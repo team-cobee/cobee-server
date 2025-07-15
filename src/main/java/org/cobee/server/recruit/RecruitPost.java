@@ -31,26 +31,26 @@ public class RecruitPost {
     private String content;
 
     @Column
-    private int recruit_count;
+    private int recruitCount;
 
     @Column
     @Enumerated(EnumType.STRING)
     private RecruitStatus status;
 
     @Column
-    private int rent_cost;
+    private int rentCost;
 
     @Column
-    private Float region_latitude; // 위도
+    private Float regionLatitude; // 위도
 
     @Column
-    private Float region_longitude; // 경도
+    private Float regionLongitude; // 경도
 
     @Column
-    private Boolean has_room;
+    private Boolean hasRoom;
 
     @Column
-    private Boolean pets_allowed;
+    private Boolean petsAllowed;
 
     @Column
     private Float distance;

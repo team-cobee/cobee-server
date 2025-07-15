@@ -17,7 +17,7 @@ public class AlarmNotice {
     private Long id;
 
     @Column
-    private Boolean is_read;
+    private Boolean isRead;
 
     @ManyToOne
     @JoinColumn(name="to_user_id")

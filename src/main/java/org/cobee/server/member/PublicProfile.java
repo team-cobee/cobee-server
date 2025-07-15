@@ -30,20 +30,20 @@ public class PublicProfile {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private Lifecycle m_lifestyle;
+    private Lifecycle lifestyle;
 
     @Column
     @Enumerated(EnumType.STRING)
-    private Personality m_personality;
+    private Personality personality;
 
     @Column
-    private Boolean m_smoking;
+    private Boolean smoking;
 
     @Column
-    private Boolean m_snoring;
+    private Boolean snoring;
 
     @Column
-    private Boolean m_pet;
+    private Boolean pet;
 
     @OneToOne
     private Member member;

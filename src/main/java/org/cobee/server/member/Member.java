@@ -31,17 +31,17 @@ public class Member {
     private String email;
 
     @Column
-    private String birth_date;
+    private String birthDate;
 
     @Column
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
 
     @Column
-    private Boolean ocr_validation;
+    private Boolean ocrValidation;
 
     @Column
-    private Boolean is_host;
+    private Boolean isHost;
 
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
     private UserPreferences userPreferences;
