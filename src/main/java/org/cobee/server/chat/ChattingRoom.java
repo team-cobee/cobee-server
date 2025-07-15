@@ -20,7 +20,7 @@ public class ChattingRoom {
     private Long id;
 
     @Column
-    private int member_num;
+    private int memberCount;
 
     @OneToMany(mappedBy = "chattingRoom", cascade = CascadeType.ALL)
     private List<Member> members;
