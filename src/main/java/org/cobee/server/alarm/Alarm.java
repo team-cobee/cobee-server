@@ -22,7 +22,7 @@ public class Alarm {
     private AlarmType alarmType;
 
     @Column
-    private int where_from; // 왜 int??
+    private int whereFrom; // 왜 int??
 
     @ManyToOne
     @JoinColumn(name="from_user_id")

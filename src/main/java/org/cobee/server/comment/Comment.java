@@ -21,7 +21,7 @@ public class Comment {
     private String content;
 
     @Column
-    private Boolean is_private;
+    private Boolean isPrivate;
 
     @ManyToOne
     @JoinColumn(name="user_id")
