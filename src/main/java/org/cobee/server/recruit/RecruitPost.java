@@ -12,6 +12,8 @@ import org.cobee.server.comment.Comment;
 import org.cobee.server.member.Member;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -31,38 +33,38 @@ public class RecruitPost {
     private String content;
 
     @Column
-    private int recruit_count;
+    private int recruitCount;
 
     @Column
     @Enumerated(EnumType.STRING)
     private RecruitStatus status;
 
     @Column
-    private int rent_cost;
+    private int rentCost;
 
     @Column
-    private Float region_latitude; // 위도
+    private Float regionLatitude; // 위도
 
     @Column
-    private Float region_longitude; // 경도
+    private Float regionLongitude; // 경도
 
     @Column
-    private Boolean has_room;
+    private Boolean hasRoom;
 
     @Column
-    private Boolean pets_allowed;
+    private Boolean isPetsAllowed;
 
     @Column
     private Float distance;
 
     @Column
-    private Timestamp createdAt; // 이 타입 맞나 확인
+    private LocalDateTime createdAt;
 
     @Column
-    private Boolean snoring;
+    private Boolean isSnoring;
 
     @Column
-    private Boolean smoking;
+    private Boolean isSmoking;
 
     @Column
     @Enumerated(EnumType.STRING)
