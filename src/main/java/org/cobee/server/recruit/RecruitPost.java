@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.cobee.server.Enum.Lifecycle;
-import org.cobee.server.Enum.Personality;
+import org.cobee.server.publicProfile.domain.enums.Lifestyle;
+import org.cobee.server.publicProfile.domain.enums.Personality;
 import org.cobee.server.Enum.RecruitStatus;
 import org.cobee.server.chat.ChattingRoom;
 import org.cobee.server.comment.Comment;
@@ -70,7 +70,7 @@ public class RecruitPost {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private Lifecycle lifeStyle;
+    private Lifestyle lifeStyle;
 
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
