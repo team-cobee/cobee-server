@@ -48,6 +48,4 @@ public class PublicProfile {
     @OneToOne
     private Member member;
 
-    /* 알람id FK 이건 어떻게 해야하나?? */
-
 }
