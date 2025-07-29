@@ -33,9 +33,10 @@ public class ApplyRecord {
     @JoinColumn(name = "post_id")
     private RecruitPost post;
 
-    /* 외래키 알람id는 어떻게 표현하지?? 직접적인 연결이 없는데 -> 최종적인 연결관계만 파악하고 이렇게 하면 돼*/
-    @ManyToOne
-    @JoinColumn(name = "alarm_id")  // FK 열, FK 연결하고 싶은 그 객체 타입을 쓰면 매핑해줌
-    private Alarm alarm;
+    /* 외래키 알람id는 어떻게 표현하지?? 직접적인 연결이 없는데 -> 최종적인 연결관계만 파악하고 이렇게 하면 돼(?)
+    * 아닌거 같아 -> 일단 속성 삭제하기로 함 */
+//    @ManyToOne
+//    @JoinColumn(name = "alarm_id")  // FK 열, FK 연결하고 싶은 그 객체 타입을 쓰면 매핑해줌
+//    private Alarm alarm;
 
 }
