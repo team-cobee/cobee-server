@@ -19,20 +19,20 @@ public class PublicProfileController {
 
     private final PublicProfileService publicProfileService;
 
-    @PostMapping
-    public ResponseEntity<Map<String, String>> createPublicProfile(@RequestHeader("userId") Long userId, @RequestBody PublicProfileRequestDto requestDto) {
-        publicProfileService.createPublicProfile(userId, requestDto);
+    @PostMapping("/{memberId}")
+    public ResponseEntity<Map<String, String>> createPublicProfile(@PathVariable("memberId") Long memberId, @RequestBody PublicProfileRequestDto requestDto) {
+        publicProfileService.createPublicProfile(memberId, requestDto);
         return ResponseEntity.ok(Map.of("message", "Public profile created successfully"));
     }
 
-    @GetMapping
-    public ResponseEntity<PublicProfileResponseDto> getPublicProfile(@RequestHeader("userId") Long userId) {
-        return ResponseEntity.ok(publicProfileService.getPublicProfile(userId));
+    @GetMapping("/{memberId}")
+    public ResponseEntity<PublicProfileResponseDto> getPublicProfile(@PathVariable("memberId") Long memberId) {
+        return ResponseEntity.ok(publicProfileService.getPublicProfile(memberId));
     }
 
-    @PatchMapping
-    public ResponseEntity<Map<String, String>> updatePublicProfile(@RequestHeader("userId") Long userId, @RequestBody PublicProfileUpdateRequestDto requestDto) {
-        publicProfileService.updatePublicProfile(userId, requestDto);
+    @PatchMapping("/{memberId}")
+    public ResponseEntity<Map<String, String>> updatePublicProfile(@PathVariable("memberId") Long memberId, @RequestBody PublicProfileUpdateRequestDto requestDto) {
+        publicProfileService.updatePublicProfile(memberId, requestDto);
         return ResponseEntity.ok(Map.of("message", "Public profile modified successfully"));
     }
 }
