@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.cobee.server.member.Member;
-import org.cobee.server.recruit.entity.RecruitPost;
+import org.cobee.server.member.domain.Member;
+import org.cobee.server.recruit.domain.RecruitPost;
 
 import java.util.List;
 

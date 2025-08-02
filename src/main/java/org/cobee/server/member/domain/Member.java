@@ -1,16 +1,17 @@
-package org.cobee.server.member;
+package org.cobee.server.member.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.cobee.server.common.Enum.SocialType;
-import org.cobee.server.alarm.entity.Alarm;
-import org.cobee.server.alarm.entity.AlarmNotice;
+import org.cobee.server.alarm.domain.Alarm;
+import org.cobee.server.alarm.domain.AlarmNotice;
 import org.cobee.server.chat.entity.ChattingRoom;
-import org.cobee.server.comment.entity.Comment;
-import org.cobee.server.recruit.entity.ApplyRecord;
-import org.cobee.server.recruit.entity.RecruitPost;
+import org.cobee.server.comment.domain.Comment;
+import org.cobee.server.member.domain.enums.SocialType;
+import org.cobee.server.publicProfile.domain.PublicProfile;
+import org.cobee.server.recruit.domain.ApplyRecord;
+import org.cobee.server.recruit.domain.RecruitPost;
 
 import java.util.List;
 
@@ -32,6 +33,9 @@ public class Member {
 
     @Column
     private String birth_date;
+
+    @Column
+    private String gender;
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -65,10 +69,13 @@ public class Member {
     @JoinColumn(name="chatroom_id")
     private ChattingRoom chattingRoom;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "public_profile_id")
     private PublicProfile publicProfile;
 
-
+    public void setPublicProfile(PublicProfile publicProfile) {
+        this.publicProfile = publicProfile;
+    }
 
 
 

@@ -1,4 +1,4 @@
-package org.cobee.server.common.Enum;
+package org.cobee.server.member.domain.enums;
 
 public enum SocialType {
     KAKAO, GOOGLE

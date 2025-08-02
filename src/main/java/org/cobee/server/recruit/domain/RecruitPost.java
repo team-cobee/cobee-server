@@ -1,15 +1,15 @@
-package org.cobee.server.recruit.entity;
+package org.cobee.server.recruit.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.cobee.server.common.Enum.Lifecycle;
-import org.cobee.server.common.Enum.Personality;
-import org.cobee.server.common.Enum.RecruitStatus;
+import org.cobee.server.publicProfile.domain.enums.Lifestyle;
+import org.cobee.server.publicProfile.domain.enums.Personality;
+import org.cobee.server.recruit.domain.enums.RecruitStatus;
 import org.cobee.server.chat.entity.ChattingRoom;
-import org.cobee.server.comment.entity.Comment;
-import org.cobee.server.member.Member;
+import org.cobee.server.comment.domain.Comment;
+import org.cobee.server.member.domain.Member;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -70,7 +70,7 @@ public class RecruitPost {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private Lifecycle lifeStyle;
+    private Lifestyle lifeStyle;
 
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;

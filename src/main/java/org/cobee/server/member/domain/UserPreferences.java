@@ -1,25 +1,22 @@
-package org.cobee.server.member;
+package org.cobee.server.member.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.cobee.server.common.Enum.Gender;
-import org.cobee.server.common.Enum.Lifecycle;
-import org.cobee.server.common.Enum.Personality;
+import org.cobee.server.member.domain.enums.Gender;
+import org.cobee.server.publicProfile.domain.enums.Lifestyle;
+import org.cobee.server.publicProfile.domain.enums.Personality;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class PublicProfile {
+public class UserPreferences {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column
-    private String name;
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -30,7 +27,7 @@ public class PublicProfile {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private Lifecycle m_lifestyle;
+    private Lifestyle m_lifestyle;
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -45,9 +42,11 @@ public class PublicProfile {
     @Column
     private Boolean m_pet;
 
+    @Column
+    private int cohabitant_count;
+
     @OneToOne
     private Member member;
 
-    /* 알람id FK 이건 어떻게 해야하나?? */
 
 }

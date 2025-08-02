@@ -1,32 +1,31 @@
-package org.cobee.server.alarm.entity;
+package org.cobee.server.alarm.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.cobee.server.alarm.Enum.AlarmType;
-import org.cobee.server.member.Member;
+import org.cobee.server.alarm.domain.Alarm;
+import org.cobee.server.member.domain.Member;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class Alarm {
+public class AlarmNotice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
-    @Enumerated(EnumType.STRING)
-    private AlarmType alarmType;
-
-    @Column
-    private int where_from; // 왜 int??
+    private Boolean is_read;
 
     @ManyToOne
-    @JoinColumn(name="from_user_id")
+    @JoinColumn(name="to_user_id")
     private Member member;
 
+    @ManyToOne
+    @JoinColumn(name="alarm_id")
+    private Alarm alarm;
 
 }
