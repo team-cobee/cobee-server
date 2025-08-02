@@ -4,9 +4,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.cobee.server.Enum.Gender;
-import org.cobee.server.Enum.Lifecycle;
-import org.cobee.server.Enum.Personality;
+import org.cobee.server.common.Enum.Gender;
+import org.cobee.server.common.Enum.Lifecycle;
+import org.cobee.server.common.Enum.Personality;
 
 @Entity
 @NoArgsConstructor

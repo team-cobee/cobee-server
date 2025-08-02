@@ -1,14 +1,14 @@
-package org.cobee.server.recruit;
+package org.cobee.server.recruit.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.cobee.server.Enum.Lifecycle;
-import org.cobee.server.Enum.Personality;
-import org.cobee.server.Enum.RecruitStatus;
-import org.cobee.server.chat.ChattingRoom;
-import org.cobee.server.comment.Comment;
+import org.cobee.server.common.Enum.Lifecycle;
+import org.cobee.server.common.Enum.Personality;
+import org.cobee.server.common.Enum.RecruitStatus;
+import org.cobee.server.chat.entity.ChattingRoom;
+import org.cobee.server.comment.entity.Comment;
 import org.cobee.server.member.Member;
 
 import java.sql.Timestamp;

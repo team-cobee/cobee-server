@@ -1,11 +1,11 @@
-package org.cobee.server.chat;
+package org.cobee.server.chat.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cobee.server.member.Member;
-import org.cobee.server.recruit.RecruitPost;
+import org.cobee.server.recruit.entity.RecruitPost;
 
 import java.util.List;
 

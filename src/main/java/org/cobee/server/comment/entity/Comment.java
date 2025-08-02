@@ -1,32 +1,35 @@
-package org.cobee.server.alarm;
+package org.cobee.server.comment.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.cobee.server.Enum.AlarmType;
 import org.cobee.server.member.Member;
+import org.cobee.server.recruit.entity.RecruitPost;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class Alarm {
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    @Enumerated(EnumType.STRING)
-    private AlarmType alarmType;
+    @Column(columnDefinition = "TEXT")
+    private String content;
 
     @Column
-    private int where_from; // 왜 int??
+    private Boolean is_private;
 
     @ManyToOne
-    @JoinColumn(name="from_user_id")
+    @JoinColumn(name="user_id")
     private Member member;
+
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private RecruitPost post;
 
 
 }

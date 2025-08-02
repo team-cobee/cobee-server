@@ -1,10 +1,10 @@
-package org.cobee.server.recruit;
+package org.cobee.server.recruit.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.cobee.server.alarm.Alarm;
+import org.cobee.server.alarm.entity.Alarm;
 import org.cobee.server.member.Member;
 
 import java.sql.Timestamp;
