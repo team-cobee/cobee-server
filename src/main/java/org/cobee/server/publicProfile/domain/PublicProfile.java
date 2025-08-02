@@ -20,34 +20,34 @@ public class PublicProfile {
     private String info;
 
     @Enumerated(EnumType.STRING)
-    private Lifestyle mLifestyle;
+    private Lifestyle lifestyle;
 
     @Enumerated(EnumType.STRING)
-    private Personality mPersonality;
+    private Personality personality;
 
-    private Boolean mSmoking;
+    private Boolean isSmoking;
 
-    private Boolean mSnoring;
+    private Boolean isSnoring;
 
-    private Boolean mPet;
+    private Boolean hasPet;
 
 //    @OneToOne
 //    private Member member;
 
-    public PublicProfile(String info, Lifestyle mLifestyle, Personality mPersonality, Boolean mSmoking, Boolean mSnoring, Boolean mPet) {
+    public PublicProfile(String info, Lifestyle lifestyle, Personality personality, Boolean isSmoking, Boolean isSnoring, Boolean hasPet) {
         this.info = info;
-        this.mLifestyle = mLifestyle;
-        this.mPersonality = mPersonality;
-        this.mSmoking = mSmoking;
-        this.mSnoring = mSnoring;
-        this.mPet = mPet;
+        this.lifestyle = lifestyle;
+        this.personality = personality;
+        this.isSmoking = isSmoking;
+        this.isSnoring = isSnoring;
+        this.hasPet = hasPet;
     }
-    public void update(String info, Lifestyle mLifestyle, Personality mPersonality, Boolean mSmoking, Boolean mSnoring, Boolean mPet) {
+    public void update(String info, Lifestyle lifestyle, Personality personality, Boolean isSmoking, Boolean isSnoring, Boolean hasPet) {
         this.info = info;
-        this.mLifestyle = mLifestyle;
-        this.mPersonality = mPersonality;
-        this.mSmoking = mSmoking;
-        this.mSnoring = mSnoring;
-        this.mPet = mPet;
+        this.lifestyle = lifestyle;
+        this.personality = personality;
+        this.isSmoking = isSmoking;
+        this.isSnoring = isSnoring;
+        this.hasPet = hasPet;
     }
 }

@@ -20,10 +20,10 @@ public class ApplyRecord {
     private Long id;
 
     @Column
-    private Boolean is_matched;
+    private Boolean isMatched;
 
     @Column
-    private Timestamp submitted_at;
+    private Timestamp submittedAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
