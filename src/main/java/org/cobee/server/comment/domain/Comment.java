@@ -1,11 +1,11 @@
-package org.cobee.server.comment;
+package org.cobee.server.comment.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.cobee.server.member.Member;
-import org.cobee.server.recruit.RecruitPost;
+import org.cobee.server.member.domain.Member;
+import org.cobee.server.recruit.domain.RecruitPost;
 
 @Entity
 @NoArgsConstructor
@@ -21,7 +21,7 @@ public class Comment {
     private String content;
 
     @Column
-    private Boolean is_private;
+    private Boolean isPrivate;
 
     @ManyToOne
     @JoinColumn(name="user_id")

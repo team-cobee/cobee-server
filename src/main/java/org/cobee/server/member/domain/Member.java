@@ -1,17 +1,17 @@
-package org.cobee.server.member;
+package org.cobee.server.member.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.cobee.server.Enum.SocialType;
-import org.cobee.server.alarm.Alarm;
-import org.cobee.server.alarm.AlarmNotice;
-import org.cobee.server.chat.ChattingRoom;
-import org.cobee.server.comment.Comment;
+import org.cobee.server.alarm.domain.Alarm;
+import org.cobee.server.alarm.domain.AlarmNotice;
+import org.cobee.server.chat.domain.ChattingRoom;
+import org.cobee.server.comment.domain.Comment;
+import org.cobee.server.member.domain.enums.SocialType;
 import org.cobee.server.publicProfile.domain.PublicProfile;
-import org.cobee.server.recruit.ApplyRecord;
-import org.cobee.server.recruit.RecruitPost;
+import org.cobee.server.recruit.domain.ApplyRecord;
+import org.cobee.server.recruit.domain.RecruitPost;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ public class Member {
     private String email;
 
     @Column
-    private String birth_date;
+    private String birthDate;
 
     @Column
     private String gender;
@@ -42,10 +42,10 @@ public class Member {
     private SocialType socialType;
 
     @Column
-    private Boolean ocr_validation;
+    private Boolean ocrValidation;
 
     @Column
-    private Boolean is_host;
+    private Boolean isHost;
 
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
     private UserPreferences userPreferences;

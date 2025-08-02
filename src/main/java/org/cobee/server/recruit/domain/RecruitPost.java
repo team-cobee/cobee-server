@@ -1,4 +1,4 @@
-package org.cobee.server.recruit;
+package org.cobee.server.recruit.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -6,12 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cobee.server.publicProfile.domain.enums.Lifestyle;
 import org.cobee.server.publicProfile.domain.enums.Personality;
-import org.cobee.server.Enum.RecruitStatus;
-import org.cobee.server.chat.ChattingRoom;
-import org.cobee.server.comment.Comment;
-import org.cobee.server.member.Member;
+import org.cobee.server.recruit.domain.enums.RecruitStatus;
+import org.cobee.server.chat.domain.ChattingRoom;
+import org.cobee.server.comment.domain.Comment;
+import org.cobee.server.member.domain.Member;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -31,38 +31,38 @@ public class RecruitPost {
     private String content;
 
     @Column
-    private int recruit_count;
+    private int recruitCount;
 
     @Column
     @Enumerated(EnumType.STRING)
     private RecruitStatus status;
 
     @Column
-    private int rent_cost;
+    private int rentCost;
 
     @Column
-    private Float region_latitude; // 위도
+    private Float regionLatitude; // 위도
 
     @Column
-    private Float region_longitude; // 경도
+    private Float regionLongitude; // 경도
 
     @Column
-    private Boolean has_room;
+    private Boolean hasRoom;
 
     @Column
-    private Boolean pets_allowed;
+    private Boolean isPetsAllowed;
 
     @Column
     private Float distance;
 
     @Column
-    private Timestamp createdAt; // 이 타입 맞나 확인
+    private LocalDateTime createdAt;
 
     @Column
-    private Boolean snoring;
+    private Boolean isSnoring;
 
     @Column
-    private Boolean smoking;
+    private Boolean isSmoking;
 
     @Column
     @Enumerated(EnumType.STRING)

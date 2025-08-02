@@ -1,11 +1,11 @@
-package org.cobee.server.recruit;
+package org.cobee.server.recruit.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.cobee.server.alarm.Alarm;
-import org.cobee.server.member.Member;
+import org.cobee.server.alarm.domain.Alarm;
+import org.cobee.server.member.domain.Member;
 
 import java.sql.Timestamp;
 
@@ -20,10 +20,10 @@ public class ApplyRecord {
     private Long id;
 
     @Column
-    private Boolean is_matched;
+    private Boolean isMatched;
 
     @Column
-    private Timestamp submitted_at;
+    private Timestamp submittedAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

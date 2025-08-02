@@ -5,10 +5,10 @@ import org.cobee.server.publicProfile.domain.enums.Personality;
 
 public record PublicProfileRequestDto(
         String info,
-        Lifestyle mLifestyle,
-        Personality mPersonality,
-        Boolean mSmoking,
-        Boolean mSnoring,
-        Boolean mPet
+        Lifestyle lifestyle,
+        Personality personality,
+        Boolean isSmoking,
+        Boolean isSnoring,
+        Boolean hasPet
 ) {
 }

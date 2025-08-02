@@ -1,11 +1,11 @@
-package org.cobee.server.alarm;
+package org.cobee.server.alarm.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.cobee.server.Enum.AlarmType;
-import org.cobee.server.member.Member;
+import org.cobee.server.alarm.domain.enums.AlarmType;
+import org.cobee.server.member.domain.Member;
 
 @Entity
 @NoArgsConstructor
