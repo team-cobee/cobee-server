@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cobee.server.Enum.Gender;
-import org.cobee.server.Enum.Lifecycle;
-import org.cobee.server.Enum.Personality;
+import org.cobee.server.publicProfile.domain.enums.Lifestyle;
+import org.cobee.server.publicProfile.domain.enums.Personality;
 
 @Entity
 @NoArgsConstructor
@@ -27,7 +27,7 @@ public class UserPreferences {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private Lifecycle m_lifestyle;
+    private Lifestyle m_lifestyle;
 
     @Column
     @Enumerated(EnumType.STRING)

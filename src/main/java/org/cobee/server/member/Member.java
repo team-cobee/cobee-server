@@ -9,6 +9,7 @@ import org.cobee.server.alarm.Alarm;
 import org.cobee.server.alarm.AlarmNotice;
 import org.cobee.server.chat.ChattingRoom;
 import org.cobee.server.comment.Comment;
+import org.cobee.server.publicProfile.domain.PublicProfile;
 import org.cobee.server.recruit.ApplyRecord;
 import org.cobee.server.recruit.RecruitPost;
 
@@ -32,6 +33,9 @@ public class Member {
 
     @Column
     private String birth_date;
+
+    @Column
+    private String gender;
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -65,10 +69,13 @@ public class Member {
     @JoinColumn(name="chatroom_id")
     private ChattingRoom chattingRoom;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "public_profile_id")
     private PublicProfile publicProfile;
 
-
+    public void setPublicProfile(PublicProfile publicProfile) {
+        this.publicProfile = publicProfile;
+    }
 
 
 
