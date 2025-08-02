@@ -1,4 +1,4 @@
-package org.cobee.server.chat.entity;
+package org.cobee.server.chat.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ public class ChattingRoom {
     private Long id;
 
     @Column
-    private int member_num;
+    private int memberNum;
 
     @OneToMany(mappedBy = "chattingRoom", cascade = CascadeType.ALL)
     private List<Member> members;
