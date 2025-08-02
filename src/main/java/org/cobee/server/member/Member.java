@@ -4,13 +4,13 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.cobee.server.Enum.SocialType;
-import org.cobee.server.alarm.Alarm;
-import org.cobee.server.alarm.AlarmNotice;
-import org.cobee.server.chat.ChattingRoom;
-import org.cobee.server.comment.Comment;
-import org.cobee.server.recruit.ApplyRecord;
-import org.cobee.server.recruit.RecruitPost;
+import org.cobee.server.common.Enum.SocialType;
+import org.cobee.server.alarm.entity.Alarm;
+import org.cobee.server.alarm.entity.AlarmNotice;
+import org.cobee.server.chat.entity.ChattingRoom;
+import org.cobee.server.comment.entity.Comment;
+import org.cobee.server.recruit.entity.ApplyRecord;
+import org.cobee.server.recruit.entity.RecruitPost;
 
 import java.util.List;
 
