@@ -57,6 +57,7 @@ public class PublicProfileControllerTest {
         );
 
         // when & then
+        // memberID 이슈 해결
         mockMvc.perform(post("/public-profiles/" + member.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDto)))
