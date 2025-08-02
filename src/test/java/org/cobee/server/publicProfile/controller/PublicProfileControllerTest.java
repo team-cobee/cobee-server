@@ -57,8 +57,8 @@ public class PublicProfileControllerTest {
         );
 
         // when & then
-        mockMvc.perform(post("/public-profiles")
-                        .header("userId", member.getId())
+        // memberID 이슈 해결
+        mockMvc.perform(post("/public-profiles/" + member.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDto)))
                 .andExpect(status().isOk())
@@ -73,8 +73,7 @@ public class PublicProfileControllerTest {
         memberRepository.save(member);
 
         // when & then
-        mockMvc.perform(get("/public-profiles")
-                        .header("userId", member.getId()))
+        mockMvc.perform(get("/public-profiles/" + member.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.userId").value(member.getId()))
                 .andExpect(jsonPath("$.info").value("info"));
@@ -97,8 +96,7 @@ public class PublicProfileControllerTest {
         );
 
         // when & then
-        mockMvc.perform(patch("/public-profiles")
-                        .header("userId", member.getId())
+        mockMvc.perform(patch("/public-profiles/" + member.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDto)))
                 .andExpect(status().isOk())
