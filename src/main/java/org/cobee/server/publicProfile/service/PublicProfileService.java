@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.cobee.server.publicProfile.domain.PublicProfile;
 import org.cobee.server.publicProfile.dto.PublicProfileRequestDto;
 import org.cobee.server.publicProfile.repository.PublicProfileRepository;
-import org.cobee.server.member.Member;
-import org.cobee.server.member.MemberRepository;
+import org.cobee.server.member.domain.Member;
+import org.cobee.server.member.repository.MemberRepository;
 import org.cobee.server.publicProfile.dto.PublicProfileResponseDto;
 import org.cobee.server.publicProfile.dto.PublicProfileUpdateRequestDto;
 import org.springframework.stereotype.Service;
@@ -25,11 +25,11 @@ public class PublicProfileService {
 
         PublicProfile publicProfile = new PublicProfile(
                 requestDto.info(),
-                requestDto.mLifestyle(),
-                requestDto.mPersonality(),
-                requestDto.mSmoking(),
-                requestDto.mSnoring(),
-                requestDto.mPet()
+                requestDto.lifestyle(),
+                requestDto.personality(),
+                requestDto.isSmoking(),
+                requestDto.isSnoring(),
+                requestDto.hasPet()
         );
         member.setPublicProfile(publicProfile);
         publicProfileRepository.save(publicProfile);
@@ -46,11 +46,11 @@ public class PublicProfileService {
                 member.getName(),
                 member.getGender(),
                 publicProfile.getInfo(),
-                publicProfile.getMLifestyle(),
-                publicProfile.getMPersonality(),
-                publicProfile.getMSmoking(),
-                publicProfile.getMSnoring(),
-                publicProfile.getMPet()
+                publicProfile.getLifestyle(),
+                publicProfile.getPersonality(),
+                publicProfile.getIsSmoking(),
+                publicProfile.getIsSnoring(),
+                publicProfile.getHasPet()
         );
     }
 
@@ -61,11 +61,11 @@ public class PublicProfileService {
         PublicProfile publicProfile = member.getPublicProfile();
         publicProfile.update(
                 requestDto.info(),
-                requestDto.mLifestyle(),
-                requestDto.mPersonality(),
-                requestDto.mSmoking(),
-                requestDto.mSnoring(),
-                requestDto.mPet()
+                requestDto.lifestyle(),
+                requestDto.personality(),
+                requestDto.isSmoking(),
+                requestDto.isSnoring(),
+                requestDto.hasPet()
         );
     }
 }

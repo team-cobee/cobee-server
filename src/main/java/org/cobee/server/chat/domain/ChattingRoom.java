@@ -1,11 +1,11 @@
-package org.cobee.server.chat;
+package org.cobee.server.chat.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.cobee.server.member.Member;
-import org.cobee.server.recruit.RecruitPost;
+import org.cobee.server.member.domain.Member;
+import org.cobee.server.recruit.domain.RecruitPost;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class ChattingRoom {
     private Long id;
 
     @Column
-    private int member_num;
+    private int memberNum;
 
     @OneToMany(mappedBy = "chattingRoom", cascade = CascadeType.ALL)
     private List<Member> members;

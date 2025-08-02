@@ -12,8 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import org.cobee.server.member.Member;
-import org.cobee.server.member.MemberRepository;
+import org.cobee.server.member.domain.Member;
+import org.cobee.server.member.repository.MemberRepository;
 import org.cobee.server.publicProfile.domain.PublicProfile;
 import org.cobee.server.publicProfile.dto.PublicProfileUpdateRequestDto;
 import org.junit.jupiter.api.BeforeEach;

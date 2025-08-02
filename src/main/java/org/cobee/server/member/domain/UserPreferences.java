@@ -1,10 +1,10 @@
-package org.cobee.server.member;
+package org.cobee.server.member.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.cobee.server.Enum.Gender;
+import org.cobee.server.member.domain.enums.Gender;
 import org.cobee.server.publicProfile.domain.enums.Lifestyle;
 import org.cobee.server.publicProfile.domain.enums.Personality;
 
@@ -27,23 +27,23 @@ public class UserPreferences {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private Lifestyle m_lifestyle;
+    private Lifestyle lifestyle;
 
     @Column
     @Enumerated(EnumType.STRING)
-    private Personality m_personality;
+    private Personality personality;
 
     @Column
-    private Boolean m_smoking;
+    private Boolean isSmoking;
 
     @Column
-    private Boolean m_snoring;
+    private Boolean isSnoring;
 
     @Column
-    private Boolean m_pet;
+    private Boolean hasPet;
 
     @Column
-    private int cohabitant_count;
+    private int cohabitantCount;
 
     @OneToOne
     private Member member;
