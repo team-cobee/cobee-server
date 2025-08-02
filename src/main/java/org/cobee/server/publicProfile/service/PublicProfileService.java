@@ -25,11 +25,11 @@ public class PublicProfileService {
 
         PublicProfile publicProfile = new PublicProfile(
                 requestDto.info(),
-                requestDto.mLifestyle(),
-                requestDto.mPersonality(),
-                requestDto.mSmoking(),
-                requestDto.mSnoring(),
-                requestDto.mPet()
+                requestDto.lifestyle(),
+                requestDto.personality(),
+                requestDto.isSmoking(),
+                requestDto.isSnoring(),
+                requestDto.hasPet()
         );
         member.setPublicProfile(publicProfile);
         publicProfileRepository.save(publicProfile);
@@ -46,11 +46,11 @@ public class PublicProfileService {
                 member.getName(),
                 member.getGender(),
                 publicProfile.getInfo(),
-                publicProfile.getMLifestyle(),
-                publicProfile.getMPersonality(),
-                publicProfile.getMSmoking(),
-                publicProfile.getMSnoring(),
-                publicProfile.getMPet()
+                publicProfile.getLifestyle(),
+                publicProfile.getPersonality(),
+                publicProfile.getIsSmoking(),
+                publicProfile.getIsSnoring(),
+                publicProfile.getHasPet()
         );
     }
 
@@ -61,11 +61,11 @@ public class PublicProfileService {
         PublicProfile publicProfile = member.getPublicProfile();
         publicProfile.update(
                 requestDto.info(),
-                requestDto.mLifestyle(),
-                requestDto.mPersonality(),
-                requestDto.mSmoking(),
-                requestDto.mSnoring(),
-                requestDto.mPet()
+                requestDto.lifestyle(),
+                requestDto.personality(),
+                requestDto.isSmoking(),
+                requestDto.isSnoring(),
+                requestDto.hasPet()
         );
     }
 }
