@@ -13,6 +13,8 @@ import org.cobee.server.recruit.repository.RecruitPostRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -59,5 +61,14 @@ public class RecruitService {
         RecruitPost post = recruitRepository.findById(postId).orElseThrow(()->new CustomException(ErrorCode.POST_NOT_FOUND));
         Member member = post.getMember();
         return RecruitResponse.from(post, member);
+    }
+
+    public List<RecruitResponse> getAllRecruitPosts() {
+        List<RecruitPost> posts = recruitRepository.findAll();
+        List<RecruitResponse> result = new ArrayList<>();
+        for (RecruitPost post : posts){
+            result.add(RecruitResponse.from(post, post.getMember()));
+        }
+        return result;
     }
 }
