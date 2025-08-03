@@ -41,6 +41,9 @@ public class RecruitPost {
     private int rentCost;
 
     @Column
+    private int monthlyCost;
+
+    @Column
     private Float regionLatitude; // 위도
 
     @Column
