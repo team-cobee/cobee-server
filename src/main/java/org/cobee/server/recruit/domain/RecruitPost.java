@@ -11,6 +11,7 @@ import org.cobee.server.recruit.domain.enums.RecruitStatus;
 import org.cobee.server.chat.domain.ChattingRoom;
 import org.cobee.server.comment.domain.Comment;
 import org.cobee.server.member.domain.Member;
+import org.cobee.server.recruit.dto.RecruitRequest;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -91,5 +92,12 @@ public class RecruitPost {
     private Member member;
 
 
-
+    public void updatePost(RecruitRequest dto) {
+        this.title = dto.title();
+        this.recruitCount = dto.recruitCount();
+        this.rentCost = dto.rentCost();
+        this.monthlyCost = dto.monthlyCost();
+        //this.imgUrl = dto.imgUrl();
+        this.content = dto.content();
+    }
 }

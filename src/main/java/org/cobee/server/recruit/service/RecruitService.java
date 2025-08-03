@@ -44,4 +44,12 @@ public class RecruitService {
         Member member = memberRepository.findById(memberId).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
         return RecruitResponse.from(recruitPost, member);
     }
+
+    public RecruitResponse updateRecruitPost(RecruitRequest request, Long postId, Long memberId){
+        RecruitPost post = recruitRepository.findById(postId).orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+        Member member = memberRepository.findById(memberId).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+        post.updatePost(request);
+        recruitRepository.save(post);
+        return RecruitResponse.from(post, member);
+    }
 }
