@@ -21,6 +21,7 @@ public class RecruitService {
     private final MemberRepository memberRepository;
 
     public RecruitResponse createRecruitPost(RecruitRequest request, Long memberId){
+        Member member = memberRepository.findById(memberId).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
         RecruitPost recruitPost = RecruitPost.builder()
                 .title(request.title())
                 .content(request.content())
@@ -38,10 +39,11 @@ public class RecruitService {
                 //.isSmoking()
                 //.personality()
                 //.lifeStyle()
+                .member(member)
                 .build();
         recruitRepository.save(recruitPost);
 
-        Member member = memberRepository.findById(memberId).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+
         return RecruitResponse.from(recruitPost, member);
     }
 
@@ -50,6 +52,12 @@ public class RecruitService {
         Member member = memberRepository.findById(memberId).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
         post.updatePost(request);
         recruitRepository.save(post);
+        return RecruitResponse.from(post, member);
+    }
+
+    public RecruitResponse getRecruitPost(Long postId) {
+        RecruitPost post = recruitRepository.findById(postId).orElseThrow(()->new CustomException(ErrorCode.POST_NOT_FOUND));
+        Member member = post.getMember();
         return RecruitResponse.from(post, member);
     }
 }
