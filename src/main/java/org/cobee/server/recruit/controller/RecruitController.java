@@ -23,4 +23,10 @@ public class RecruitController {
         RecruitResponse result = recruitService.updateRecruitPost(request,postId,memberId);
         return ApiResponse.success("구인글 수정 완료", "RECRUIT_UPDATED", result);
     }
+
+    @GetMapping("/recruits/{postId}")
+    public ApiResponse<RecruitResponse> getRecruitPost(@PathVariable(name="postId") Long postId){
+        RecruitResponse result = recruitService.getRecruitPost(postId);
+        return ApiResponse.success("postId가 "+postId+"인 post 조회 완료", "RECRUIT_GET_ONE", result);
+    }
 }
