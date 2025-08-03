@@ -7,6 +7,8 @@ import org.cobee.server.recruit.dto.RecruitResponse;
 import org.cobee.server.recruit.service.RecruitService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 public class RecruitController {
@@ -28,5 +30,11 @@ public class RecruitController {
     public ApiResponse<RecruitResponse> getRecruitPost(@PathVariable(name="postId") Long postId){
         RecruitResponse result = recruitService.getRecruitPost(postId);
         return ApiResponse.success("postId가 "+postId+"인 post 조회 완료", "RECRUIT_GET_ONE", result);
+    }
+
+    @GetMapping("/recruits")
+    public ApiResponse<List<RecruitResponse>> getRecruitPosts(){
+        List<RecruitResponse> result = recruitService.getAllRecruitPosts();
+        return ApiResponse.success("모든 구인글 조회 완료","RECRUIT_GET_ALL",result);
     }
 }
