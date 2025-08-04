@@ -25,6 +25,10 @@ public class LocationService {
                 .longitude(dto.getLongitude())
                 .build();
 
+        if(locationRepository.existsByLatitudeAndLongitude(dto.getLatitude(), dto.getLongitude())) {
+            throw new IllegalArgumentException("이미 저장된 위치입니다.");
+        }
+
         Location saved = locationRepository.save(location);
 
         return LocationResponseDto.builder()
