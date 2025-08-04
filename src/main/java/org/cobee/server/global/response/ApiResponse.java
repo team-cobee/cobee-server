@@ -30,8 +30,13 @@ public class ApiResponse<T> {
         return new ApiResponse<>(true, message, code, null, null);
     }
 
-    // 실패 응답
+    // 실패 응답 (데이터 없음)
     public static <T> ApiResponse<T> failure(String message, String code, String error) {
         return new ApiResponse<>(false, message, code, error, null);
+    }
+
+    // 실패 응답 (데이터 포함)
+    public static <T> ApiResponse<T> failure(String message, String code, String error, T data) {
+        return new ApiResponse<>(false, message, code, error, data);
     }
 }

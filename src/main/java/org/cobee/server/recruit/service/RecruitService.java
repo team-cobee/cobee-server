@@ -71,4 +71,16 @@ public class RecruitService {
         }
         return result;
     }
+
+    public Boolean deleteRecruitPost(Long postId) {
+        try{
+            RecruitPost post = recruitRepository.findById(postId).orElseThrow(()->new CustomException(ErrorCode.POST_NOT_FOUND));
+            recruitRepository.delete(post);
+            return true;
+        } catch (CustomException e) {
+            return false;
+        }
+
+
+    }
 }
