@@ -1,5 +1,6 @@
 package org.cobee.server.map.service;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.cobee.server.map.domain.Location;
 import org.cobee.server.map.dto.LocationRequestDto;
@@ -34,4 +35,23 @@ public class LocationService {
                 .createdAt(saved.getCreatedAt())
                 .build();
     }
+
+    public List<LocationResponseDto> findNearbyLocations(LocationRequestDto dto) {
+        double lat = dto.getLatitude();
+        double lng = dto.getLongitude();
+        double radiusKm = dto.getDistance() / 1000.0;
+
+        List<Location> locations = locationRepository.findWithinDistance(lat, lng, radiusKm);
+
+        return locations.stream()
+                .map(loc -> LocationResponseDto.builder()
+                        .id(loc.getId())
+                        .address(loc.getAddress())
+                        .latitude(loc.getLatitude())
+                        .longitude(loc.getLongitude())
+                        .createdAt(loc.getCreatedAt())
+                        .build())
+                .toList();
+    }
+
 }
