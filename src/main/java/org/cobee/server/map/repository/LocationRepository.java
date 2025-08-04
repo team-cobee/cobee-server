@@ -22,5 +22,6 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
                                       @Param("lng") double lng,
                                       @Param("radius") double radiusKm);
 
+    boolean existsByLatitudeAndLongitude(Double latitude, Double longitude);
 }
 
