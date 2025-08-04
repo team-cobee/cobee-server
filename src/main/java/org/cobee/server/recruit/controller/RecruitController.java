@@ -12,34 +12,35 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/recruits")
 public class RecruitController {
 
     private final RecruitService recruitService;
-    @PostMapping("/recruits/{memberId}")
+    @PostMapping("/{memberId}")
     public ApiResponse<RecruitResponse> createRecruitPost(@RequestBody RecruitRequest request, @PathVariable(name="memberId") Long memberId){
         RecruitResponse result = recruitService.createRecruitPost(request, memberId);
         return ApiResponse.success("구인글 생성 완료", "RECRUIT_CREATED", result);
     }
 
-    @PutMapping("/recruits/{memberId}/{postId}")
+    @PutMapping("/{memberId}/{postId}")
     public ApiResponse<RecruitResponse> updateRecruitPost(@RequestBody RecruitRequest request, @PathVariable(name="memberId") Long memberId, @PathVariable(name="postId") Long postId){
         RecruitResponse result = recruitService.updateRecruitPost(request,postId,memberId);
         return ApiResponse.success("구인글 수정 완료", "RECRUIT_UPDATED", result);
     }
 
-    @GetMapping("/recruits/{postId}")
+    @GetMapping("/{postId}")
     public ApiResponse<RecruitResponse> getRecruitPost(@PathVariable(name="postId") Long postId){
         RecruitResponse result = recruitService.getRecruitPost(postId);
         return ApiResponse.success("postId가 "+postId+"인 post 조회 완료", "RECRUIT_GET_ONE", result);
     }
 
-    @GetMapping("/recruits")
+    @GetMapping("")
     public ApiResponse<List<RecruitResponse>> getRecruitPosts(){
         List<RecruitResponse> result = recruitService.getAllRecruitPosts();
         return ApiResponse.success("모든 구인글 조회 완료","RECRUIT_GET_ALL",result);
     }
 
-    @DeleteMapping("/recruits/{postId}")
+    @DeleteMapping("/{postId}")
     public ApiResponse<Boolean> deleteRecruitPost(@PathVariable(name="postId") Long postId){
         Boolean result = recruitService.deleteRecruitPost(postId);
         if (result) {
