@@ -1,6 +1,7 @@
 package org.cobee.server.recruit.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.cobee.server.global.error.code.ErrorCode;
 import org.cobee.server.global.response.ApiResponse;
 import org.cobee.server.recruit.dto.RecruitRequest;
 import org.cobee.server.recruit.dto.RecruitResponse;
@@ -36,5 +37,15 @@ public class RecruitController {
     public ApiResponse<List<RecruitResponse>> getRecruitPosts(){
         List<RecruitResponse> result = recruitService.getAllRecruitPosts();
         return ApiResponse.success("모든 구인글 조회 완료","RECRUIT_GET_ALL",result);
+    }
+
+    @DeleteMapping("/recruits/{postId}")
+    public ApiResponse<Boolean> deleteRecruitPost(@PathVariable(name="postId") Long postId){
+        Boolean result = recruitService.deleteRecruitPost(postId);
+        if (result) {
+            return ApiResponse.success("postId가 "+postId+"인 구인글 삭제 완료", "RECRUIT_DELETED", result);
+        } else {
+            return ApiResponse.failure("postId가 "+postId+"인 구인글 삭제 실패", "RECRUIT_DELETED_FAILED", ErrorCode.POST_NOT_FOUND.getMessage(), result);
+        }
     }
 }
