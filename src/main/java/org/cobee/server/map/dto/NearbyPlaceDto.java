@@ -6,17 +6,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LocationRequestDto {
+@Builder
+public class NearbyPlaceDto {
+    private String name;
+    private String address;
     private Double latitude;
     private Double longitude;
-    private Integer distance;
-
-    public LocationRequestDto(Double latitude, Double longitude) {
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.distance = null;
-    }
 }
+

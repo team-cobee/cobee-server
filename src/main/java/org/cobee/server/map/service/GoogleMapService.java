@@ -1,6 +1,9 @@
 package org.cobee.server.map.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.cobee.server.map.dto.NearbyPlaceDto;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,6 +38,40 @@ public class GoogleMapService {
             }
         } catch (Exception e) {
             throw new RuntimeException("구글 맵에서 주소 가져오기 실패", e);
+        }
+    }
+
+    public List<NearbyPlaceDto> getNearbyPlaces(double latitude, double longitude, Integer radiusInMeters) {
+        String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
+                + "?location=" + latitude + "," + longitude
+                + "&radius=" + radiusInMeters
+                + "&key=" + apiKey
+                + "&language=ko";
+
+        try {
+            ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+            JSONObject json = new JSONObject(response.getBody());
+
+            JSONArray results = json.getJSONArray("results");
+
+            List<NearbyPlaceDto> places = new ArrayList<>();
+
+            for (int i = 0; i < results.length(); i++) {
+                JSONObject obj = results.getJSONObject(i);
+                JSONObject location = obj.getJSONObject("geometry").getJSONObject("location");
+
+                places.add(NearbyPlaceDto.builder()
+                        .name(obj.optString("name"))
+                        .address(obj.optString("vicinity"))
+                        .latitude(location.getDouble("lat"))
+                        .longitude(location.getDouble("lng"))
+                        .build());
+            }
+
+            return places;
+
+        } catch (Exception e) {
+            throw new RuntimeException("Google Nearby Search API 호출 실패", e);
         }
     }
 }
