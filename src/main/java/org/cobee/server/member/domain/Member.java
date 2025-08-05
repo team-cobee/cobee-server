@@ -2,6 +2,7 @@ package org.cobee.server.member.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cobee.server.alarm.domain.Alarm;
@@ -19,16 +20,17 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Builder
 public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     private String name;
 
-    @Column
+    @Column(nullable = false)
     private String email;
 
     @Column
@@ -37,9 +39,12 @@ public class Member {
     @Column
     private String gender;
 
-    @Column
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private SocialType socialType;
+
+    @Column(nullable = false)
+    private String socialId;
 
     @Column
     private Boolean ocrValidation;
@@ -77,7 +82,9 @@ public class Member {
         this.publicProfile = publicProfile;
     }
 
-
-
-
+    public Member update(String name, String email) {
+        this.name = name;
+        this.email = email;
+        return this;
+    }
 }
