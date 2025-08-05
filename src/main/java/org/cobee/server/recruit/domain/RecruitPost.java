@@ -100,4 +100,8 @@ public class RecruitPost {
         //this.imgUrl = dto.imgUrl();
         this.content = dto.content();
     }
+
+    public void addComment(Comment comment) {
+        comments.add(comment);
+    }
 }

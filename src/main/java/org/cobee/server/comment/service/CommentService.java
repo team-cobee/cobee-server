@@ -1,7 +1,55 @@
 package org.cobee.server.comment.service;
 
+import lombok.RequiredArgsConstructor;
+import org.cobee.server.comment.domain.Comment;
+import org.cobee.server.comment.dto.CommentRequest;
+import org.cobee.server.comment.dto.CommentResponse;
+import org.cobee.server.comment.repository.CommentRepository;
+import org.cobee.server.global.error.code.ErrorCode;
+import org.cobee.server.global.error.exception.CustomException;
+import org.cobee.server.member.domain.Member;
+import org.cobee.server.member.repository.MemberRepository;
+import org.cobee.server.recruit.domain.RecruitPost;
+import org.cobee.server.recruit.repository.RecruitPostRepository;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class CommentService {
+
+    private final RecruitPostRepository postRepository;
+    private final MemberRepository memberRepository;
+    private final CommentRepository commentRepository;
+    public CommentResponse createComment(Long memberId, Long postId, CommentRequest request){
+        Member member = memberRepository.findById(memberId).orElseThrow(()->new CustomException(ErrorCode.UNAUTHORIZED));// 추후 바꾸기
+        RecruitPost post = postRepository.findById(postId).orElseThrow(
+                ()->new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        Comment parentComment = null;
+
+        // parentId가 있음 대댓글
+        if (request.parentId() != null) {
+            parentComment = commentRepository.findById(request.parentId())
+                    .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+        }
+
+        // 댓글(또는 대댓글) 생성
+        Comment comment = Comment.builder()
+                .content(request.content())
+                .isPrivate(request.isPrivate())
+                .member(member)
+                .post(post)
+                .parent(parentComment) // 원댓글이면 null, 대댓글이면 parentId 값의 댓글이 들어가
+                .build();
+
+        // 양방향 동기화
+        if (parentComment != null) {
+            parentComment.addChild(comment); // 대댓글일 경우 부모 댓글에 추가
+        } else {
+            post.addComment(comment); // 일반 댓글일 경우 게시글에 추가
+        }
+
+        commentRepository.save(comment);
+        return CommentResponse.from(member, comment);
+    }
 }
