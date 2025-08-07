@@ -60,4 +60,20 @@ public class CommentService {
         List<Comment> comments = commentRepository.findAllByPostId(postId);
         return CommentResponse.toList(comments);
     }
+
+    public CommentResponse updateComment(Long memberId, Long commentId, CommentRequest request) {
+        Member member = memberRepository.findById(memberId).orElseThrow(()->new CustomException(ErrorCode.UNAUTHORIZED));// 추후 바꾸기
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+
+        if (request.parentId() != null) {
+            Comment parent = commentRepository.findById(request.parentId())
+                    .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+            comment.setParent(parent);
+        }
+        comment.updateComment(request);
+        commentRepository.save(comment);
+        return CommentResponse.from(member, comment);
+
+    }
 }

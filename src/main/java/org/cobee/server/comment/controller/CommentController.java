@@ -33,4 +33,12 @@ public class CommentController {
         List<CommentResponse> result = commentService.getAllComments(memberId, postId);
         return ApiResponse.success(postId+"의 모든 댓글 조회 완료", "COMMENT_ALL_VIEW_SUCCESS", result);
     }
+
+    @PutMapping("/{memberId}/comments/{commentId}")
+    public ApiResponse<CommentResponse> editComment(@PathVariable(name = "memberId") Long memberId,
+                                                    @PathVariable(name = "commentId") Long commentId,
+                                                    @RequestBody CommentRequest request){
+        CommentResponse result = commentService.updateComment(memberId,commentId,request);
+        return ApiResponse.success("댓글 수정 완료", "COMMENT_EDIT_SUCCESS", result);
+    }
 }
