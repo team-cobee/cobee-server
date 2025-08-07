@@ -5,6 +5,9 @@ import lombok.Builder;
 import org.cobee.server.comment.domain.Comment;
 import org.cobee.server.member.domain.Member;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Builder
 public record CommentResponse(Long commentId, Long parentId, String content, String nickname, String profileImg) {
 
@@ -19,4 +22,12 @@ public record CommentResponse(Long commentId, Long parentId, String content, Str
                 .profileImg(member.getProfileUrl())
                 .build();
     }
+
+    public static List<CommentResponse> toList(List<Comment> comments){
+        return comments.stream().
+                map(comment -> CommentResponse.from(comment.getMember(), comment))
+                .collect(Collectors.toList());
+    }
+
+
 }
