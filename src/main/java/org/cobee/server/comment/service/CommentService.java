@@ -13,6 +13,9 @@ import org.cobee.server.recruit.domain.RecruitPost;
 import org.cobee.server.recruit.repository.RecruitPostRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -51,5 +54,10 @@ public class CommentService {
 
         commentRepository.save(comment);
         return CommentResponse.from(member, comment);
+    }
+
+    public List<CommentResponse> getAllComments(Long memberId, Long postId){
+        List<Comment> comments = commentRepository.findAllByPostId(postId);
+        return CommentResponse.toList(comments);
     }
 }

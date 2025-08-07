@@ -8,6 +8,8 @@ import org.cobee.server.global.error.exception.CustomException;
 import org.cobee.server.global.response.ApiResponse;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 public class CommentController {
@@ -24,6 +26,11 @@ public class CommentController {
         } catch (CustomException e){
             return ApiResponse.failure("댓글 생성 실패", "COMMENT_FAILED", e.getMessage());
         }
+    }
 
+    @GetMapping("/posts/{postId}/comments")
+    public ApiResponse<List<CommentResponse>> getComments(Long memberId, @PathVariable(name = "postId") Long postId){
+        List<CommentResponse> result = commentService.getAllComments(memberId, postId);
+        return ApiResponse.success(postId+"의 모든 댓글 조회 완료", "COMMENT_ALL_VIEW_SUCCESS", result);
     }
 }
