@@ -41,4 +41,15 @@ public class CommentController {
         CommentResponse result = commentService.updateComment(memberId,commentId,request);
         return ApiResponse.success("댓글 수정 완료", "COMMENT_EDIT_SUCCESS", result);
     }
+
+    @DeleteMapping("/{memberId}/comments/{commentId}")
+    public ApiResponse<Boolean> deleteComment(@PathVariable(name = "memberId") Long memberId,
+                                              @PathVariable(name = "commentId") Long commentId) {
+        Boolean result = commentService.deleteComment(memberId, commentId);
+        if (result){
+            return ApiResponse.success("성공", "COMMENT_DELETED", result);
+        } else {
+            return ApiResponse.failure("실패","COMMENT_DELETED_FAILED","comment delete failed", result);
+        }
+    }
 }

@@ -76,4 +76,18 @@ public class CommentService {
         return CommentResponse.from(member, comment);
 
     }
+
+    public Boolean deleteComment(Long memberId, Long commentId){
+        try {
+            Comment comment = commentRepository.findById(commentId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+            commentRepository.delete(comment);
+            return true;
+        } catch (CustomException e){
+            return false;
+        }
+
+    }
+
+
 }
