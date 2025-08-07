@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.cobee.server.comment.dto.CommentRequest;
 import org.cobee.server.member.domain.Member;
 import org.cobee.server.recruit.domain.RecruitPost;
 
@@ -46,5 +47,14 @@ public class Comment {
     public void addChild(Comment child) {
         children.add(child);
         child.parent = this;
+    }
+
+    public void updateComment(CommentRequest request) {
+        this.content = request.content();
+        this.isPrivate = request.isPrivate();
+    }
+
+    public void setParent(Comment parent) {
+        this.parent = parent;
     }
 }
