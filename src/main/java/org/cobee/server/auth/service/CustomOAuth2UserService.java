@@ -50,7 +50,9 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         if ("kakao".equals(registrationId)) {
             return SocialType.KAKAO;
         }
-        // TODO: GOOGLE
+        if ("google".equals(registrationId)) {
+            return SocialType.GOOGLE;
+        }
         return null;
     }
 
