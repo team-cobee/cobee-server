@@ -55,17 +55,33 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     private Member getUser(OAuthAttributes attributes, SocialType socialType) {
-        Member findMember = memberRepository.findBySocialTypeAndSocialId(socialType,
-                attributes.getOauth2UserInfo().getId()).orElse(null);
+        String socialId = attributes.getOauth2UserInfo().getId();
+        System.out.println("=== getUser Debug ===");
+        System.out.println("socialType: " + socialType);
+        System.out.println("socialId: " + socialId);
+        
+        Member findMember = memberRepository.findBySocialTypeAndSocialId(socialType, socialId).orElse(null);
+        System.out.println("findMember: " + findMember);
 
         if (findMember == null) {
+            System.out.println("Member not found, creating new member...");
             return saveUser(attributes, socialType);
         }
+        System.out.println("Member found, returning existing member");
         return findMember;
     }
 
     private Member saveUser(OAuthAttributes attributes, SocialType socialType) {
+        System.out.println("=== saveUser Debug ===");
         Member createdMember = attributes.toEntity(socialType, attributes.getOauth2UserInfo());
-        return memberRepository.save(createdMember);
+        System.out.println("Before save - Member: " + createdMember);
+        System.out.println("Email: " + createdMember.getEmail());
+        System.out.println("SocialId: " + createdMember.getSocialId());
+        System.out.println("SocialType: " + createdMember.getSocialType());
+        System.out.println("IsCompleted: " + createdMember.getIsCompleted());
+        
+        Member savedMember = memberRepository.save(createdMember);
+        System.out.println("After save - Member ID: " + savedMember.getId());
+        return savedMember;
     }
 }

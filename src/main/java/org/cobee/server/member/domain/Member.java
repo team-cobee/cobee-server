@@ -27,7 +27,7 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    //@Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
@@ -40,11 +40,16 @@ public class Member {
     private String gender;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    //@Column(nullable = false)
     private SocialType socialType;
 
-    @Column(nullable = false)
+    // 소셜 플랫폼에서 제공하는 사용자 고유 ID (카카오, 구글 등)
+    //@Column(nullable = false)
     private String socialId;
+
+    // 회원가입 완료 여부 (소셜 로그인 후 추가 정보 입력 완료 여부)
+    @Column(nullable = false)
+    private Boolean isCompleted;
 
     @Column
     private Boolean ocrValidation;
