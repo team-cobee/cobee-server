@@ -33,9 +33,15 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 .getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
+        System.out.println("=== OAuth2 Debug Info ===");
+        System.out.println("Registration ID: " + registrationId);
+        System.out.println("Social Type: " + socialType);
+        System.out.println("User Attributes: " + attributes);
+
         OAuthAttributes extractAttributes = OAuthAttributes.of(socialType, userNameAttributeName, attributes);
 
         Member createdMember = getUser(extractAttributes, socialType);
+        System.out.println("Created Member: " + createdMember.getId() + ", " + createdMember.getName());
 
         return new PrincipalDetails(createdMember, attributes);
     }

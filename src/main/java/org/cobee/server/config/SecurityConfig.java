@@ -1,6 +1,7 @@
 package org.cobee.server.config;
 
 import lombok.RequiredArgsConstructor;
+import org.cobee.server.auth.handler.HttpCookieOAuth2AuthorizationRequestRepository;
 import org.cobee.server.auth.handler.OAuth2AuthenticationFailureHandler;
 import org.cobee.server.auth.handler.OAuth2AuthenticationSuccessHandler;
 import org.cobee.server.auth.jwt.JwtAuthenticationFilter;
@@ -28,6 +29,7 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
+    private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -48,6 +50,7 @@ public class SecurityConfig {
 
                 // OAuth2 로그인 설정
                 .oauth2Login(oauth2 -> oauth2
+                        .authorizationEndpoint(auth -> auth.authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository))
                         .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
                         .successHandler(oAuth2AuthenticationSuccessHandler)
                         .failureHandler(oAuth2AuthenticationFailureHandler))
