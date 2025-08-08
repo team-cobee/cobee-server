@@ -48,6 +48,7 @@ public class OAuthAttributes {
                 .socialId(oauth2UserInfo.getId())
                 .name(oauth2UserInfo.getNickname())
                 .email(oauth2UserInfo.getEmail())
+                .isCompleted(false)
                 .build();
     }
 }

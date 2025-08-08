@@ -45,8 +45,10 @@ public class SecurityConfig {
 
                 // 인가 규칙 설정
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/**").permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers("/", "/home", "/login/**", "/oauth2/**", "/error").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**").permitAll()
+                        .requestMatchers("/auth/**").authenticated()
+                        .anyRequest().permitAll())
 
                 // OAuth2 로그인 설정
                 .oauth2Login(oauth2 -> oauth2

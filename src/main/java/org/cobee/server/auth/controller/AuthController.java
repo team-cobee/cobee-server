@@ -1,11 +1,13 @@
 package org.cobee.server.auth.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.cobee.server.auth.dto.MemberInfoDto;
 import org.cobee.server.auth.service.PrincipalDetails;
 import org.cobee.server.global.response.ApiResponse;
 import org.cobee.server.member.domain.Member;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,9 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
 
-    @GetMapping
+    @GetMapping("/kakao")
     public ResponseEntity<ApiResponse> getMyInfo(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         Member member = principalDetails.getMember();
-        return ResponseEntity.ok(ApiResponse.success("내 정보 조회 성공", "200", member));
+        MemberInfoDto memberInfo = MemberInfoDto.from(member);
+        return ResponseEntity.ok(ApiResponse.success("내 정보 조회 성공", "200", memberInfo));
     }
 }

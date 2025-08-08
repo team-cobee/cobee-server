@@ -38,3 +38,5 @@ out/
 
 ### env 파일 추가 ###
 .env
+
+/src/main/resources/application.yml
