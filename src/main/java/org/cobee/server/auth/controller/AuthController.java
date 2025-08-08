@@ -18,9 +18,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     @GetMapping("/kakao")
-    public ResponseEntity<ApiResponse> getMyInfo(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ResponseEntity<ApiResponse> getKakaoUserInfo(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         Member member = principalDetails.getMember();
         MemberInfoDto memberInfo = MemberInfoDto.from(member);
-        return ResponseEntity.ok(ApiResponse.success("내 정보 조회 성공", "200", memberInfo));
+        return ResponseEntity.ok(ApiResponse.success("카카오 사용자 정보 조회 성공", "200", memberInfo));
+    }
+
+    @GetMapping("/google")
+    public ResponseEntity<ApiResponse> getGoogleUserInfo(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Member member = principalDetails.getMember();
+        MemberInfoDto memberInfo = MemberInfoDto.from(member);
+        return ResponseEntity.ok(ApiResponse.success("구글 사용자 정보 조회 성공", "200", memberInfo));
     }
 }

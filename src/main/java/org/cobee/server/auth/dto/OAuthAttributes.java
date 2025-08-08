@@ -24,7 +24,9 @@ public class OAuthAttributes {
         if (socialType == SocialType.KAKAO) {
             return ofKakao(userNameAttributeName, attributes);
         }
-        // TODO: GOOGLE
+        if (socialType == SocialType.GOOGLE) {
+            return ofGoogle(userNameAttributeName, attributes);
+        }
         return null;
     }
 
@@ -38,6 +40,17 @@ public class OAuthAttributes {
                         String.valueOf(attributes.get("id")),
                         (String) kakaoProfile.get("nickname"),
                         (String) kakaoAccount.get("email")
+                ))
+                .build();
+    }
+
+    private static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes) {
+        return OAuthAttributes.builder()
+                .nameAttributeKey(userNameAttributeName)
+                .oauth2UserInfo(new OAuth2UserInfo(
+                        (String) attributes.get("sub"),
+                        (String) attributes.get("name"),
+                        (String) attributes.get("email")
                 ))
                 .build();
     }
