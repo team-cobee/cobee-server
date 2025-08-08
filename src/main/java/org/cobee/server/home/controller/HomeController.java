@@ -1,5 +1,6 @@
 package org.cobee.server.home.controller;
 
+import org.cobee.server.global.response.ApiResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,23 +12,18 @@ import java.util.Map;
 public class HomeController {
 
     @GetMapping("/home")
-    public Map<String, Object> home(@RequestParam(required = false) String code,
-                                    @RequestParam(required = false) String token) {
-        Map<String, Object> response = new HashMap<>();
+    public ApiResponse<Map<String, Object>> home(@RequestParam(required = false) String code,
+                                                @RequestParam(required = false) String token) {
+        Map<String, Object> data = new HashMap<>();
         
         if (token != null) {
-            response.put("success", true);
-            response.put("message", "Login successful");
-            response.put("token", token);
+            data.put("token", token);
+            return ApiResponse.success("Login successful", "200", data);
         } else if (code != null) {
-            response.put("success", true);
-            response.put("message", "Authorization code received");
-            response.put("code", code);
+            data.put("code", code);
+            return ApiResponse.success("Authorization code received", "200", data);
         } else {
-            response.put("success", false);
-            response.put("message", "No token or code provided");
+            return ApiResponse.failure("No token or code provided", "400", "MISSING_PARAMETER");
         }
-        
-        return response;
     }
 }
