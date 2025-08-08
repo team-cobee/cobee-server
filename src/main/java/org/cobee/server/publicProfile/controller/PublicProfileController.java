@@ -1,9 +1,11 @@
 package org.cobee.server.publicProfile.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.cobee.server.auth.service.PrincipalDetails;
 import org.cobee.server.publicProfile.dto.PublicProfileRequestDto;
 import org.cobee.server.publicProfile.service.PublicProfileService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.cobee.server.publicProfile.dto.PublicProfileResponseDto;
@@ -19,8 +21,9 @@ public class PublicProfileController {
 
     private final PublicProfileService publicProfileService;
 
-    @PostMapping("/{memberId}")
-    public ResponseEntity<Map<String, String>> createPublicProfile(@PathVariable("memberId") Long memberId, @RequestBody PublicProfileRequestDto requestDto) {
+    @PostMapping()
+    public ResponseEntity<Map<String, String>> createPublicProfile(@AuthenticationPrincipal PrincipalDetails principalDetails, @RequestBody PublicProfileRequestDto requestDto) {
+        Long memberId = principalDetails.getMember().getId();
         publicProfileService.createPublicProfile(memberId, requestDto);
         return ResponseEntity.ok(Map.of("message", "Public profile created successfully"));
     }
