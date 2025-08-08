@@ -51,6 +51,7 @@ public class Member {
     @Column(nullable = false)
     private Boolean isCompleted;
 
+    // OCR 주민등록증 인증 여부
     @Column
     private Boolean ocrValidation;
 
@@ -91,5 +92,12 @@ public class Member {
         this.name = name;
         this.email = email;
         return this;
+    }
+
+    public void updateOcrValidation(String realName, String birthDate, String gender) {
+        this.name = realName;
+        this.birthDate = birthDate;
+        this.gender = gender;
+        this.ocrValidation = true;
     }
 }
