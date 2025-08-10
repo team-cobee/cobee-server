@@ -23,7 +23,7 @@ public class OcrController {
      * 주민등록증 OCR 인증
      */
     @PostMapping("/verify")
-    public ApiResponse<OcrResponse.OcrData> verifyIdCard(
+    public ApiResponse<OcrResponse> verifyIdCard(
             @RequestParam("image") MultipartFile imageFile,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
@@ -45,9 +45,9 @@ public class OcrController {
             if (ocrResult.isSuccess()) {
                 // Member 엔티티에 OCR 결과 저장
                 Member member = principalDetails.getMember();
-                ocrMemberService.updateMemberWithOcrData(member.getId(), ocrResult.getData());
+                ocrMemberService.updateMemberWithOcrData(member.getId(), ocrResult);
 
-                return ApiResponse.success("주민등록증 인증이 완료되었습니다.", "200", ocrResult.getData());
+                return ApiResponse.success("주민등록증 인증이 완료되었습니다.", "200", ocrResult);
             } else {
                 return ApiResponse.failure("주민등록증 인증에 실패했습니다: " + ocrResult.getMessage(), "400", "OCR_FAILED");
             }
