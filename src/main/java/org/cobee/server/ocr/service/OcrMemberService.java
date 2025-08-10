@@ -23,17 +23,17 @@ public class OcrMemberService {
     /**
      * OCR 결과를 Member 엔티티에 저장
      */
-    public void updateMemberWithOcrData(Long memberId, OcrResponse.OcrData ocrData) {
+    public void updateMemberWithOcrData(Long memberId, OcrResponse ocrData) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
 
         // OCR 결과에서 정보 추출 및 매핑
-        if (ocrData.getName() != null && ocrData.getResidentNumber() != null) {
-            String birthDate = extractBirthDateFromResidentNumber(ocrData.getResidentNumber());
-            String gender = extractGenderFromResidentNumber(ocrData.getResidentNumber());
+        if (ocrData.getName() != null && ocrData.getSss_front() != null && ocrData.getSsn_back_first() != null) {
+            String birthDate = extractBirthDateFromOcrData(ocrData.getSss_front(), ocrData.getSsn_back_first());
+            String genderCode = convertGenderToCode(ocrData.getGender());
             
             // Member 엔티티 업데이트
-            member.updateOcrValidation(ocrData.getName(), birthDate, gender);
+            member.updateOcrValidation(ocrData.getName(), birthDate, genderCode);
             
             memberRepository.save(member);
             log.info("Member OCR 정보 업데이트 완료 - ID: {}, 이름: {}", memberId, ocrData.getName());
@@ -41,7 +41,52 @@ public class OcrMemberService {
     }
 
     /**
-     * 주민등록번호에서 생년월일 추출 (YYYYMMDD 형식)
+     * OCR 데이터에서 생년월일 추출 (YYYYMMDD 형식)
+     */
+    private String extractBirthDateFromOcrData(String sss_front, Integer ssn_back_first) {
+        if (sss_front == null || sss_front.length() != 6 || ssn_back_first == null) {
+            return null;
+        }
+
+        try {
+            // 1,2: 1900년대, 3,4: 2000년대
+            String year;
+            if (ssn_back_first == 1 || ssn_back_first == 2) {
+                year = "19" + sss_front.substring(0, 2);
+            } else if (ssn_back_first == 3 || ssn_back_first == 4) {
+                year = "20" + sss_front.substring(0, 2);
+            } else {
+                return null;
+            }
+
+            String month = sss_front.substring(2, 4);
+            String day = sss_front.substring(4, 6);
+
+            return year + month + day; // YYYYMMDD 형식으로 반환
+
+        } catch (Exception e) {
+            log.error("생년월일 추출 실패: sss_front={}, ssn_back_first={}", sss_front, ssn_back_first, e);
+            return null;
+        }
+    }
+
+    /**
+     * 성별 한글을 코드로 변환
+     */
+    private String convertGenderToCode(String genderKorean) {
+        if (genderKorean == null) {
+            return null;
+        }
+        
+        return switch (genderKorean) {
+            case "남성" -> "MALE";
+            case "여성" -> "FEMALE";
+            default -> null;
+        };
+    }
+
+    /**
+     * 주민등록번호에서 생년월일 추출 (YYYYMMDD 형식) - 레거시 메서드
      */
     private String extractBirthDateFromResidentNumber(String residentNumber) {
         if (residentNumber == null || residentNumber.length() < 7) {
