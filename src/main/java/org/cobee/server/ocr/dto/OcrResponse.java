@@ -1,34 +1,65 @@
 package org.cobee.server.ocr.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
 public class OcrResponse {
-    private String name;           // 이름
-    private String sss_front;      // 주민등록번호 앞자리 (YYMMDD)
-    private String address;        // 주소
-    private Integer ssn_back_first; // 주민등록번호 뒷자리 첫번째 (성별 구분)
-    private String gender;         // 성별 ("남성" 또는 "여성")
+    private boolean success;
+    private String filename;
+    @JsonProperty("image_url")
+    private String imageUrl;
+    @JsonProperty("raw_text")
+    private String rawText;
+    @JsonProperty("structured_data")
+    private StructuredData structuredData;
+    private String error;
 
-    // 성공 여부를 판단하는 메서드 (이름이 있으면 성공으로 간주)
-    public boolean isSuccess() {
-        return name != null && !name.isEmpty();
+    @Data
+    public static class StructuredData {
+        private String name;
+        @JsonProperty("ssn_front")
+        private String ssnFront;
+        private String address;
+        @JsonProperty("ssn_back_first")
+        private String ssnBackFirst;
+        private String gender;
     }
 
-    // 에러 메시지 (실패 시 사용)
+    public boolean isSuccess() {
+        return success && structuredData != null && structuredData.getName() != null;
+    }
+
     public String getMessage() {
+        if (error != null) {
+            return error;
+        }
         return isSuccess() ? "OCR 처리 성공" : "OCR 처리 실패";
     }
 
-    // 기존 코드와의 호환성을 위한 getData 메서드
-    public OcrResponse getData() {
-        return this;
+    public String getName() {
+        return structuredData != null ? structuredData.getName() : null;
     }
 
-    // 주민등록번호 전체를 조합하는 메서드
+    public String getSsnFront() {
+        return structuredData != null ? structuredData.getSsnFront() : null;
+    }
+
+    public String getAddress() {
+        return structuredData != null ? structuredData.getAddress() : null;
+    }
+
+    public String getSsnBackFirst() {
+        return structuredData != null ? structuredData.getSsnBackFirst() : null;
+    }
+
+    public String getGender() {
+        return structuredData != null ? structuredData.getGender() : null;
+    }
+
     public String getFullResidentNumber() {
-        if (sss_front != null && ssn_back_first != null) {
-            return sss_front + "-" + ssn_back_first + "XXXXXX"; // 뒷자리는 보안상 마스킹
+        if (getSsnFront() != null && getSsnBackFirst() != null) {
+            return getSsnFront() + "-" + getSsnBackFirst() + "XXXXXX";
         }
         return null;
     }

@@ -52,12 +52,31 @@ public class OcrService {
             ResponseEntity<OcrResponse> response = restTemplate.postForEntity(
                     uploadUrl, requestEntity, OcrResponse.class);
 
-            log.info("OCR API 호출 성공: {}", response.getBody());
-            return response.getBody();
+            OcrResponse ocrResponse = response.getBody();
+            
+            if (ocrResponse != null) {
+                log.info("OCR API 호출 성공 - filename: {}, success: {}", 
+                    ocrResponse.getFilename(), ocrResponse.isSuccess());
+                
+                if (!ocrResponse.isSuccess()) {
+                    log.warn("OCR 처리 실패: {}", ocrResponse.getMessage());
+                }
+                
+                return ocrResponse;
+            } else {
+                log.error("OCR API 응답이 null입니다.");
+                throw new RuntimeException("OCR API에서 응답을 받지 못했습니다.");
+            }
 
         } catch (Exception e) {
             log.error("OCR API 호출 실패: ", e);
-            throw new RuntimeException("OCR 처리 중 오류가 발생했습니다.", e);
+            
+            // 실패 응답 객체 생성
+            OcrResponse errorResponse = new OcrResponse();
+            errorResponse.setSuccess(false);
+            errorResponse.setError("OCR 처리 중 오류가 발생했습니다: " + e.getMessage());
+            
+            return errorResponse;
         }
     }
 }

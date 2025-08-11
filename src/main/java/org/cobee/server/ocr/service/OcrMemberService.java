@@ -28,44 +28,73 @@ public class OcrMemberService {
                 .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
 
         // OCR 결과에서 정보 추출 및 매핑
-        if (ocrData.getName() != null && ocrData.getSss_front() != null && ocrData.getSsn_back_first() != null) {
-            String birthDate = extractBirthDateFromOcrData(ocrData.getSss_front(), ocrData.getSsn_back_first());
-            String genderCode = convertGenderToCode(ocrData.getGender());
+        if (ocrData.getName() != null && ocrData.getSsnFront() != null && ocrData.getSsnBackFirst() != null) {
+            String birthDate = extractBirthDateFromOcrData(ocrData.getSsnFront(), ocrData.getSsnBackFirst());
+            String genderCode = extractGenderFromSsnBackFirst(ocrData.getSsnBackFirst());
             
             // Member 엔티티 업데이트
             member.updateOcrValidation(ocrData.getName(), birthDate, genderCode);
             
             memberRepository.save(member);
-            log.info("Member OCR 정보 업데이트 완료 - ID: {}, 이름: {}", memberId, ocrData.getName());
+            log.info("Member OCR 정보 업데이트 완료 - ID: {}, 이름: {}, 생년월일: {}, 성별: {}", 
+                memberId, ocrData.getName(), birthDate, genderCode);
         }
     }
 
     /**
      * OCR 데이터에서 생년월일 추출 (YYYYMMDD 형식)
      */
-    private String extractBirthDateFromOcrData(String sss_front, Integer ssn_back_first) {
-        if (sss_front == null || sss_front.length() != 6 || ssn_back_first == null) {
+    private String extractBirthDateFromOcrData(String ssnFront, String ssnBackFirst) {
+        if (ssnFront == null || ssnFront.length() != 6 || ssnBackFirst == null) {
             return null;
         }
 
         try {
+            int backFirstDigit = Integer.parseInt(ssnBackFirst);
+            
             // 1,2: 1900년대, 3,4: 2000년대
             String year;
-            if (ssn_back_first == 1 || ssn_back_first == 2) {
-                year = "19" + sss_front.substring(0, 2);
-            } else if (ssn_back_first == 3 || ssn_back_first == 4) {
-                year = "20" + sss_front.substring(0, 2);
+            if (backFirstDigit == 1 || backFirstDigit == 2) {
+                year = "19" + ssnFront.substring(0, 2);
+            } else if (backFirstDigit == 3 || backFirstDigit == 4) {
+                year = "20" + ssnFront.substring(0, 2);
             } else {
                 return null;
             }
 
-            String month = sss_front.substring(2, 4);
-            String day = sss_front.substring(4, 6);
+            String month = ssnFront.substring(2, 4);
+            String day = ssnFront.substring(4, 6);
 
             return year + month + day; // YYYYMMDD 형식으로 반환
 
         } catch (Exception e) {
-            log.error("생년월일 추출 실패: sss_front={}, ssn_back_first={}", sss_front, ssn_back_first, e);
+            log.error("생년월일 추출 실패: ssnFront={}, ssnBackFirst={}", ssnFront, ssnBackFirst, e);
+            return null;
+        }
+    }
+
+    /**
+     * SSN 뒷자리 첫 번째 숫자로 성별 판단
+     * 홀수(1,3): 남성, 짝수(2,4): 여성
+     */
+    private String extractGenderFromSsnBackFirst(String ssnBackFirst) {
+        if (ssnBackFirst == null) {
+            return null;
+        }
+
+        try {
+            int backFirstDigit = Integer.parseInt(ssnBackFirst);
+            
+            // 홀수: 남성, 짝수: 여성
+            if (backFirstDigit % 2 == 1) {
+                return "MALE";
+            } else if (backFirstDigit % 2 == 0) {
+                return "FEMALE";
+            }
+            
+            return null;
+        } catch (Exception e) {
+            log.error("성별 추출 실패: ssnBackFirst={}", ssnBackFirst, e);
             return null;
         }
     }
