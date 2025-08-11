@@ -41,6 +41,7 @@ public class RecruitService {
                 //.isSmoking()
                 //.personality()
                 //.lifeStyle()
+                .comments(new ArrayList<>()) //여기에 추가하는건 안되고 메서드로 추가해야하는건가??
                 .member(member)
                 .build();
         recruitRepository.save(recruitPost);
