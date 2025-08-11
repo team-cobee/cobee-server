@@ -53,6 +53,9 @@ public class Member {
 
     // OCR 주민등록증 인증 여부
     @Column
+    private String profileUrl;
+
+    @Column
     private Boolean ocrValidation;
 
     @Column

@@ -35,6 +35,8 @@ out/
 
 ### VS Code ###
 .vscode/
-
 ### env 파일 추가 ###
 .env
+### application ###
+resources/application.yml
+src/test/resources/application.yml
