@@ -5,7 +5,9 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 public enum ErrorCode {
-    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "AUTH-001", "Unauthorized access");
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "AUTH-001", "Unauthorized access"),
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "AUTH-002", "Cannot find Member"),
+    POST_NOT_FOUND(HttpStatus.NOT_FOUND, "POST-001", "Cannot find RecruitPost");
 
     private final HttpStatus status;
     private final String code;
