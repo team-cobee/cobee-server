@@ -15,17 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
 
-    @GetMapping("/kakao")
-    public ApiResponse<MemberInfoDto> getKakaoUserInfo(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+    @GetMapping()
+    public ApiResponse<MemberInfoDto> getUserInfo(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         Member member = principalDetails.getMember();
         MemberInfoDto memberInfo = MemberInfoDto.from(member);
-        return ApiResponse.success("카카오 사용자 정보 조회 성공", "200", memberInfo);
-    }
-
-    @GetMapping("/google")
-    public ApiResponse<MemberInfoDto> getGoogleUserInfo(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        Member member = principalDetails.getMember();
-        MemberInfoDto memberInfo = MemberInfoDto.from(member);
-        return ApiResponse.success("구글 사용자 정보 조회 성공", "200", memberInfo);
+        return ApiResponse.success("사용자 정보 조회 성공", "200", memberInfo);
     }
 }
