@@ -42,6 +42,9 @@ public class Member {
     private SocialType socialType;
 
     @Column
+    private String profileUrl;
+
+    @Column
     private Boolean ocrValidation;
 
     @Column

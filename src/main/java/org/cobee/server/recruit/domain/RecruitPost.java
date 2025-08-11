@@ -2,6 +2,7 @@ package org.cobee.server.recruit.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cobee.server.publicProfile.domain.enums.Lifestyle;
@@ -10,6 +11,7 @@ import org.cobee.server.recruit.domain.enums.RecruitStatus;
 import org.cobee.server.chat.domain.ChattingRoom;
 import org.cobee.server.comment.domain.Comment;
 import org.cobee.server.member.domain.Member;
+import org.cobee.server.recruit.dto.RecruitRequest;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,6 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Builder
 public class RecruitPost {
 
     @Id
@@ -39,6 +42,9 @@ public class RecruitPost {
 
     @Column
     private int rentCost;
+
+    @Column
+    private int monthlyCost;
 
     @Column
     private Float regionLatitude; // 위도
@@ -86,5 +92,12 @@ public class RecruitPost {
     private Member member;
 
 
-
+    public void updatePost(RecruitRequest dto) {
+        this.title = dto.title();
+        this.recruitCount = dto.recruitCount();
+        this.rentCost = dto.rentCost();
+        this.monthlyCost = dto.monthlyCost();
+        //this.imgUrl = dto.imgUrl();
+        this.content = dto.content();
+    }
 }
