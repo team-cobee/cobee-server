@@ -12,16 +12,25 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     // CustomException 처리
+//    @ExceptionHandler(CustomException.class)
+//    public ResponseEntity<ApiResponse<Void>> handleCustomException(CustomException ex) {
+//        ErrorCode errorCode = ex.getErrorCode();
+//        return ResponseEntity
+//                .status(errorCode.getStatus())
+//                .body(ApiResponse.failure(
+//                        errorCode.getMessage(),
+//                        errorCode.getCode(),
+//                        ex.getMessage()
+//                ));
+//    }
     @ExceptionHandler(CustomException.class)
-    public ResponseEntity<ApiResponse<Void>> handleCustomException(CustomException ex) {
+    public ApiResponse<Void> handleCustomException(CustomException ex) {
         ErrorCode errorCode = ex.getErrorCode();
-        return ResponseEntity
-                .status(errorCode.getStatus())
-                .body(ApiResponse.failure(
-                        errorCode.getMessage(),
-                        errorCode.getCode(),
-                        ex.getMessage()
-                ));
+        return ApiResponse.failure(
+                errorCode.getMessage(),
+                errorCode.getCode(),
+                ex.getMessage()
+        );
     }
 
     // 서버 내부 오류 처리
