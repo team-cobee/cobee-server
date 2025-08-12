@@ -81,7 +81,9 @@ public class RecruitService {
         } catch (CustomException e) {
             return false;
         }
-
-
+    }
+    
+    public List<RecruitPost> getAllActiveRecruits() {
+        return recruitRepository.findByStatus(RecruitStatus.ACTIVE);
     }
 }
