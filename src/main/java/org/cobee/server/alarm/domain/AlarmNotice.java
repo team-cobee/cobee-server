@@ -2,6 +2,7 @@ package org.cobee.server.alarm.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cobee.server.alarm.domain.Alarm;
@@ -11,6 +12,7 @@ import org.cobee.server.member.domain.Member;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Builder
 public class AlarmNotice {
 
     @Id
@@ -18,7 +20,7 @@ public class AlarmNotice {
     private Long id;
 
     @Column
-    private Boolean is_read;
+    private Boolean isRead;
 
     @ManyToOne
     @JoinColumn(name="to_user_id")

@@ -16,7 +16,7 @@ build/
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
-
+**/src/main/resources/firebase/cobee-firebase.json
 ### IntelliJ IDEA ###
 .idea
 *.iws
