@@ -17,3 +17,6 @@ google:
   maps:
     api-key: ${GOOGLE_MAPS_API_KEY}
 
+logging:
+  level:
+    root: INFO   # 또는 DEBUG

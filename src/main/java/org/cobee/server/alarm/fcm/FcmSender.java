@@ -14,7 +14,7 @@ public class FcmSender {
 
     public void send(String fcmToken, String title, String body) {
         if (fcmToken == null || fcmToken.isBlank()) {
-            log.warn("FCM token is blank. Skip push.");
+            log.info("FCM token is blank. Skip push.");
             return;
         }
         try {
