@@ -9,6 +9,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AlarmNoticeRepository extends JpaRepository<AlarmNotice, Long> {
-    Page<AlarmNotice> findByMemberOrderByIdDesc(Member toUser, Pageable pageable);
-    long countByMemberAndIsReadFalse(Member toUser);
+    AlarmNotice findAlarmNoticeByAlarmId(Long id);
 }

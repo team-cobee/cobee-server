@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.cobee.server.alarm.domain.Alarm;
 import org.cobee.server.member.domain.Member;
 
 @Entity
@@ -29,5 +28,9 @@ public class AlarmNotice {
     @ManyToOne
     @JoinColumn(name="alarm_id")
     private Alarm alarm;
+
+    public void updateIsRead(Boolean isReadCheck){
+        this.isRead=isReadCheck;
+    }
 
 }

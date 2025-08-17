@@ -1,4 +1,5 @@
 package org.cobee.server.alarm.service;
+import org.cobee.server.alarm.dto.MarkReadRequest;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,5 +51,12 @@ public class AlarmService {
         fcmSender.send(to.getFcmToken(), req.getPushTitle(), req.getPushBody());
 
         return AlarmNoticeResponse.of(notice);
+    }
+
+    public Boolean changeAlarmRead(MarkReadRequest request){
+        AlarmNotice notice = alarmNoticeRepository.findAlarmNoticeByAlarmId(request.getNoticeId());
+        notice.updateIsRead(true);
+        alarmNoticeRepository.save(notice);
+        return notice.getIsRead();
     }
 }
