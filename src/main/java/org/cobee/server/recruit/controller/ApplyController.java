@@ -16,7 +16,7 @@ public class ApplyController {
     public ApiResponse<ApplyResponse> applyForRecruit(@PathVariable(name="fromMemberId") Long memberId,
                                                       @RequestBody ApplyRequest request){
         ApplyResponse result = applyService.apply(memberId, request);
-        return ApiResponse.success("", "", result);
+        return ApiResponse.success("지원이 완료되었습니다", "APPLY-001", result);
 
     }
 }

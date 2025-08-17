@@ -2,6 +2,7 @@ package org.cobee.server.recruit.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cobee.server.alarm.domain.Alarm;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Builder
 public class ApplyRecord {
 
     @Id
@@ -39,4 +41,7 @@ public class ApplyRecord {
     @JoinColumn(name = "alarm_id")  // FK 열, FK 연결하고 싶은 그 객체 타입을 쓰면 매핑해줌
     private Alarm alarm;
 
+    public void setPost(RecruitPost recruitPost) {
+        this.post=recruitPost;
+    }
 }
