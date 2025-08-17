@@ -84,6 +84,8 @@ public class Member {
     }
 
 
-
-
+    public String updateFcmToken(String fcmToken) {
+        this.fcmToken=fcmToken;
+        return fcmToken;
+    }
 }
