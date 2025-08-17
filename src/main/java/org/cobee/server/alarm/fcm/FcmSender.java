@@ -5,6 +5,8 @@ import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.cobee.server.global.error.code.ErrorCode;
+import org.cobee.server.global.error.exception.CustomException;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -14,7 +16,6 @@ public class FcmSender {
 
     public void send(String fcmToken, String title, String body) {
         if (fcmToken == null || fcmToken.isBlank()) {
-            log.info("FCM token is blank. Skip push.");
             return;
         }
         try {
@@ -24,13 +25,11 @@ public class FcmSender {
                             .setTitle(title)
                             .setBody(body)
                             .build())
-                    .putData("click_action", "FLUTTER_NOTIFICATION_CLICK") // 필요시
                     .build();
 
-            String response = FirebaseMessaging.getInstance().send(message);
-            log.info("FCM sent: {}", response);
+            FirebaseMessaging.getInstance().send(message);
         } catch (Exception e) {
-            log.error("FCM send error", e);
+            throw new CustomException(ErrorCode.ALARM_NOT_CREATED);
         }
     }
 }

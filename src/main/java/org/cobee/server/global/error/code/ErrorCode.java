@@ -8,7 +8,8 @@ public enum ErrorCode {
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "AUTH-001", "Unauthorized access"),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "AUTH-002", "Cannot find Member"),
     POST_NOT_FOUND(HttpStatus.NOT_FOUND, "POST-001", "Cannot find RecruitPost"),
-    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "COMMENT-001", "Cannot find Comment");
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "COMMENT-001", "Cannot find Comment"),
+    ALARM_NOT_CREATED(HttpStatus.BAD_REQUEST, "ALARM-001", "Alarm cannot be created");
 
     private final HttpStatus status;
     private final String code;

@@ -8,10 +8,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
-import org.springframework.web.bind.annotation.RestController;
 import org.cobee.server.alarm.dto.AlarmCreateRequest;
 import org.cobee.server.alarm.service.AlarmService;
-import org.springframework.web.bind.annotation.*;
 
 @Component
 @RequiredArgsConstructor
@@ -22,10 +20,11 @@ public class AlarmListener {
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void onCommentCreated(CommentCreatedEvent e) {
-        var title = e.isReply() ? "대댓글 알림" : "새 댓글 알림";     // 추측입니다.
-        var body  = e.isReply() ? "내 댓글에 답글이 달렸어요!" : "내 글에 댓글이 달렸어요!"; // 추측입니다.
+        // title과 body는 프론트가 보게 될 메시지 (백엔드가 메시지 구성함)
+        var title = e.isReply() ? "대댓글 알림" : "새 댓글 알림";
+        var body  = e.isReply() ? "내 댓글에 답글이 달렸어요" : "내 글에 댓글이 달렸어요";
 
-        alarmService.createAndSend(new AlarmCreateRequest(
+        alarmService. createAndSend(new AlarmCreateRequest(
                 e.getFromUserId(),           // fromUserId: 댓글 작성자
                 e.getToUserId(),             // toUserId: 수신자
                 AlarmType.COMMENT,        // 타입
