@@ -8,6 +8,7 @@ import org.cobee.server.alarm.domain.Alarm;
 import org.cobee.server.member.domain.Member;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 @Entity
 @NoArgsConstructor
@@ -20,10 +21,10 @@ public class ApplyRecord {
     private Long id;
 
     @Column
-    private Boolean isMatched;
+    private Boolean isMatched=false;
 
     @Column
-    private Timestamp submittedAt;
+    private LocalDate submittedAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
