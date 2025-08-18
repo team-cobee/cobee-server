@@ -25,6 +25,10 @@ public class ApplyController {
     public ApiResponse<ApplyResponse> acceptApply(@PathVariable(name="applyId") Long applyId,
                                                   @RequestBody ApplyAcceptRequest request){
         ApplyResponse result = applyService.accept(applyId, request);
-        return ApiResponse.success("매칭이 되었습니다.", "APPLY-002", result);
+        if (request.getIsAccept()){
+            return ApiResponse.success("매칭이 되었습니다.", "APPLY-002", result);
+        } else {
+            return ApiResponse.success("매칭이 거절되었습니다", "APPLY-003", result);
+        }
     }
 }

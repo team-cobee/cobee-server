@@ -5,6 +5,7 @@ import org.cobee.server.member.domain.Member;
 import org.cobee.server.member.repository.MemberRepository;
 import org.cobee.server.recruit.domain.ApplyRecord;
 import org.cobee.server.recruit.domain.RecruitPost;
+import org.cobee.server.recruit.domain.enums.MatchStatus;
 import org.cobee.server.recruit.dto.ApplyAcceptRequest;
 import org.cobee.server.recruit.dto.ApplyRequest;
 import org.cobee.server.recruit.dto.ApplyResponse;
@@ -26,7 +27,7 @@ public class ApplyService {
         ApplyRecord applyRecord = ApplyRecord.builder()
                 .post(post)
                 .member(member)
-                .isMatched(false)
+                .isMatched(MatchStatus.NONE)
                 .submittedAt(LocalDate.now())
                 .build();
 

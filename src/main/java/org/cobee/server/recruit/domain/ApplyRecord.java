@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cobee.server.alarm.domain.Alarm;
 import org.cobee.server.member.domain.Member;
+import org.cobee.server.recruit.domain.enums.MatchStatus;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -23,7 +24,8 @@ public class ApplyRecord {
     private Long id;
 
     @Column
-    private Boolean isMatched=false;
+    @Enumerated(EnumType.STRING)
+    private MatchStatus isMatched;
 
     @Column
     private LocalDate submittedAt;
@@ -46,6 +48,7 @@ public class ApplyRecord {
     }
 
     public void acceptMatching(Boolean accept){
-        this.isMatched=accept;
+        if (accept) this.isMatched=MatchStatus.ACCEPTED;
+        else this.isMatched=MatchStatus.REJECTED;
     }
 }

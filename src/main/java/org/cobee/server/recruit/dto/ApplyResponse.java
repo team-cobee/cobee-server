@@ -3,6 +3,7 @@ package org.cobee.server.recruit.dto;
 import lombok.Builder;
 import lombok.Getter;
 import org.cobee.server.recruit.domain.ApplyRecord;
+import org.cobee.server.recruit.domain.enums.MatchStatus;
 
 @Builder
 @Getter
@@ -10,7 +11,7 @@ public class ApplyResponse {
     private Long id;
     private Long appliedPostId;
     private Long appliedMemberId;
-    private Boolean isMatched;
+    private MatchStatus isMatched;
 
     public static ApplyResponse from(ApplyRecord apply) {
         return ApplyResponse.builder()
