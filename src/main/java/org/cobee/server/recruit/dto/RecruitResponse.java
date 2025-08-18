@@ -9,7 +9,11 @@ import org.cobee.server.recruit.domain.RecruitPost;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
+/*
+TODO
+- class로 바꾸기
+- response에 댓글개수, 조회수(가능하면), 지원자 n명 추가
+ */
 @Builder
 public record RecruitResponse(
         Long id, String authorName, Float location /* 이거 어케 처리할지 고민 */, String profileUrl,

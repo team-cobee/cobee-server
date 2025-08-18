@@ -9,11 +9,14 @@ import org.cobee.server.recruit.domain.enums.MatchStatus;
 import org.cobee.server.recruit.dto.ApplyAcceptRequest;
 import org.cobee.server.recruit.dto.ApplyRequest;
 import org.cobee.server.recruit.dto.ApplyResponse;
+import org.cobee.server.recruit.dto.RecruitResponse;
 import org.cobee.server.recruit.repository.ApplyRecordRepository;
 import org.cobee.server.recruit.repository.RecruitPostRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -45,4 +48,13 @@ public class ApplyService {
         return ApplyResponse.from(applyRecord);
     }
 
+    public List<RecruitResponse> getMyApplies(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow();
+        List<ApplyRecord> myRecords = applyRepository.findApplyRecordsByMemberId(memberId);
+        List<RecruitResponse> myApplies = new ArrayList<>();
+        for (ApplyRecord record : myRecords){
+            myApplies.add(RecruitResponse.from(record.getPost(), member));
+        }
+        return myApplies;
+    }
 }
