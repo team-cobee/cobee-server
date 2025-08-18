@@ -5,6 +5,7 @@ import org.cobee.server.member.domain.Member;
 import org.cobee.server.member.repository.MemberRepository;
 import org.cobee.server.recruit.domain.ApplyRecord;
 import org.cobee.server.recruit.domain.RecruitPost;
+import org.cobee.server.recruit.dto.ApplyAcceptRequest;
 import org.cobee.server.recruit.dto.ApplyRequest;
 import org.cobee.server.recruit.dto.ApplyResponse;
 import org.cobee.server.recruit.repository.ApplyRecordRepository;
@@ -34,4 +35,13 @@ public class ApplyService {
         applyRepository.save(applyRecord);
         return ApplyResponse.from(applyRecord);
     }
+
+    public ApplyResponse accept(Long applyId, ApplyAcceptRequest applyAccept){
+        ApplyRecord applyRecord = applyRepository.findById(applyId).orElseThrow();
+        Boolean accept = applyAccept.getIsAccept();
+        applyRecord.acceptMatching(accept);
+        applyRepository.save(applyRecord);
+        return ApplyResponse.from(applyRecord);
+    }
+
 }

@@ -44,4 +44,8 @@ public class ApplyRecord {
     public void setPost(RecruitPost recruitPost) {
         this.post=recruitPost;
     }
+
+    public void acceptMatching(Boolean accept){
+        this.isMatched=accept;
+    }
 }
