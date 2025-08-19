@@ -48,7 +48,7 @@ public class ApplyRecord {
     }
 
     public void acceptMatching(Boolean accept){
-        if (accept) this.isMatched=MatchStatus.ACCEPTED;
+        if (accept) this.isMatched=MatchStatus.MATCHING;
         else this.isMatched=MatchStatus.REJECTED;
     }
 }

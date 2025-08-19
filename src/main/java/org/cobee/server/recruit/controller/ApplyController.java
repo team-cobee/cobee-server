@@ -33,12 +33,17 @@ public class ApplyController {
     @PostMapping("/accept/{applyId}")  // 글쓴이와 현재로그인한 사람 같은지 비교 안해도 되려나? 지원목록만 쓴 글이 있을때 보여줌 돼
     public ApiResponse<ApplyResponse> acceptApply(@PathVariable(name="applyId") Long applyId,
                                                   @RequestBody ApplyAcceptRequest request){
-        ApplyResponse result = applyService.accept(applyId, request);
-        if (request.getIsAccept()){
-            return ApiResponse.success("매칭이 되었습니다.", "APPLY-002", result);
-        } else {
-            return ApiResponse.success("매칭이 거절되었습니다", "APPLY-003", result);
+        try {
+            ApplyResponse result = applyService.accept(applyId, request);
+            if (request.getIsAccept()){
+                return ApiResponse.success("매칭이 되었습니다.", "APPLY-002", result);
+            } else {
+                return ApiResponse.success("매칭이 거절되었습니다", "APPLY-003", result);
+            }
+        } catch (CustomException e){
+            return ApiResponse.failure("", "", e.getMessage());
         }
+
     }
 
     @GetMapping("/my")
@@ -46,13 +51,15 @@ public class ApplyController {
         // 현재 로그인 사용자
         Long memberId = principalDetails.getMember().getId();
         List<RecruitResponse> myApplies = applyService.getMyApplies(memberId);
-        return ApiResponse.success("나의 지원 구인글 목룍 조회 완료", "APPLY-004", myApplies);
+        return ApiResponse.success("나의 지원 구인글 목록 조회 완료", "APPLY-004", myApplies);
     }
 
     // 나의 특정 구인글에 지원한 지원자 내역
+    // TODO : 멤버 처리 어떻게 할지, 고민
     @GetMapping("/{postId}")
     public ApiResponse<List<PublicProfileResponseDto>> myAppliers(@PathVariable(name="postId") Long postId,
-                                                                  @AuthenticationPrincipal PrincipalDetails principalDetails){
+                                                                  @AuthenticationPrincipal PrincipalDetails principalDetails)
+    {
         try{
             Long memberId = principalDetails.getMember().getId();
             List<PublicProfileResponseDto> result = applyService.getMyAppliers(postId, memberId);

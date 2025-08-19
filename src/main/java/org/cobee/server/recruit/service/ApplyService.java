@@ -44,7 +44,7 @@ public class ApplyService {
     }
 
     public ApplyResponse accept(Long applyId, ApplyAcceptRequest applyAccept){
-        ApplyRecord applyRecord = applyRepository.findById(applyId).orElseThrow();
+        ApplyRecord applyRecord = applyRepository.findById(applyId).orElseThrow(()->new CustomException(ErrorCode.APPLY_NOT_FOUND));
         Boolean accept = applyAccept.getIsAccept();
         applyRecord.acceptMatching(accept);
         applyRepository.save(applyRecord);
