@@ -9,10 +9,14 @@ import org.cobee.server.recruit.domain.RecruitPost;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
+/*
+TODO
+- class로 바꾸기
+- response에 댓글개수, 조회수(가능하면), 지원자 n명 추가
+ */
 @Builder
 public record RecruitResponse(
-        Long id, String authorName, Float location /* 이거 어케 처리할지 고민 */, String profileUrl,
+        Long postId, String authorName, Float location /* 이거 어케 처리할지 고민 */, String profileUrl,
         String title, int recruitCount, int rentalCost, int monthlyCost,
         String content //String formUrl
         , List<CommentResponse> comments
@@ -26,10 +30,10 @@ public record RecruitResponse(
         }
 
         return RecruitResponse.builder()
-                .id(post.getId())
-                .authorName(member.getName())
+                .postId(post.getId())
+                .authorName(post.getMember().getName())
                 .location(post.getDistance())
-                .profileUrl(member.getProfileUrl())
+                .profileUrl(post.getMember().getProfileUrl())
                 .title(post.getTitle())
                 .recruitCount(post.getRecruitCount())
                 .rentalCost(post.getRentCost())
