@@ -5,7 +5,6 @@ import org.cobee.server.auth.service.PrincipalDetails;
 import org.cobee.server.global.error.exception.CustomException;
 import org.cobee.server.global.response.ApiResponse;
 import org.cobee.server.publicProfile.dto.PublicProfileResponseDto;
-import org.cobee.server.recruit.domain.ApplyRecord;
 import org.cobee.server.recruit.dto.ApplyAcceptRequest;
 import org.cobee.server.recruit.dto.ApplyRequest;
 import org.cobee.server.recruit.dto.ApplyResponse;
@@ -51,7 +50,7 @@ public class ApplyController {
     public ApiResponse<List<RecruitResponse>> myAppliedPost(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         // 현재 로그인 사용자
         Long memberId = principalDetails.getMember().getId();
-        List<RecruitResponse> myApplies = applyService.getMyApplies(memberId);
+        List<RecruitResponse> myApplies = applyService.getMyAppliesOnWait(memberId);
         return ApiResponse.success("나의 지원 구인글 목록 조회 완료", "APPLY-004", myApplies);
     }
 

@@ -51,9 +51,9 @@ public class ApplyService {
         return ApplyResponse.from(applyRecord);
     }
 
-    public List<RecruitResponse> getMyApplies(Long memberId) {
+    public List<RecruitResponse> getMyAppliesOnWait(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow();
-        List<ApplyRecord> myRecords = applyRepository.findApplyRecordsByMemberId(memberId);
+        List<ApplyRecord> myRecords = applyRepository.findApplyRecordsByMemberIdAndStatus(memberId, MatchStatus.ON_WAIT);
         List<RecruitResponse> myApplies = new ArrayList<>();
         for (ApplyRecord record : myRecords){
             myApplies.add(RecruitResponse.from(record.getPost(), member));
@@ -65,7 +65,7 @@ public class ApplyService {
         // TODO : 현재 로그인된 사용자 검증은 하는데 작성자인지 검증하는거 넣어야함.
         memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         postRepository.findById(postId).orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
-        List<ApplyRecord> records = applyRepository.findMyPostAppliers(postId);
+        List<ApplyRecord> records = applyRepository.findMyPostAppliers(memberId, postId);
         List<PublicProfileResponseDto> appliers = new ArrayList<>();
         // get()은 null이 있다면 NPE 터뜨림 -> TODO : 근데 현재 공개프로필은 필수 작성이므로 NPE 처리 안 함 (나중에 필요시 리팩토링할것)
         for (ApplyRecord record : records){
