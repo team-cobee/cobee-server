@@ -4,5 +4,7 @@ public enum AlarmType {
     COMMENT,
     CHAT,
     INVITED,
-    NEW_APPLY
+    NEW_APPLY,
+    START_MATCHING,
+    MATCH_COMPLETE
 }

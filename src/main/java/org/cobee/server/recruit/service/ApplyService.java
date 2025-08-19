@@ -60,6 +60,7 @@ public class ApplyService {
         return ApplyResponse.from(applyRecord);
     }
 
+    @Transactional
     public ApplyResponse accept(Long memberId, Long applyId, ApplyAcceptRequest applyAccept){
         ApplyRecord applyRecord = applyRepository.findById(applyId).orElseThrow(()->new CustomException(ErrorCode.APPLY_NOT_FOUND));
         Long checkAuthor = applyRecord.getPost().getMember().getId();
@@ -67,6 +68,15 @@ public class ApplyService {
             Boolean accept = applyAccept.getIsAccept();
             applyRecord.acceptMatching(accept);
             applyRepository.save(applyRecord);
+
+            publisher.publishEvent(new ApplyAcceptResultEvent(
+                    applyRecord.getId(),
+                    applyRecord.getPost().getId(),
+                    memberId,
+                    applyRecord.getMember().getId(),
+                    accept
+            ));
+
             return ApplyResponse.from(applyRecord);
         } else {
             throw new CustomException(ErrorCode.UNAUTHORIZED);
