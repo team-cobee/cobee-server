@@ -33,7 +33,7 @@ public class ApplyService {
         ApplyRecord applyRecord = ApplyRecord.builder()
                 .post(post)
                 .member(member)
-                .isMatched(MatchStatus.NONE)
+                .isMatched(MatchStatus.ON_WAIT)
                 .submittedAt(LocalDate.now())
                 .build();
 

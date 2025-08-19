@@ -46,6 +46,7 @@ public class ApplyController {
 
     }
 
+    // MatchStatus가 NONE인 것들(지원 중)
     @GetMapping("/my")
     public ApiResponse<List<RecruitResponse>> myAppliedPost(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         // 현재 로그인 사용자
@@ -53,6 +54,13 @@ public class ApplyController {
         List<RecruitResponse> myApplies = applyService.getMyApplies(memberId);
         return ApiResponse.success("나의 지원 구인글 목록 조회 완료", "APPLY-004", myApplies);
     }
+
+    // isMatched MATCHING로 된 구인글 리스트 조회 <= 작성자가 승인 버튼 눌러서 채팅에 초대 알림 보낸 구인글 탭
+
+
+
+    // isMatched가 Matched인 구인글 보기
+
 
     // 나의 특정 구인글에 지원한 지원자 내역
     // TODO : 멤버 처리 어떻게 할지, 고민
@@ -72,5 +80,5 @@ public class ApplyController {
         }
     }
 
-    // isMatched true인 사람은 초대된 구인글 리스트 보이게 추가하기
+
 }
