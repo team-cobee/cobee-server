@@ -38,12 +38,12 @@ public class ApplyController {
             Long memberId = principalDetails.getMember().getId();
             ApplyResponse result = applyService.accept(memberId, applyId, request);
             if (request.getIsAccept()){
-                return ApiResponse.success("매칭이 되었습니다.", "APPLY-002", result);
+                return ApiResponse.success("매칭이 성사되었습니다.", "APPLY-002", result);
             } else {
                 return ApiResponse.success("매칭이 거절되었습니다", "APPLY-003", result);
             }
         } catch (CustomException e){
-            return ApiResponse.failure("", "", e.getMessage());
+            return ApiResponse.failure("입력한 정보를 다시 한 번 더 확인해주세요", "APPLY-002-1a", e.getMessage());
         }
 
     }
@@ -76,9 +76,8 @@ public class ApplyController {
 
 
     // 나의 특정 구인글에 지원한 지원자 공개프로필 리스트
-    // TODO : 멤버 처리 어떻게 할지, 고민
-    @GetMapping("/{postId}")
-    public ApiResponse<List<PublicProfileResponseDto>> myAppliers(@PathVariable(name="postId") Long postId,
+    @GetMapping("/{postId}/all")
+    public ApiResponse<List<PublicProfileResponseDto>> myAllAppliers(@PathVariable(name="postId") Long postId,
                                                                   @AuthenticationPrincipal PrincipalDetails principalDetails)
     {
         try{
@@ -90,6 +89,54 @@ public class ApplyController {
             return ApiResponse.success("지원자 조회 성공", "APPLY-008", result);
         } catch (CustomException e){
             return ApiResponse.failure("정보 요청을 다시 해주세요","APPLY-009",e.getMessage());
+        }
+    }
+
+    @GetMapping("/{postId}/onWait")
+    public ApiResponse<List<PublicProfileResponseDto>> myOnConsideredAppliers(@PathVariable(name="postId") Long postId,
+                                                                     @AuthenticationPrincipal PrincipalDetails principalDetails)
+    {
+        try{
+            Long memberId = principalDetails.getMember().getId();
+            List<PublicProfileResponseDto> result = applyService.getMyOnConsideredPostAppliers(postId, memberId);
+            if (result.isEmpty()) {
+                return ApiResponse.success("지원한 멤버가 없습니다.", "APPLY-010", result);
+            }
+            return ApiResponse.success("지원자 조회 성공", "APPLY-011", result);
+        } catch (CustomException e){
+            return ApiResponse.failure("정보 요청을 다시 해주세요","APPLY-012",e.getMessage());
+        }
+    }
+
+    @GetMapping("/{postId}/approve")
+    public ApiResponse<List<PublicProfileResponseDto>> myOnApprovedAppliers(@PathVariable(name="postId") Long postId,
+                                                                              @AuthenticationPrincipal PrincipalDetails principalDetails)
+    {
+        try{
+            Long memberId = principalDetails.getMember().getId();
+            List<PublicProfileResponseDto> result = applyService.getMyOnApprovedPostAppliers(postId, memberId);
+            if (result.isEmpty()) {
+                return ApiResponse.success("지원한 멤버가 없습니다.", "APPLY-013", result);
+            }
+            return ApiResponse.success("지원자 조회 성공", "APPLY-014", result);
+        } catch (CustomException e){
+            return ApiResponse.failure("정보 요청을 다시 해주세요","APPLY-015",e.getMessage());
+        }
+    }
+
+    @GetMapping("/{postId}/reject")
+    public ApiResponse<List<PublicProfileResponseDto>> myRejectedAppliers(@PathVariable(name="postId") Long postId,
+                                                                            @AuthenticationPrincipal PrincipalDetails principalDetails)
+    {
+        try{
+            Long memberId = principalDetails.getMember().getId();
+            List<PublicProfileResponseDto> result = applyService.getMyRejectedPostAppliers(postId, memberId);
+            if (result.isEmpty()) {
+                return ApiResponse.success("지원한 멤버가 없습니다.", "APPLY-016", result);
+            }
+            return ApiResponse.success("지원자 조회 성공", "APPLY-017", result);
+        } catch (CustomException e){
+            return ApiResponse.failure("정보 요청을 다시 해주세요","APPLY-018",e.getMessage());
         }
     }
 

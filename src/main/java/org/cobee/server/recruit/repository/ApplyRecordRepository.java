@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface ApplyRecordRepository extends JpaRepository<ApplyRecord, Long> {
 
-    // 내가 쓴 구인글에 지원한 사람들의 기록 (내 구인글 탭에서 지원자 승인 받는 곳)
+    // 내가 쓴 구인글에 지원한 사람들의 모든 공개프로필 리스트 (조건상관X, 내 구인글 탭에서 지원자 승인 받는 곳)
     @Query("select applies from ApplyRecord applies where applies.post.id=:postId")
     List<ApplyRecord> findMyPostAppliers(@Param("postId") Long postId);
 
@@ -20,6 +20,8 @@ public interface ApplyRecordRepository extends JpaRepository<ApplyRecord, Long> 
     @Query("select applies from ApplyRecord applies where applies.isMatched=:status and applies.member.id=:memberId")
     List<ApplyRecord> findApplyRecordsByMemberIdAndStatus(@Param("memberId") Long memberId, @Param("status") MatchStatus status);
 
+    @Query("select applies from ApplyRecord applies where applies.isMatched=:status and applies.post.id=:postId")
+    List<ApplyRecord> findApplyProfilesByMemberIdAndStatus(@Param("postId") Long postId, @Param("status") MatchStatus status);
 
 
 }

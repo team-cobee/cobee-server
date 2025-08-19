@@ -108,5 +108,59 @@ public class ApplyService {
 
     }
 
+    public List<PublicProfileResponseDto> getMyOnConsideredPostAppliers(Long postId, Long memberId) {
+        // 작성자 본인 확인 체크
+        RecruitPost post = postRepository.findById(postId).orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+        Long checkAuthor = post.getMember().getId();
+
+
+        if (checkAuthor.equals(memberId)){
+            List<ApplyRecord> records = applyRepository.findApplyProfilesByMemberIdAndStatus(postId, MatchStatus.ON_WAIT);
+            List<PublicProfileResponseDto> appliers = new ArrayList<>();
+            for (ApplyRecord record : records){
+                appliers.add(PublicProfileResponseDto.from(record.getMember().getPublicProfile(), record.getMember()));
+            }
+            return appliers;
+        } else {
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
+    }
+
+    public List<PublicProfileResponseDto> getMyOnApprovedPostAppliers(Long postId, Long memberId) {
+        // 작성자 본인 확인 체크
+        RecruitPost post = postRepository.findById(postId).orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+        Long checkAuthor = post.getMember().getId();
+
+        if (checkAuthor.equals(memberId)){
+            List<ApplyRecord> records = applyRepository.findApplyProfilesByMemberIdAndStatus(postId, MatchStatus.MATCHING);
+            List<PublicProfileResponseDto> appliers = new ArrayList<>();
+
+            for (ApplyRecord record : records){
+                appliers.add(PublicProfileResponseDto.from(record.getMember().getPublicProfile(), record.getMember()));
+            }
+            return appliers;
+        } else {
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
+    }
+
+    public List<PublicProfileResponseDto> getMyRejectedPostAppliers(Long postId, Long memberId) {
+        // 작성자 본인 확인 체크
+        RecruitPost post = postRepository.findById(postId).orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+        Long checkAuthor = post.getMember().getId();
+
+        if (checkAuthor.equals(memberId)){
+            List<ApplyRecord> records = applyRepository.findApplyProfilesByMemberIdAndStatus(postId, MatchStatus.REJECTED);
+            List<PublicProfileResponseDto> appliers = new ArrayList<>();
+
+            for (ApplyRecord record : records){
+                appliers.add(PublicProfileResponseDto.from(record.getMember().getPublicProfile(), record.getMember()));
+            }
+            return appliers;
+        } else {
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
+    }
+
 
 }
