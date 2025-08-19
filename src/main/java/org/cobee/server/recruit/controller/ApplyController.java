@@ -45,8 +45,8 @@ public class ApplyController {
 
     }
 
-    // MatchStatus가 NONE인 것들(지원 중)
-    @GetMapping("/my")
+    // MatchStatus가 ON_WAIT인 것들(지원 중)
+    @GetMapping("/my/onWait")
     public ApiResponse<List<RecruitResponse>> myAppliedPost(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         // 현재 로그인 사용자
         Long memberId = principalDetails.getMember().getId();
@@ -55,7 +55,13 @@ public class ApplyController {
     }
 
     // isMatched MATCHING로 된 구인글 리스트 조회 <= 작성자가 승인 버튼 눌러서 채팅에 초대 알림 보낸 구인글 탭
-
+    @GetMapping("/my/matching")
+    public ApiResponse<List<RecruitResponse>> myOnMatchingPost(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        // 현재 로그인 사용자
+        Long memberId = principalDetails.getMember().getId();
+        List<RecruitResponse> myApplies = applyService.getMyAppliesOnMatching(memberId);
+        return ApiResponse.success("나의 지원 구인글 목록 조회 완료", "APPLY-004", myApplies);
+    }
 
 
     // isMatched가 Matched인 구인글 보기
@@ -69,7 +75,7 @@ public class ApplyController {
     {
         try{
             Long memberId = principalDetails.getMember().getId();
-            List<PublicProfileResponseDto> result = applyService.getMyAppliers(postId, memberId);
+            List<PublicProfileResponseDto> result = applyService.getMyPostAppliers(postId, memberId);
             if (result.isEmpty()) {
                 return ApiResponse.success("지원한 멤버가 없습니다.", "", result);
             }
