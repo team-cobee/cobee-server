@@ -2,7 +2,9 @@ package org.cobee.server.recruit.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.cobee.server.auth.service.PrincipalDetails;
+import org.cobee.server.global.error.exception.CustomException;
 import org.cobee.server.global.response.ApiResponse;
+import org.cobee.server.publicProfile.dto.PublicProfileResponseDto;
 import org.cobee.server.recruit.domain.ApplyRecord;
 import org.cobee.server.recruit.dto.ApplyAcceptRequest;
 import org.cobee.server.recruit.dto.ApplyRequest;
@@ -27,6 +29,7 @@ public class ApplyController {
 
     }
 
+    // 매칭 승인이 되면 Matching으로 바꾸기 (현재는 Matched로 되어있음) (== 채팅방 초대 => 초대된 구인글 리스트에도 보이게 추가하기)
     @PostMapping("/accept/{applyId}")  // 글쓴이와 현재로그인한 사람 같은지 비교 안해도 되려나? 지원목록만 쓴 글이 있을때 보여줌 돼
     public ApiResponse<ApplyResponse> acceptApply(@PathVariable(name="applyId") Long applyId,
                                                   @RequestBody ApplyAcceptRequest request){
@@ -46,5 +49,21 @@ public class ApplyController {
         return ApiResponse.success("나의 지원 구인글 목룍 조회 완료", "APPLY-004", myApplies);
     }
 
+    // 나의 특정 구인글에 지원한 지원자 내역
+    @GetMapping("/{postId}")
+    public ApiResponse<List<PublicProfileResponseDto>> myAppliers(@PathVariable(name="postId") Long postId,
+                                                                  @AuthenticationPrincipal PrincipalDetails principalDetails){
+        try{
+            Long memberId = principalDetails.getMember().getId();
+            List<PublicProfileResponseDto> result = applyService.getMyAppliers(postId, memberId);
+            if (result.isEmpty()) {
+                return ApiResponse.success("지원한 멤버가 없습니다.", "", result);
+            }
+            return ApiResponse.success("지원자 조회 성공", "", result);
+        } catch (CustomException e){
+            return ApiResponse.failure("정보 요청을 다시 해주세요","",e.getMessage());
+        }
+    }
 
+    // isMatched true인 사람은 초대된 구인글 리스트 보이게 추가하기
 }
