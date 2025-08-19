@@ -54,20 +54,25 @@ public class ApplyController {
         return ApiResponse.success("나의 지원 구인글 목록 조회 완료", "APPLY-004", myApplies);
     }
 
-    // isMatched MATCHING로 된 구인글 리스트 조회 <= 작성자가 승인 버튼 눌러서 채팅에 초대 알림 보낸 구인글 탭
+    // isMatched MATCHING으로 된 구인글 리스트 조회 <= 작성자가 승인 버튼 눌러서 채팅에 초대 알림 보낸 구인글 탭
     @GetMapping("/my/matching")
     public ApiResponse<List<RecruitResponse>> myOnMatchingPost(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         // 현재 로그인 사용자
         Long memberId = principalDetails.getMember().getId();
         List<RecruitResponse> myApplies = applyService.getMyAppliesOnMatching(memberId);
-        return ApiResponse.success("나의 지원 구인글 목록 조회 완료", "APPLY-004", myApplies);
+        return ApiResponse.success("나의 지원 구인글 목록 조회 완료", "APPLY-005", myApplies);
+    }
+
+    // isMatched가 MATCHED인 구인글 보기
+    @GetMapping("/my/matched")
+    public ApiResponse<List<RecruitResponse>> myMatchedPost(@AuthenticationPrincipal PrincipalDetails principalDetails){
+        Long memberId = principalDetails.getMember().getId();
+        List<RecruitResponse> myApplies = applyService.getMyAppliesOnMatched(memberId);
+        return ApiResponse.success("나의 매칭된 구인글 목록 조회 완료", "APPLY-006", myApplies);
     }
 
 
-    // isMatched가 Matched인 구인글 보기
-
-
-    // 나의 특정 구인글에 지원한 지원자 내역
+    // 나의 특정 구인글에 지원한 지원자 공개프로필 리스트
     // TODO : 멤버 처리 어떻게 할지, 고민
     @GetMapping("/{postId}")
     public ApiResponse<List<PublicProfileResponseDto>> myAppliers(@PathVariable(name="postId") Long postId,
@@ -77,11 +82,11 @@ public class ApplyController {
             Long memberId = principalDetails.getMember().getId();
             List<PublicProfileResponseDto> result = applyService.getMyPostAppliers(postId, memberId);
             if (result.isEmpty()) {
-                return ApiResponse.success("지원한 멤버가 없습니다.", "", result);
+                return ApiResponse.success("지원한 멤버가 없습니다.", "APPLY-007", result);
             }
-            return ApiResponse.success("지원자 조회 성공", "", result);
+            return ApiResponse.success("지원자 조회 성공", "APPLY-008", result);
         } catch (CustomException e){
-            return ApiResponse.failure("정보 요청을 다시 해주세요","",e.getMessage());
+            return ApiResponse.failure("정보 요청을 다시 해주세요","APPLY-009",e.getMessage());
         }
     }
 

@@ -71,6 +71,16 @@ public class ApplyService {
         return myApplies;
     }
 
+    public List<RecruitResponse> getMyAppliesOnMatched(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow();
+        List<ApplyRecord> myRecords = applyRepository.findApplyRecordsByMemberIdAndStatus(memberId, MatchStatus.MATCHED);
+        List<RecruitResponse> myApplies = new ArrayList<>();
+        for (ApplyRecord record : myRecords){
+            myApplies.add(RecruitResponse.from(record.getPost(), member));
+        }
+        return myApplies;
+    }
+
     public List<PublicProfileResponseDto> getMyPostAppliers(Long postId, Long memberId) {
         // TODO : 현재 로그인된 사용자 검증은 하는데 작성자인지 검증하는거 넣어야함.
         memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -83,4 +93,6 @@ public class ApplyService {
         }
         return appliers;
     }
+
+
 }
