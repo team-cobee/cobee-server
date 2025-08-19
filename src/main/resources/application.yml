@@ -15,6 +15,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+
   security:
     oauth2:
       client:
@@ -53,3 +54,4 @@ logging:
 google:
   maps:
     api-key: ${GOOGLE_MAPS_API_KEY}
+

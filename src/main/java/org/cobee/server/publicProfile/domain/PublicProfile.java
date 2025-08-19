@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.cobee.server.member.domain.Member;
 import org.cobee.server.publicProfile.domain.enums.Lifestyle;
 import org.cobee.server.publicProfile.domain.enums.Personality;
 

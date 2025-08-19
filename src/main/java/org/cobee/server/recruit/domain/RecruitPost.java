@@ -94,12 +94,12 @@ public class RecruitPost {
 
 
     public void updatePost(RecruitRequest dto) {
-        this.title = dto.title();
-        this.recruitCount = dto.recruitCount();
-        this.rentCost = dto.rentCost();
-        this.monthlyCost = dto.monthlyCost();
+        this.title = dto.getTitle();
+        this.recruitCount = dto.getRecruitCount();
+        this.rentCost = dto.getRentCost();
+        this.monthlyCost = dto.getMonthlyCost();
         //this.imgUrl = dto.imgUrl();
-        this.content = dto.content();
+        this.content = dto.getContent();
     }
 
     public void addComment(Comment comment) {

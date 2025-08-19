@@ -9,7 +9,8 @@ public enum ErrorCode {
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "AUTH-002", "Cannot find Member"),
     POST_NOT_FOUND(HttpStatus.NOT_FOUND, "POST-001", "Cannot find RecruitPost"),
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "COMMENT-001", "Cannot find Comment"),
-    APPLY_NOT_FOUND(HttpStatus.NOT_FOUND, "APPLY-001", "APPLY find Comment");
+    APPLY_NOT_FOUND(HttpStatus.NOT_FOUND, "APPLY-001", "APPLY find Comment"),
+    ALARM_NOT_CREATED(HttpStatus.BAD_REQUEST, "ALARM-001", "Alarm cannot be created");
 
     private final HttpStatus status;
     private final String code;

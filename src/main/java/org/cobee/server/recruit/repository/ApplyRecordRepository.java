@@ -23,5 +23,4 @@ public interface ApplyRecordRepository extends JpaRepository<ApplyRecord, Long> 
     @Query("select applies from ApplyRecord applies where applies.isMatched=:status and applies.post.id=:postId")
     List<ApplyRecord> findApplyProfilesByMemberIdAndStatus(@Param("postId") Long postId, @Param("status") MatchStatus status);
 
-
 }
