@@ -26,7 +26,6 @@ public class ApplyController {
         Long memberId = principalDetails.getMember().getId();
         ApplyResponse result = applyService.apply(memberId, request);
         return ApiResponse.success("지원이 완료되었습니다", "APPLY-001", result);
-
     }
 
     // 매칭 승인이 되면 Matching으로 바꾸기 : 이때 채팅방 초대 알림 및 매칭 알림 보내기

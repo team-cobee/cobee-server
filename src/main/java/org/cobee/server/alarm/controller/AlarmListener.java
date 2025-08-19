@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.cobee.server.alarm.domain.enums.AlarmSourceType;
 import org.cobee.server.alarm.domain.enums.AlarmType;
 import org.cobee.server.comment.dto.CommentCreatedEvent;
+import org.cobee.server.recruit.dto.ApplyCreatedEvent;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
@@ -30,6 +31,23 @@ public class AlarmListener {
                 AlarmType.COMMENT,        // 타입
                 AlarmSourceType.COMMENT,  // 출처 타입
                 e.getCommentId(),            // 출처 ID(댓글 PK)
+                title,
+                body
+        ));
+    }
+
+    @Async
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void onApplyCreated(ApplyCreatedEvent e) {
+        var title = "지원 알림";
+        var body  = "새로운 지원이 도착했습니다.";
+
+        alarmService.createAndSend(new AlarmCreateRequest(
+                e.getFromUserId(),
+                e.getToUserId(),
+                AlarmType.NEW_APPLY,
+                AlarmSourceType.RECRUIT_POST,
+                e.getApplyId(),
                 title,
                 body
         ));
