@@ -20,20 +20,23 @@ import java.util.List;
 @RequestMapping("/apply")
 public class ApplyController {
     private final ApplyService applyService;
-    @PostMapping("/{fromMemberId}")
-    public ApiResponse<ApplyResponse> applyForRecruit(@PathVariable(name="fromMemberId") Long memberId,
+    @PostMapping()
+    public ApiResponse<ApplyResponse> applyForRecruit(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                                       @RequestBody ApplyRequest request){
+        Long memberId = principalDetails.getMember().getId();
         ApplyResponse result = applyService.apply(memberId, request);
         return ApiResponse.success("지원이 완료되었습니다", "APPLY-001", result);
 
     }
 
-    // 매칭 승인이 되면 Matching으로 바꾸기 (현재는 Matched로 되어있음) (== 채팅방 초대 => 초대된 구인글 리스트에도 보이게 추가하기)
-    @PostMapping("/accept/{applyId}")  // 글쓴이와 현재로그인한 사람 같은지 비교 안해도 되려나? 지원목록만 쓴 글이 있을때 보여줌 돼
+    // 매칭 승인이 되면 Matching으로 바꾸기 : 이때 채팅방 초대 알림 및 매칭 알림 보내기
+    @PostMapping("/accept/{applyId}")
     public ApiResponse<ApplyResponse> acceptApply(@PathVariable(name="applyId") Long applyId,
-                                                  @RequestBody ApplyAcceptRequest request){
+                                                  @RequestBody ApplyAcceptRequest request,
+                                                  @AuthenticationPrincipal PrincipalDetails principalDetails){
         try {
-            ApplyResponse result = applyService.accept(applyId, request);
+            Long memberId = principalDetails.getMember().getId();
+            ApplyResponse result = applyService.accept(memberId, applyId, request);
             if (request.getIsAccept()){
                 return ApiResponse.success("매칭이 되었습니다.", "APPLY-002", result);
             } else {

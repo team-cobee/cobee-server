@@ -43,12 +43,18 @@ public class ApplyService {
         return ApplyResponse.from(applyRecord);
     }
 
-    public ApplyResponse accept(Long applyId, ApplyAcceptRequest applyAccept){
+    public ApplyResponse accept(Long memberId, Long applyId, ApplyAcceptRequest applyAccept){
         ApplyRecord applyRecord = applyRepository.findById(applyId).orElseThrow(()->new CustomException(ErrorCode.APPLY_NOT_FOUND));
-        Boolean accept = applyAccept.getIsAccept();
-        applyRecord.acceptMatching(accept);
-        applyRepository.save(applyRecord);
-        return ApplyResponse.from(applyRecord);
+        Long checkAuthor = applyRecord.getPost().getMember().getId();
+        if(memberId.equals(checkAuthor)) {
+            Boolean accept = applyAccept.getIsAccept();
+            applyRecord.acceptMatching(accept);
+            applyRepository.save(applyRecord);
+            return ApplyResponse.from(applyRecord);
+        } else {
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
+
     }
 
     public List<RecruitResponse> getMyAppliesOnWait(Long memberId) {
