@@ -27,6 +27,8 @@ public class ApplyService {
     private final MemberRepository memberRepository;
     private final RecruitPostRepository postRepository;
     private final ApplyRecordRepository applyRepository;
+
+    // TODO : 중복 처리 되지 않게 수정
     public ApplyResponse apply(Long memberId, ApplyRequest request) {
         Member member = memberRepository.findById(memberId).orElseThrow();
         RecruitPost post = postRepository.findById(request.getPostId()).orElseThrow();
@@ -87,7 +89,7 @@ public class ApplyService {
         return myApplies;
     }
 
-    public List<PublicProfileResponseDto> getMyPostAppliers(Long postId, Long memberId) {
+    public List<PublicProfileResponseDto> getMyAllPostAppliers(Long postId, Long memberId) {
         // 작성자 본인 확인 체크
         RecruitPost post = postRepository.findById(postId).orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
         Long checkAuthor = post.getMember().getId();

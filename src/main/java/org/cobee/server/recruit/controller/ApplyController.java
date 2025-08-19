@@ -83,7 +83,7 @@ public class ApplyController {
     {
         try{
             Long memberId = principalDetails.getMember().getId();
-            List<PublicProfileResponseDto> result = applyService.getMyPostAppliers(postId, memberId);
+            List<PublicProfileResponseDto> result = applyService.getMyAllPostAppliers(postId, memberId);
             if (result.isEmpty()) {
                 return ApiResponse.success("지원한 멤버가 없습니다.", "APPLY-007", result);
             }
@@ -92,6 +92,7 @@ public class ApplyController {
             return ApiResponse.failure("정보 요청을 다시 해주세요","APPLY-009",e.getMessage());
         }
     }
+
 
 
 }
