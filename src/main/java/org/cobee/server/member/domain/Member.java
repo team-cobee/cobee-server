@@ -61,6 +61,9 @@ public class Member {
     @Column
     private Boolean isHost;
 
+    @Column
+    private String fcmToken; // 앱 로그인 시 갱신 저장
+
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
     private UserPreferences userPreferences;
 
@@ -103,4 +106,10 @@ public class Member {
         this.gender = gender;
         this.ocrValidation = true;
     }
+
+    public String updateFcmToken(String fcmToken) {
+        this.fcmToken=fcmToken;
+        return fcmToken;
+    }
 }
+

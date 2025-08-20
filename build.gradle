@@ -18,6 +18,7 @@ repositories {
 }
 
 dependencies {
+
 	implementation 'org.json:json:20240303'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -37,6 +38,12 @@ dependencies {
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
 	compileOnly 'org.projectlombok:lombok'
+
+	// Firebase Admin SDK
+	implementation 'com.google.firebase:firebase-admin:9.2.0'
+	// logging
+	implementation 'org.springframework.boot:spring-boot-starter-logging'
+
 }
 
 tasks.named('test') {

@@ -13,7 +13,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.cobee.server.member.domain.Member;
+<<<<<<< HEAD
 import org.cobee.server.member.domain.enums.SocialType;
+=======
+>>>>>>> b21609e8827bbf2c18cc16f9b70ff90dbb699730
 import org.cobee.server.member.repository.MemberRepository;
 import org.cobee.server.publicProfile.domain.PublicProfile;
 import org.cobee.server.publicProfile.dto.PublicProfileUpdateRequestDto;
@@ -41,12 +44,16 @@ public class PublicProfileControllerTest {
 
     @BeforeEach
     void setUp() {
+<<<<<<< HEAD
         member = Member.builder()
                 .name("testUser")
                 .email("test@example.com")
                 .socialType(SocialType.KAKAO)
                 .socialId("testSocialId")
                 .build();
+=======
+        member = new Member(null, "testUser", "test@example.com", "2000-01-01", "male", null, false, false, null, null, null, null, null, null, null, null);
+>>>>>>> b21609e8827bbf2c18cc16f9b70ff90dbb699730
         memberRepository.save(member);
     }
 
@@ -109,4 +116,7 @@ public class PublicProfileControllerTest {
                 .andExpect(jsonPath("$.message").value("Public profile modified successfully"));
     }
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> b21609e8827bbf2c18cc16f9b70ff90dbb699730
