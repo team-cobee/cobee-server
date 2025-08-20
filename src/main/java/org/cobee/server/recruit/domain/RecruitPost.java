@@ -14,6 +14,7 @@ import org.cobee.server.member.domain.Member;
 import org.cobee.server.recruit.dto.RecruitRequest;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -84,8 +85,8 @@ public class RecruitPost {
     @OneToOne
     private ChatRoom chattingRoom;
 
-    @ManyToOne
-    private ApplyRecord applyRecords;
+    @OneToMany(mappedBy = "post")
+    private List<ApplyRecord> applyRecords = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name="user_id")
@@ -93,15 +94,21 @@ public class RecruitPost {
 
 
     public void updatePost(RecruitRequest dto) {
-        this.title = dto.title();
-        this.recruitCount = dto.recruitCount();
-        this.rentCost = dto.rentCost();
-        this.monthlyCost = dto.monthlyCost();
+        this.title = dto.getTitle();
+        this.recruitCount = dto.getRecruitCount();
+        this.rentCost = dto.getRentCost();
+        this.monthlyCost = dto.getMonthlyCost();
         //this.imgUrl = dto.imgUrl();
-        this.content = dto.content();
+        this.content = dto.getContent();
     }
 
     public void addComment(Comment comment) {
         comments.add(comment);
     }
+
+    public void addApply(ApplyRecord apply) {
+        this.applyRecords.add(apply);
+        apply.setPost(this); // FK 가진 소유자 쪽도 세팅
+    }
+
 }

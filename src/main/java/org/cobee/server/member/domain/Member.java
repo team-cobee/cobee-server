@@ -27,10 +27,10 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    //@Column(nullable = false)
     private String name;
 
-    @Column
+    @Column(nullable = false)
     private String email;
 
     @Column
@@ -39,10 +39,19 @@ public class Member {
     @Column
     private String gender;
 
-    @Column
     @Enumerated(EnumType.STRING)
+    //@Column(nullable = false)
     private SocialType socialType;
 
+    // 소셜 플랫폼에서 제공하는 사용자 고유 ID (카카오, 구글 등)
+    //@Column(nullable = false)
+    private String socialId;
+
+    // 회원가입 완료 여부 (소셜 로그인 후 추가 정보 입력 완료 여부)
+    @Column(nullable = false)
+    private Boolean isCompleted;
+
+    // OCR 주민등록증 인증 여부
     @Column
     private String profileUrl;
 
@@ -51,6 +60,9 @@ public class Member {
 
     @Column
     private Boolean isHost;
+
+    @Column
+    private String fcmToken; // 앱 로그인 시 갱신 저장
 
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
     private UserPreferences userPreferences;
@@ -94,5 +106,22 @@ public class Member {
         this.chatRoom = null;
     }
 
+    public Member update(String name, String email) {
+        this.name = name;
+        this.email = email;
+        return this;
+    }
 
+    public void updateOcrValidation(String realName, String birthDate, String gender) {
+        this.name = realName;
+        this.birthDate = birthDate;
+        this.gender = gender;
+        this.ocrValidation = true;
+    }
+
+    public String updateFcmToken(String fcmToken) {
+        this.fcmToken=fcmToken;
+        return fcmToken;
+    }
 }
+

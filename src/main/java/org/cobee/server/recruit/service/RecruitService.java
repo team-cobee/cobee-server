@@ -5,13 +5,17 @@ import org.cobee.server.global.error.code.ErrorCode;
 import org.cobee.server.global.error.exception.CustomException;
 import org.cobee.server.member.domain.Member;
 import org.cobee.server.member.repository.MemberRepository;
+import org.cobee.server.recruit.domain.ApplyRecord;
 import org.cobee.server.recruit.domain.RecruitPost;
+import org.cobee.server.recruit.domain.enums.MatchStatus;
 import org.cobee.server.recruit.domain.enums.RecruitStatus;
 import org.cobee.server.recruit.dto.RecruitRequest;
 import org.cobee.server.recruit.dto.RecruitResponse;
+import org.cobee.server.recruit.repository.ApplyRecordRepository;
 import org.cobee.server.recruit.repository.RecruitPostRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,16 +25,17 @@ import java.util.List;
 public class RecruitService {
     private final RecruitPostRepository recruitRepository;
     private final MemberRepository memberRepository;
+    private final ApplyRecordRepository applyRepository;
 
     public RecruitResponse createRecruitPost(RecruitRequest request, Long memberId){
         Member member = memberRepository.findById(memberId).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
         RecruitPost recruitPost = RecruitPost.builder()
-                .title(request.title())
-                .content(request.content())
-                .recruitCount(request.recruitCount())
+                .title(request.getTitle())
+                .content(request.getContent())
+                .recruitCount(request.getRecruitCount())
                 .status(RecruitStatus.RECRUITING)
-                .rentCost(request.rentCost())
-                .monthlyCost(request.monthlyCost())
+                .rentCost(request.getRentCost())
+                .monthlyCost(request.getMonthlyCost())
                 //.regionLatitude
                 //.regionLongitude
                 .hasRoom(true)
@@ -46,6 +51,13 @@ public class RecruitService {
                 .build();
         recruitRepository.save(recruitPost);
 
+        ApplyRecord apply = ApplyRecord.builder()
+                .submittedAt(LocalDate.now())
+                .post(recruitPost)
+                .isMatched(MatchStatus.MATCHING)
+                .member(member)
+                .build();
+        applyRepository.save(apply);
 
         return RecruitResponse.from(recruitPost, member);
     }
@@ -81,7 +93,6 @@ public class RecruitService {
         } catch (CustomException e) {
             return false;
         }
-
 
     }
 }
