@@ -1,2 +1,6 @@
-package org.cobee.server.chat.domain.enums;public class MessageType {
+package org.cobee.server.chat.domain.enums;
+
+public enum MessageType {
+    TEXT,
+    IMAGE
 }
