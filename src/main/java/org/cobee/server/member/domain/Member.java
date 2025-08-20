@@ -2,11 +2,12 @@ package org.cobee.server.member.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cobee.server.alarm.domain.Alarm;
 import org.cobee.server.alarm.domain.AlarmNotice;
-import org.cobee.server.chat.domain.ChattingRoom;
+import org.cobee.server.chat.domain.ChatRoom;
 import org.cobee.server.comment.domain.Comment;
 import org.cobee.server.member.domain.enums.SocialType;
 import org.cobee.server.publicProfile.domain.PublicProfile;
@@ -19,6 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Builder
 public class Member {
 
     @Id
@@ -68,19 +70,29 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Alarm> alarms;
 
-    @ManyToOne
-    @JoinColumn(name="chatroom_id")
-    private ChattingRoom chattingRoom;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "chatroom_id")
+    private ChatRoom chatRoom;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "public_profile_id")
     private PublicProfile publicProfile;
 
+    public Member(String username) {
+        this.name = username;
+    }
+
     public void setPublicProfile(PublicProfile publicProfile) {
         this.publicProfile = publicProfile;
     }
 
+    public void join(ChatRoom room) {
+        this.chatRoom = room;
+    }
 
+    public void leave() {
+        this.chatRoom = null;
+    }
 
 
 }

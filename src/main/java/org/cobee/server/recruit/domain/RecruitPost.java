@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import org.cobee.server.publicProfile.domain.enums.Lifestyle;
 import org.cobee.server.publicProfile.domain.enums.Personality;
 import org.cobee.server.recruit.domain.enums.RecruitStatus;
-import org.cobee.server.chat.domain.ChattingRoom;
+import org.cobee.server.chat.domain.ChatRoom;
 import org.cobee.server.comment.domain.Comment;
 import org.cobee.server.member.domain.Member;
 import org.cobee.server.recruit.dto.RecruitRequest;
@@ -82,7 +82,7 @@ public class RecruitPost {
     private List<Comment> comments;
 
     @OneToOne
-    private ChattingRoom chattingRoom;
+    private ChatRoom chattingRoom;
 
     @ManyToOne
     private ApplyRecord applyRecords;
