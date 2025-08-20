@@ -38,6 +38,9 @@ dependencies {
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
 	compileOnly 'org.projectlombok:lombok'
+	//채팅 관련
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
 	// Firebase Admin SDK
 	implementation 'com.google.firebase:firebase-admin:9.2.0'
