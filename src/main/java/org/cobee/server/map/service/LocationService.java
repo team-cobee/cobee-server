@@ -2,6 +2,8 @@ package org.cobee.server.map.service;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.cobee.server.global.error.code.ErrorCode;
+import org.cobee.server.global.error.exception.CustomException;
 import org.cobee.server.map.domain.Location;
 import org.cobee.server.map.dto.LocationRequestDto;
 import org.cobee.server.map.dto.LocationResponseDto;
@@ -26,7 +28,7 @@ public class LocationService {
                 .build();
 
         if(locationRepository.existsByLatitudeAndLongitude(dto.getLatitude(), dto.getLongitude())) {
-            throw new IllegalArgumentException("이미 저장된 위치입니다.");
+            throw new CustomException(ErrorCode.LOCATION_ALREADY_EXISTS);
         }
 
         Location saved = locationRepository.save(location);

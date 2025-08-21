@@ -68,7 +68,7 @@ public class ChatRoomService {
                 chatRoomRepository.delete(room);
                 log.info("채팅방 정상 삭제, roomId=" + roomId);
             } else {
-                throw new CustomException(ErrorCode.CHAT_ROOM__EXISTS_USER);
+                throw new CustomException(ErrorCode.CHAT_ROOM_EXISTS_USER);
             }
         } catch (IllegalArgumentException e) {
             System.err.println("채팅방 삭제 실패: " + e.getMessage());
