@@ -42,3 +42,5 @@ out/
 ### application ###
 resources/application.yml
 src/test/resources/application.yml
+
+src/main/resources/static/index.html

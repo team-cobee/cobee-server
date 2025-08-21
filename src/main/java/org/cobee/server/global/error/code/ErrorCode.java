@@ -13,7 +13,7 @@ public enum ErrorCode {
     CHAT_ROOM_POST_NOT_FOUND(HttpStatus.NOT_FOUND, "CHATROOM-006", "Cannot find post in ChatRoom"),
     CHAT_ROOM_USER_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "CHATROOM-007", "User already exists in ChatRoom"),
     CHAT_ROOM_USER_NOT_IN_ROOM(HttpStatus.BAD_REQUEST, "CHATROOM-008", "User is not in the ChatRoom"),
-    CHAT_ROOM__EXISTS_USER(HttpStatus.BAD_REQUEST, "CHATROOM-009", "User exists in the ChatRoom"),
+    CHAT_ROOM_EXISTS_USER(HttpStatus.BAD_REQUEST, "CHATROOM-009", "User exists in the ChatRoom"),
     CHAT_ROOM_NAME_CANNOT_EMPTY(HttpStatus.BAD_REQUEST, "CHATROOM-010", "ChatRoom name cannot be empty"),
 
 
