@@ -8,7 +8,7 @@ import org.cobee.server.recommendation.service.MLRecommendationService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/recommendations")
+@RequestMapping("/recommendations")
 @RequiredArgsConstructor
 @Tag(name = "Recommendation", description = "추천 시스템 API")
 public class RecommendationController {
@@ -21,9 +21,9 @@ public class RecommendationController {
                                            @RequestParam(defaultValue = "5") int topN) {
         Object recommendations = mlRecommendationService.getRecommendations(userId);
         if (recommendations == null) {
-            return ApiResponse.error("추천 결과를 조회할 수 없습니다.");
+            return ApiResponse.failure("추천 결과 조회 실패", "RECOMMENDATION_NOT_FOUND", "추천 결과를 조회할 수 없습니다.");
         }
-        return ApiResponse.success(recommendations);
+        return ApiResponse.success("추천 결과 조회 성공", "SUCCESS", recommendations);
     }
     
     @GetMapping("/batch/status")
@@ -31,9 +31,9 @@ public class RecommendationController {
     public ApiResponse<?> getBatchStatus() {
         Object status = mlRecommendationService.getBatchStatus();
         if (status == null) {
-            return ApiResponse.error("배치 상태를 조회할 수 없습니다.");
+            return ApiResponse.failure("배치 상태 조회 실패", "BATCH_STATUS_NOT_FOUND", "배치 상태를 조회할 수 없습니다.");
         }
-        return ApiResponse.success(status);
+        return ApiResponse.success("배치 상태 조회 성공", "SUCCESS", status);
     }
     
     @GetMapping("/batch/result")
@@ -41,9 +41,9 @@ public class RecommendationController {
     public ApiResponse<?> getBatchResult() {
         Object result = mlRecommendationService.getBatchResult();
         if (result == null) {
-            return ApiResponse.error("배치 결과를 조회할 수 없습니다.");
+            return ApiResponse.failure("배치 결과 조회 실패", "BATCH_RESULT_NOT_FOUND", "배치 결과를 조회할 수 없습니다.");
         }
-        return ApiResponse.success(result);
+        return ApiResponse.success("배치 결과 조회 성공", "SUCCESS", result);
     }
     
     @PostMapping("/batch/sync")
@@ -51,9 +51,9 @@ public class RecommendationController {
     public ApiResponse<?> manualSync() {
         try {
             mlRecommendationService.syncDataToML();
-            return ApiResponse.success("데이터 동기화가 시작되었습니다.");
+            return ApiResponse.success("데이터 동기화 시작", "SUCCESS");
         } catch (Exception e) {
-            return ApiResponse.error("데이터 동기화 실패: " + e.getMessage());
+            return ApiResponse.failure("데이터 동기화 실패", "SYNC_FAILED", "데이터 동기화 실패: " + e.getMessage());
         }
     }
 }

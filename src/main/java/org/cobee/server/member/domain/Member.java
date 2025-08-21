@@ -51,7 +51,6 @@ public class Member {
     @Column(nullable = false)
     private Boolean isCompleted;
 
-    // OCR 주민등록증 인증 여부
     @Column
     private String profileUrl;
 

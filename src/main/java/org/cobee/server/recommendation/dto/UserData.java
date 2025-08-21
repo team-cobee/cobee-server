@@ -11,18 +11,24 @@ public class UserData {
     @JsonProperty("age")
     private Integer age;
     
-    @JsonProperty("gender")
+    @JsonProperty("user_gender")
     private String gender;
     
     @JsonProperty("smoking")
     private String smoking;
-    
+
+    @JsonProperty("lifestyle")
+    private String lifestyle;
+
+    @JsonProperty("personality")
+    private String personality;
+
     @JsonProperty("pet")
     private String pet;
     
     @JsonProperty("snoring")
     private String snoring;
     
-    @JsonProperty("preferred_gender")
+    @JsonProperty("preferred_roommate_gender")
     private String preferredGender;
 }

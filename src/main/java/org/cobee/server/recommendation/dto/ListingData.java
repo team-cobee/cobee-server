@@ -19,12 +19,21 @@ public class ListingData {
     @JsonProperty("preferred_age_max")
     private Integer preferredAgeMax;
     
-    @JsonProperty("gender_preference")
+    @JsonProperty("listing_preferred_gender")
     private String genderPreference;
+    
+    @JsonProperty("author_gender")
+    private String authorGender;
     
     @JsonProperty("smoking_allowed")
     private String smokingAllowed;
     
     @JsonProperty("pet_allowed")
     private String petAllowed;
+    
+    @JsonProperty("lifestyle")
+    private String lifestyle;
+    
+    @JsonProperty("personality")
+    private String personality;
 }

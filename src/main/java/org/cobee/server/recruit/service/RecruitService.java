@@ -84,6 +84,6 @@ public class RecruitService {
     }
     
     public List<RecruitPost> getAllActiveRecruits() {
-        return recruitRepository.findByStatus(RecruitStatus.ACTIVE);
+        return recruitRepository.findByStatus(RecruitStatus.RECRUITING);
     }
 }

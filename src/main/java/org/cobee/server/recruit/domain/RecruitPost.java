@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cobee.server.publicProfile.domain.enums.Lifestyle;
 import org.cobee.server.publicProfile.domain.enums.Personality;
+import org.cobee.server.member.domain.enums.PreferredGender;
 import org.cobee.server.recruit.domain.enums.RecruitStatus;
 import org.cobee.server.chat.domain.ChattingRoom;
 import org.cobee.server.comment.domain.Comment;
@@ -77,6 +78,10 @@ public class RecruitPost {
     @Column
     @Enumerated(EnumType.STRING)
     private Lifestyle lifeStyle;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private PreferredGender preferredGender;
 
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
