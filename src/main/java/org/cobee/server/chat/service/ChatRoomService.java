@@ -1,6 +1,7 @@
 package org.cobee.server.chat.service;
 
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.cobee.server.chat.domain.ChatRoom;
@@ -10,6 +11,8 @@ import org.cobee.server.global.error.code.ErrorCode;
 import org.cobee.server.global.error.exception.CustomException;
 import org.cobee.server.member.domain.Member;
 import org.cobee.server.member.repository.MemberRepository;
+import org.cobee.server.recruit.domain.RecruitPost;
+import org.cobee.server.recruit.repository.RecruitPostRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -20,10 +23,20 @@ import org.springframework.util.StringUtils;
 public class ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
     private final MemberRepository memberRepository;
+    private final RecruitPostRepository recruitPostRepository;
 
     @Transactional
-    public ChatRoom createChatRoom(ChatRoomCreateRequestDto request) {
-        ChatRoom newRoom = new ChatRoom(request.getName(), request.getMaxUserCount());
+    public ChatRoom createChatRoom(ChatRoomCreateRequestDto request, Member host) {
+        RecruitPost post = recruitPostRepository.findById(request.getPostId())
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        ChatRoom newRoom = ChatRoom.builder()
+                .name(request.getName())
+                .maxMemberCount(request.getMaxUserCount())
+                .host(host)
+                .post(post)
+                .build();
+
         return chatRoomRepository.save(newRoom);
     }
 
@@ -103,5 +116,24 @@ public class ChatRoomService {
 
         room.editChatroomName(request.getName());
         return chatRoomRepository.save(room);
+    }
+
+    @Transactional
+    public void outUserFromRoom(Long roomId, Member host, Long userIdToOut) {
+        ChatRoom room = findRoomById(roomId);
+
+        if (room.getHost() == null || !room.getHost().getId().equals(host.getId())) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
+
+        Member memberToOut = memberRepository.findById(userIdToOut)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        if (memberToOut.getChatRoom() == null || !memberToOut.getChatRoom().getId().equals(roomId)) {
+            throw new CustomException(ErrorCode.CHAT_ROOM_USER_NOT_IN_ROOM);
+        }
+
+        room.removeUser(memberToOut);
+        chatRoomRepository.save(room);
     }
 }
