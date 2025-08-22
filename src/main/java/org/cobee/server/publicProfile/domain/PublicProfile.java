@@ -4,8 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.cobee.server.publicProfile.domain.enums.Lifestyle;
-import org.cobee.server.publicProfile.domain.enums.Personality;
+import org.cobee.server.publicProfile.domain.enums.*;
 
 @Entity
 @Getter
@@ -25,16 +24,16 @@ public class PublicProfile {
     @Enumerated(EnumType.STRING)
     private Personality personality;
 
-    private Boolean isSmoking;
+    private Smoking isSmoking;
 
-    private Boolean isSnoring;
+    private Snoring isSnoring;
 
-    private Boolean hasPet;
+    private Pets hasPet;
 
 //    @OneToOne
 //    private Member member;
 
-    public PublicProfile(String info, Lifestyle lifestyle, Personality personality, Boolean isSmoking, Boolean isSnoring, Boolean hasPet) {
+    public PublicProfile(String info, Lifestyle lifestyle, Personality personality, Smoking isSmoking, Snoring isSnoring, Pets hasPet) {
         this.info = info;
         this.lifestyle = lifestyle;
         this.personality = personality;
@@ -42,7 +41,7 @@ public class PublicProfile {
         this.isSnoring = isSnoring;
         this.hasPet = hasPet;
     }
-    public void update(String info, Lifestyle lifestyle, Personality personality, Boolean isSmoking, Boolean isSnoring, Boolean hasPet) {
+    public void update(String info, Lifestyle lifestyle, Personality personality, Smoking isSmoking, Snoring isSnoring, Pets hasPet) {
         this.info = info;
         this.lifestyle = lifestyle;
         this.personality = personality;
