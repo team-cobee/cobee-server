@@ -17,6 +17,9 @@ bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 
+**/src/main/resources/firebase/cobee-firebase.json
+**/src/main/resources/static/index.html
+
 ### IntelliJ IDEA ###
 .idea
 *.iws
@@ -39,4 +42,5 @@ out/
 .env
 ### application ###
 resources/application.yml
-src/test/resources/application.yml
+**/src/test/resources/application.yml
+

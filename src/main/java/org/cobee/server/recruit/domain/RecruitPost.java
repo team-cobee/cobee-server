@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import org.cobee.server.publicProfile.domain.enums.Lifestyle;
 import org.cobee.server.publicProfile.domain.enums.Personality;
 import org.cobee.server.recruit.domain.enums.RecruitStatus;
-import org.cobee.server.chat.domain.ChattingRoom;
+import org.cobee.server.chat.domain.ChatRoom;
 import org.cobee.server.comment.domain.Comment;
 import org.cobee.server.member.domain.Member;
 import org.cobee.server.recruit.dto.RecruitRequest;
@@ -83,7 +83,7 @@ public class RecruitPost {
     private List<Comment> comments;
 
     @OneToOne
-    private ChattingRoom chattingRoom;
+    private ChatRoom chattingRoom;
 
     @OneToMany(mappedBy = "post")
     private List<ApplyRecord> applyRecords = new ArrayList<>();
@@ -94,12 +94,12 @@ public class RecruitPost {
 
 
     public void updatePost(RecruitRequest dto) {
-        this.title = dto.title();
-        this.recruitCount = dto.recruitCount();
-        this.rentCost = dto.rentCost();
-        this.monthlyCost = dto.monthlyCost();
+        this.title = dto.getTitle();
+        this.recruitCount = dto.getRecruitCount();
+        this.rentCost = dto.getRentCost();
+        this.monthlyCost = dto.getMonthlyCost();
         //this.imgUrl = dto.imgUrl();
-        this.content = dto.content();
+        this.content = dto.getContent();
     }
 
     public void addComment(Comment comment) {

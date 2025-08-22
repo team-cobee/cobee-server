@@ -1,6 +1,10 @@
 package org.cobee.server.recruit.service;
 
 import lombok.RequiredArgsConstructor;
+import org.cobee.server.alarm.domain.enums.AlarmSourceType;
+import org.cobee.server.alarm.domain.enums.AlarmType;
+import org.cobee.server.alarm.dto.AlarmCreateRequest;
+import org.cobee.server.alarm.service.AlarmService;
 import org.cobee.server.global.error.code.ErrorCode;
 import org.cobee.server.global.error.exception.CustomException;
 import org.cobee.server.member.domain.Member;
@@ -9,13 +13,12 @@ import org.cobee.server.publicProfile.dto.PublicProfileResponseDto;
 import org.cobee.server.recruit.domain.ApplyRecord;
 import org.cobee.server.recruit.domain.RecruitPost;
 import org.cobee.server.recruit.domain.enums.MatchStatus;
-import org.cobee.server.recruit.dto.ApplyAcceptRequest;
-import org.cobee.server.recruit.dto.ApplyRequest;
-import org.cobee.server.recruit.dto.ApplyResponse;
-import org.cobee.server.recruit.dto.RecruitResponse;
+import org.cobee.server.recruit.dto.*;
 import org.cobee.server.recruit.repository.ApplyRecordRepository;
 import org.cobee.server.recruit.repository.RecruitPostRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -27,8 +30,11 @@ public class ApplyService {
     private final MemberRepository memberRepository;
     private final RecruitPostRepository postRepository;
     private final ApplyRecordRepository applyRepository;
+    private final AlarmService alarmService;
+    private final ApplicationEventPublisher publisher;
 
     // TODO : 중복 처리 되지 않게 수정
+    @Transactional
     public ApplyResponse apply(Long memberId, ApplyRequest request) {
         Member member = memberRepository.findById(memberId).orElseThrow();
         RecruitPost post = postRepository.findById(request.getPostId()).orElseThrow();
@@ -42,9 +48,19 @@ public class ApplyService {
         post.addApply(applyRecord);
         //postRepository.save(post); 이거 대신에 RecruitPost에 setting하는 메서드로
         applyRepository.save(applyRecord);
+
+        // 알림 생성 및 발송
+        publisher.publishEvent(new ApplyCreatedEvent(
+                applyRecord.getId(),
+                post.getId(),
+                memberId,
+                post.getMember().getId()
+        ));
+
         return ApplyResponse.from(applyRecord);
     }
 
+    @Transactional
     public ApplyResponse accept(Long memberId, Long applyId, ApplyAcceptRequest applyAccept){
         ApplyRecord applyRecord = applyRepository.findById(applyId).orElseThrow(()->new CustomException(ErrorCode.APPLY_NOT_FOUND));
         Long checkAuthor = applyRecord.getPost().getMember().getId();
@@ -52,6 +68,15 @@ public class ApplyService {
             Boolean accept = applyAccept.getIsAccept();
             applyRecord.acceptMatching(accept);
             applyRepository.save(applyRecord);
+
+            publisher.publishEvent(new ApplyAcceptResultEvent(
+                    applyRecord.getId(),
+                    applyRecord.getPost().getId(),
+                    memberId,
+                    applyRecord.getMember().getId(),
+                    accept
+            ));
+
             return ApplyResponse.from(applyRecord);
         } else {
             throw new CustomException(ErrorCode.UNAUTHORIZED);

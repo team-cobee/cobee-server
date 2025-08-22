@@ -30,12 +30,12 @@ public class RecruitService {
     public RecruitResponse createRecruitPost(RecruitRequest request, Long memberId){
         Member member = memberRepository.findById(memberId).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
         RecruitPost recruitPost = RecruitPost.builder()
-                .title(request.title())
-                .content(request.content())
-                .recruitCount(request.recruitCount())
+                .title(request.getTitle())
+                .content(request.getContent())
+                .recruitCount(request.getRecruitCount())
                 .status(RecruitStatus.RECRUITING)
-                .rentCost(request.rentCost())
-                .monthlyCost(request.monthlyCost())
+                .rentCost(request.getRentCost())
+                .monthlyCost(request.getMonthlyCost())
                 //.regionLatitude
                 //.regionLongitude
                 .hasRoom(true)
@@ -93,7 +93,6 @@ public class RecruitService {
         } catch (CustomException e) {
             return false;
         }
-
 
     }
 }

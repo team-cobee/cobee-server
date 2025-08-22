@@ -9,7 +9,7 @@ import org.cobee.server.recruit.domain.RecruitPost;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
 /*
 TODO
 - response에 댓글개수, 조회수(가능하면), 지원자 n명 추가
@@ -48,6 +48,4 @@ public class RecruitResponse{
                 .comments(responses)
                 .build();
     }
-
 }
-

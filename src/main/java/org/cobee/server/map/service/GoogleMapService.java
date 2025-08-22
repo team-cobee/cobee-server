@@ -3,6 +3,8 @@ package org.cobee.server.map.service;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.cobee.server.global.error.code.ErrorCode;
+import org.cobee.server.global.error.exception.CustomException;
 import org.cobee.server.map.dto.NearbyPlaceDto;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -37,7 +39,7 @@ public class GoogleMapService {
                 return "주소를 찾지 못 했어요.";
             }
         } catch (Exception e) {
-            throw new RuntimeException("구글 맵에서 주소 가져오기 실패", e);
+            throw new CustomException(ErrorCode.GOOGLE_MAP_API_ERROR);
         }
     }
 
@@ -71,7 +73,7 @@ public class GoogleMapService {
             return places;
 
         } catch (Exception e) {
-            throw new RuntimeException("Google Nearby Search API 호출 실패", e);
+            throw new CustomException(ErrorCode.GOOGLE_NEARBY_API_ERROR);
         }
     }
 }
