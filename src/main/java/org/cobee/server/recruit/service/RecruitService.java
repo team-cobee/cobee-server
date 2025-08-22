@@ -47,11 +47,14 @@ public class RecruitService {
                 .address(request.getAddress())
                 .createdAt(LocalDateTime.now())
                 .status(RecruitStatus.RECRUITING)
+                .regionLatitude(request.getLatitude())
+                .regionLongitude(request.getLongitude())
+                .distance(request.getDistance())
+                .detailDescription(request.getDetailDescription())
+                .additionalDescription(request.getAdditionalDescription())
                 .comments(new ArrayList<>()) //여기에 추가하는건 안되고 메서드로 추가해야하는건가??
                 .member(member)
-                //.regionLatitude
-                //.regionLongitude
-                //.distance()
+
                 .build();
         recruitRepository.save(recruitPost);
 
