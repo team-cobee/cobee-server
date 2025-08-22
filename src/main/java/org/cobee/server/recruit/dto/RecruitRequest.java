@@ -8,13 +8,13 @@ import java.util.List;
 @Getter
 public class RecruitRequest{
     private String title;
-    private int recruitCount;
-    private int rentCostMin;
-    private int rentCostMax;
-    private int monthlyCostMin;
-    private int monthlyCostMax;
-    private int minAge;
-    private int maxAge;
+    private Integer recruitCount;
+    private Integer rentCostMin;
+    private Integer rentCostMax;
+    private Integer monthlyCostMin;
+    private Integer monthlyCostMax;
+    private Integer minAge;
+    private Integer maxAge;
     private Lifestyle lifestyle;
     private Personality personality;
     private Smoking isSmoking;

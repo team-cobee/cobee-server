@@ -31,25 +31,25 @@ public class RecruitPost {
     private String title;
 
     @Column
-    private int recruitCount;
+    private Integer recruitCount;
 
     @Column
-    private int rentCostMin;
+    private Integer rentCostMin;
 
     @Column
-    private int rentCostMax;
+    private Integer rentCostMax;
 
     @Column
-    private int monthlyCostMin;
+    private Integer monthlyCostMin;
 
     @Column
-    private int monthlyCostMax;
+    private Integer monthlyCostMax;
 
     @Column
-    private int minAge;
+    private Integer minAge;
 
     @Column
-    private int maxAge;
+    private Integer maxAge;
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -119,10 +119,21 @@ public class RecruitPost {
 
 
     public void updatePost(RecruitRequest dto) {
-        this.title = dto.getTitle();
-        this.recruitCount = dto.getRecruitCount();
-        this.rentCostMin = dto.getRentCostMin();
-        this.monthlyCost = dto.getMonthlyCost();
+        if (dto.getTitle() != null) this.title = dto.getTitle();
+        if (dto.getRecruitCount() != null) this.recruitCount = dto.getRecruitCount();
+        if (dto.getRentCostMin() != null) this.rentCostMin = dto.getRentCostMin();
+        if (dto.getRentCostMax() != null) this.rentCostMax = dto.getRentCostMax();
+        if (dto.getMonthlyCostMin() != null) this.monthlyCostMin = dto.getMonthlyCostMin();
+        if (dto.getMonthlyCostMax() != null) this.monthlyCostMax = dto.getMonthlyCostMax();
+        if (dto.getMinAge() != null) this.minAge = dto.getMinAge();
+        if (dto.getMaxAge() != null) this.maxAge = dto.getMaxAge();
+        if (dto.getLifestyle() != null) this.lifeStyle = dto.getLifestyle();
+        if (dto.getPersonality() != null) this.personality = dto.getPersonality();
+        if (dto.getIsSmoking() != null) this.isSmoking = dto.getIsSmoking();
+        if (dto.getIsSnoring() != null) this.isSnoring = dto.getIsSnoring();
+        if (dto.getIsPetsAllowed() != null) this.isPetsAllowed = dto.getIsPetsAllowed();
+        if (dto.getHasRoom() != null) this.hasRoom = dto.getHasRoom();
+        if (dto.getAddress() != null) this.address = dto.getAddress();
     }
 
     public void addComment(Comment comment) {
