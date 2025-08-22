@@ -14,6 +14,7 @@ import org.cobee.server.recruit.dto.RecruitResponse;
 import org.cobee.server.recruit.repository.ApplyRecordRepository;
 import org.cobee.server.recruit.repository.RecruitPostRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -101,5 +102,16 @@ public class RecruitService {
             return false;
         }
 
+    }
+
+    @Transactional(readOnly = true)
+    public List<RecruitResponse> getAllMyPost(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+        List<RecruitPost> myPosts = recruitRepository.findAllByMemberId(memberId);
+        List<RecruitResponse> responses = new ArrayList<>();
+        for (RecruitPost post : myPosts){
+            responses.add(RecruitResponse.from(post, member));
+        }
+        return responses;
     }
 }

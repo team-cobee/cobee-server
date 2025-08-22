@@ -58,4 +58,10 @@ public class RecruitController {
     }
 
     // TODO : 나의 구인글 조회 API 구현
+    @GetMapping("/my")
+    public ApiResponse<List<RecruitResponse>> getMyRecruitPosts(@AuthenticationPrincipal PrincipalDetails principalDetails){
+        Long memberId = principalDetails.getMember().getId();
+        List<RecruitResponse> result = recruitService.getAllMyPost(memberId);
+        return ApiResponse.success("나의 모든 구인글 조회 완료", "MY_RECRUIT_VIEWED", result);
+    }
 }
