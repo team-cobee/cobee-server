@@ -19,7 +19,7 @@ public class RecruitRequest{
     private Personality personality;
     private Smoking isSmoking;
     private Snoring isSnoring;
-    private Pets hasPet;
+    private Pets isPetsAllowed;
     private Boolean hasRoom;
     private List<String> imgUrl;
     private String address;  //  지도가 처리?

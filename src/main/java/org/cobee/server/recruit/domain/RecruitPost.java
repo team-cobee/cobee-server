@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cobee.server.publicProfile.domain.enums.Lifestyle;
 import org.cobee.server.publicProfile.domain.enums.Personality;
+import org.cobee.server.publicProfile.domain.enums.Pets;
 import org.cobee.server.recruit.domain.enums.RecruitStatus;
 import org.cobee.server.chat.domain.ChatRoom;
 import org.cobee.server.comment.domain.Comment;
@@ -31,21 +32,67 @@ public class RecruitPost {
     @Column
     private String title;
 
-    @Column(columnDefinition = "TEXT")
-    private String content;
+    @Column
+    private int recruitCountMin;
 
     @Column
-    private int recruitCount;
+    private int rentCostMin;
+
+    @Column
+    private int rentCostMax;
+
+    @Column
+    private int monthlyCostMin;
+
+    @Column
+    private int monthlyCostMax;
+
+    @Column
+    private int minAge;
+
+    @Column
+    private int maxAge;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Lifestyle lifeStyle;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Personality personality;
+
+    @Column
+    private Boolean isSmoking;
+
+    @Column
+    private Boolean isSnoring;
+
+    @Column
+    private Pets isPetsAllowed;
+
+    @Column
+    private Boolean hasRoom;
+
+    @Column
+    private String address;
+
+    @Column
+    @Lob
+    private String detailDescription;
+
+    @Column
+    @Lob
+    private String additionalDescription;
 
     @Column
     @Enumerated(EnumType.STRING)
     private RecruitStatus status;
 
     @Column
-    private int rentCost;
+    private LocalDateTime createdAt;
 
-    @Column
-    private int monthlyCost;
+
+    /* 지도 */
 
     @Column
     private Float regionLatitude; // 위도
@@ -54,30 +101,7 @@ public class RecruitPost {
     private Float regionLongitude; // 경도
 
     @Column
-    private Boolean hasRoom;
-
-    @Column
-    private Boolean isPetsAllowed;
-
-    @Column
-    private Float distance;
-
-    @Column
-    private LocalDateTime createdAt;
-
-    @Column
-    private Boolean isSnoring;
-
-    @Column
-    private Boolean isSmoking;
-
-    @Column
-    @Enumerated(EnumType.STRING)
-    private Personality personality;
-
-    @Column
-    @Enumerated(EnumType.STRING)
-    private Lifestyle lifeStyle;
+    private Float distance;  // 거리
 
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
