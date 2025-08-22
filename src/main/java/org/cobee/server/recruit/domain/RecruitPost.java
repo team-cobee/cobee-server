@@ -5,9 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.cobee.server.publicProfile.domain.enums.Lifestyle;
-import org.cobee.server.publicProfile.domain.enums.Personality;
-import org.cobee.server.publicProfile.domain.enums.Pets;
+import org.cobee.server.publicProfile.domain.enums.*;
 import org.cobee.server.recruit.domain.enums.RecruitStatus;
 import org.cobee.server.chat.domain.ChatRoom;
 import org.cobee.server.comment.domain.Comment;
@@ -33,7 +31,7 @@ public class RecruitPost {
     private String title;
 
     @Column
-    private int recruitCountMin;
+    private int recruitCount;
 
     @Column
     private int rentCostMin;
@@ -62,10 +60,10 @@ public class RecruitPost {
     private Personality personality;
 
     @Column
-    private Boolean isSmoking;
+    private Smoking isSmoking;
 
     @Column
-    private Boolean isSnoring;
+    private Snoring isSnoring;
 
     @Column
     private Pets isPetsAllowed;

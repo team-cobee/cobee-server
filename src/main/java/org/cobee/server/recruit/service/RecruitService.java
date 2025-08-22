@@ -31,23 +31,27 @@ public class RecruitService {
         Member member = memberRepository.findById(memberId).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
         RecruitPost recruitPost = RecruitPost.builder()
                 .title(request.getTitle())
-                .content(request.getContent())
                 .recruitCount(request.getRecruitCount())
-                .status(RecruitStatus.RECRUITING)
-                .rentCost(request.getRentCost())
-                .monthlyCost(request.getMonthlyCost())
-                //.regionLatitude
-                //.regionLongitude
-                .hasRoom(true)
-                //.isPetsAllowed()
-                //.distance()
+                .rentCostMin(request.getRentCostMin())
+                .rentCostMax(request.getRentCostMax())
+                .monthlyCostMin(request.getMonthlyCostMin())
+                .monthlyCostMax(request.getMonthlyCostMax())
+                .minAge(request.getMinAge())
+                .maxAge(request.getMaxAge())
+                .lifeStyle(request.getLifestyle())
+                .personality(request.getPersonality())
+                .isSmoking(request.getIsSmoking())
+                .isSnoring(request.getIsSnoring())
+                .isPetsAllowed(request.getIsPetsAllowed())
+                .hasRoom(request.getHasRoom())
+                .address(request.getAddress())
                 .createdAt(LocalDateTime.now())
-                //.isSnoring()
-                //.isSmoking()
-                //.personality()
-                //.lifeStyle()
+                .status(RecruitStatus.RECRUITING)
                 .comments(new ArrayList<>()) //여기에 추가하는건 안되고 메서드로 추가해야하는건가??
                 .member(member)
+                //.regionLatitude
+                //.regionLongitude
+                //.distance()
                 .build();
         recruitRepository.save(recruitPost);
 

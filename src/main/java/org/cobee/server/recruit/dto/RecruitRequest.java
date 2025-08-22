@@ -12,7 +12,7 @@ public class RecruitRequest{
     private int rentCostMin;
     private int rentCostMax;
     private int monthlyCostMin;
-    private int monthlyConstMax;
+    private int monthlyCostMax;
     private int minAge;
     private int maxAge;
     private Lifestyle lifestyle;
