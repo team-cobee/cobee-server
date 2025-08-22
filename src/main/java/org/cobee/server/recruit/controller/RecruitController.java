@@ -1,11 +1,13 @@
 package org.cobee.server.recruit.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.cobee.server.auth.service.PrincipalDetails;
 import org.cobee.server.global.error.code.ErrorCode;
 import org.cobee.server.global.response.ApiResponse;
 import org.cobee.server.recruit.dto.RecruitRequest;
 import org.cobee.server.recruit.dto.RecruitResponse;
 import org.cobee.server.recruit.service.RecruitService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,14 +18,19 @@ import java.util.List;
 public class RecruitController {
 
     private final RecruitService recruitService;
-    @PostMapping("/{memberId}")
-    public ApiResponse<RecruitResponse> createRecruitPost(@RequestBody RecruitRequest request, @PathVariable(name="memberId") Long memberId){
+    @PostMapping("")
+    public ApiResponse<RecruitResponse> createRecruitPost(@RequestBody RecruitRequest request,
+                                                          @AuthenticationPrincipal PrincipalDetails principalDetails){
+        Long memberId = principalDetails.getMember().getId();
         RecruitResponse result = recruitService.createRecruitPost(request, memberId);
         return ApiResponse.success("구인글 생성 완료", "RECRUIT_CREATED", result);
     }
 
-    @PutMapping("/{memberId}/{postId}")
-    public ApiResponse<RecruitResponse> updateRecruitPost(@RequestBody RecruitRequest request, @PathVariable(name="memberId") Long memberId, @PathVariable(name="postId") Long postId){
+    @PutMapping("/{postId}")
+    public ApiResponse<RecruitResponse> updateRecruitPost(@RequestBody RecruitRequest request,
+                                                          @AuthenticationPrincipal PrincipalDetails principalDetails,
+                                                          @PathVariable(name="postId") Long postId){
+        Long memberId = principalDetails.getMember().getId();
         RecruitResponse result = recruitService.updateRecruitPost(request,postId,memberId);
         return ApiResponse.success("구인글 수정 완료", "RECRUIT_UPDATED", result);
     }
@@ -49,4 +56,6 @@ public class RecruitController {
             return ApiResponse.failure("postId가 "+postId+"인 구인글 삭제 실패", "RECRUIT_DELETED_FAILED", ErrorCode.POST_NOT_FOUND.getMessage(), result);
         }
     }
+
+    // TODO : 나의 구인글 조회 API 구현
 }
