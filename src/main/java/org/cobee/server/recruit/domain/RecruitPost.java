@@ -60,12 +60,15 @@ public class RecruitPost {
     private Personality personality;
 
     @Column
+    @Enumerated(EnumType.STRING)
     private Smoking isSmoking;
 
     @Column
+    @Enumerated(EnumType.STRING)
     private Snoring isSnoring;
 
     @Column
+    @Enumerated(EnumType.STRING)
     private Pets isPetsAllowed;
 
     @Column
@@ -118,10 +121,8 @@ public class RecruitPost {
     public void updatePost(RecruitRequest dto) {
         this.title = dto.getTitle();
         this.recruitCount = dto.getRecruitCount();
-        this.rentCost = dto.getRentCost();
+        this.rentCostMin = dto.getRentCostMin();
         this.monthlyCost = dto.getMonthlyCost();
-        //this.imgUrl = dto.imgUrl();
-        this.content = dto.getContent();
     }
 
     public void addComment(Comment comment) {
