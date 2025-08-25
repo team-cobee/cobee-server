@@ -26,12 +26,18 @@ public class ChatRoom {
     @Column(nullable = false)
     private String name;
 
+    @ManyToOne
+    @JoinColumn(name = "host_id")
+    private Member host;
+
+    @Builder.Default
     @Column(nullable = false)
     private int currentUserCount = 0;
 
     @Column(nullable = false)
     private int maxMemberCount;
 
+    @Builder.Default
     @OneToMany(mappedBy = "chatRoom")
     private Set<Member> users = new HashSet<>();
 

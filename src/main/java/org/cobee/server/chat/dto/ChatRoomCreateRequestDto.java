@@ -8,4 +8,5 @@ import lombok.Getter;
 public class ChatRoomCreateRequestDto {
     private String name;
     private int maxUserCount;
+    private Long postId;
 }

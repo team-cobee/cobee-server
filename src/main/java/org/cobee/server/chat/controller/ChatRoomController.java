@@ -3,6 +3,7 @@ package org.cobee.server.chat.controller;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.cobee.server.auth.service.PrincipalDetails;
 import org.cobee.server.chat.document.ChatMessage;
 import org.cobee.server.chat.domain.ChatRoom;
 import org.cobee.server.chat.dto.ChatRoomCreateRequestDto;
@@ -13,6 +14,7 @@ import org.cobee.server.chat.dto.JoinRoomRequestDto;
 import org.cobee.server.chat.service.ChatRoomService;
 import org.cobee.server.chat.service.ChatService;
 import org.cobee.server.global.response.ApiResponse;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -31,10 +33,14 @@ public class ChatRoomController {
 
     //채팅방 개설
     @PostMapping("/rooms")
-    public ApiResponse<ChatRoomResponseDto> createRoom(@RequestBody ChatRoomCreateRequestDto request) {
-        ChatRoom room = chatRoomService.createChatRoom(request);
+    public ApiResponse<ChatRoomResponseDto> createRoom(
+            @RequestBody ChatRoomCreateRequestDto request,
+            @AuthenticationPrincipal PrincipalDetails principal) {
+        ChatRoom room = chatRoomService.createChatRoom(request, principal.getMember());
+        chatRoomService.addUserToRoom(room.getId(), principal.getMember().getId());
         return ApiResponse.success("채팅방 생성 성공", "CHAT_ROOM_CREATED", ChatRoomMapper.toDto(room));
     }
+
 
     //채팅방 이름 수정
     @PatchMapping("/rooms/{roomId}")
@@ -110,5 +116,14 @@ public class ChatRoomController {
         } catch (IllegalArgumentException e) {
             return ApiResponse.failure("채팅방을 찾을 수 없습니다", "CHAT_ROOM_NOT_FOUND", e.getMessage());
         }
+    }
+    // 채팅방에서 유저 강퇴 (채팅방 방장인 host만 가능)
+    @DeleteMapping("/rooms/{roomId}/users/{userId}")
+    public ApiResponse<Void> outUser(
+            @PathVariable Long roomId,
+            @PathVariable Long userId,
+            @AuthenticationPrincipal PrincipalDetails principal) {
+        chatRoomService.outUserFromRoom(roomId, principal.getMember(), userId);
+        return ApiResponse.success("유저 강퇴 성공", "USER_KICKED");
     }
 }
