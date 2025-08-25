@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.cobee.server.publicProfile.domain.enums.Lifestyle;
-import org.cobee.server.publicProfile.domain.enums.Personality;
+import org.cobee.server.member.domain.enums.Gender;
+import org.cobee.server.publicProfile.domain.enums.*;
 import org.cobee.server.recruit.domain.enums.RecruitStatus;
 import org.cobee.server.chat.domain.ChatRoom;
 import org.cobee.server.comment.domain.Comment;
@@ -31,21 +31,74 @@ public class RecruitPost {
     @Column
     private String title;
 
-    @Column(columnDefinition = "TEXT")
-    private String content;
+    @Column
+    private Integer recruitCount;
 
     @Column
-    private int recruitCount;
+    private Integer rentCostMin;
+
+    @Column
+    private Integer rentCostMax;
+
+    @Column
+    private Integer monthlyCostMin;
+
+    @Column
+    private Integer monthlyCostMax;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Gender preferedGender;
+
+    @Column
+    private Integer minAge;
+
+    @Column
+    private Integer maxAge;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Lifestyle lifeStyle;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Personality personality;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Smoking isSmoking;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Snoring isSnoring;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Pets isPetsAllowed;
+
+    @Column
+    private Boolean hasRoom;
+
+    @Column
+    private String address;
+
+    @Column
+    @Lob
+    private String detailDescription;
+
+    @Column
+    @Lob
+    private String additionalDescription;
 
     @Column
     @Enumerated(EnumType.STRING)
     private RecruitStatus status;
 
     @Column
-    private int rentCost;
+    private LocalDateTime createdAt;
 
-    @Column
-    private int monthlyCost;
+
+    /* 지도 */
 
     @Column
     private Float regionLatitude; // 위도
@@ -54,30 +107,7 @@ public class RecruitPost {
     private Float regionLongitude; // 경도
 
     @Column
-    private Boolean hasRoom;
-
-    @Column
-    private Boolean isPetsAllowed;
-
-    @Column
-    private Float distance;
-
-    @Column
-    private LocalDateTime createdAt;
-
-    @Column
-    private Boolean isSnoring;
-
-    @Column
-    private Boolean isSmoking;
-
-    @Column
-    @Enumerated(EnumType.STRING)
-    private Personality personality;
-
-    @Column
-    @Enumerated(EnumType.STRING)
-    private Lifestyle lifeStyle;
+    private Float distance;  // 거리
 
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
@@ -94,12 +124,21 @@ public class RecruitPost {
 
 
     public void updatePost(RecruitRequest dto) {
-        this.title = dto.getTitle();
-        this.recruitCount = dto.getRecruitCount();
-        this.rentCost = dto.getRentCost();
-        this.monthlyCost = dto.getMonthlyCost();
-        //this.imgUrl = dto.imgUrl();
-        this.content = dto.getContent();
+        if (dto.getTitle() != null) this.title = dto.getTitle();
+        if (dto.getRecruitCount() != null) this.recruitCount = dto.getRecruitCount();
+        if (dto.getRentCostMin() != null) this.rentCostMin = dto.getRentCostMin();
+        if (dto.getRentCostMax() != null) this.rentCostMax = dto.getRentCostMax();
+        if (dto.getMonthlyCostMin() != null) this.monthlyCostMin = dto.getMonthlyCostMin();
+        if (dto.getMonthlyCostMax() != null) this.monthlyCostMax = dto.getMonthlyCostMax();
+        if (dto.getMinAge() != null) this.minAge = dto.getMinAge();
+        if (dto.getMaxAge() != null) this.maxAge = dto.getMaxAge();
+        if (dto.getLifestyle() != null) this.lifeStyle = dto.getLifestyle();
+        if (dto.getPersonality() != null) this.personality = dto.getPersonality();
+        if (dto.getIsSmoking() != null) this.isSmoking = dto.getIsSmoking();
+        if (dto.getIsSnoring() != null) this.isSnoring = dto.getIsSnoring();
+        if (dto.getIsPetsAllowed() != null) this.isPetsAllowed = dto.getIsPetsAllowed();
+        if (dto.getHasRoom() != null) this.hasRoom = dto.getHasRoom();
+        if (dto.getAddress() != null) this.address = dto.getAddress();
     }
 
     public void addComment(Comment comment) {

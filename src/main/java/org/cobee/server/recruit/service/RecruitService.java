@@ -14,6 +14,7 @@ import org.cobee.server.recruit.dto.RecruitResponse;
 import org.cobee.server.recruit.repository.ApplyRecordRepository;
 import org.cobee.server.recruit.repository.RecruitPostRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -31,23 +32,30 @@ public class RecruitService {
         Member member = memberRepository.findById(memberId).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
         RecruitPost recruitPost = RecruitPost.builder()
                 .title(request.getTitle())
-                .content(request.getContent())
                 .recruitCount(request.getRecruitCount())
-                .status(RecruitStatus.RECRUITING)
-                .rentCost(request.getRentCost())
-                .monthlyCost(request.getMonthlyCost())
-                //.regionLatitude
-                //.regionLongitude
-                .hasRoom(true)
-                //.isPetsAllowed()
-                //.distance()
+                .rentCostMin(request.getRentCostMin())
+                .rentCostMax(request.getRentCostMax())
+                .monthlyCostMin(request.getMonthlyCostMin())
+                .monthlyCostMax(request.getMonthlyCostMax())
+                .minAge(request.getMinAge())
+                .maxAge(request.getMaxAge())
+                .lifeStyle(request.getLifestyle())
+                .personality(request.getPersonality())
+                .isSmoking(request.getIsSmoking())
+                .isSnoring(request.getIsSnoring())
+                .isPetsAllowed(request.getIsPetsAllowed())
+                .hasRoom(request.getHasRoom())
+                .address(request.getAddress())
                 .createdAt(LocalDateTime.now())
-                //.isSnoring()
-                //.isSmoking()
-                //.personality()
-                //.lifeStyle()
+                .status(RecruitStatus.RECRUITING)
+                .regionLatitude(request.getLatitude())
+                .regionLongitude(request.getLongitude())
+                .distance(request.getDistance())
+                .detailDescription(request.getDetailDescription())
+                .additionalDescription(request.getAdditionalDescription())
                 .comments(new ArrayList<>()) //여기에 추가하는건 안되고 메서드로 추가해야하는건가??
                 .member(member)
+
                 .build();
         recruitRepository.save(recruitPost);
 
@@ -94,5 +102,16 @@ public class RecruitService {
             return false;
         }
 
+    }
+
+    @Transactional(readOnly = true)
+    public List<RecruitResponse> getAllMyPost(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+        List<RecruitPost> myPosts = recruitRepository.findAllByMemberId(memberId);
+        List<RecruitResponse> responses = new ArrayList<>();
+        for (RecruitPost post : myPosts){
+            responses.add(RecruitResponse.from(post, member));
+        }
+        return responses;
     }
 }

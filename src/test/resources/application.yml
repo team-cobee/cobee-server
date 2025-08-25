@@ -1,5 +1,4 @@
 spring:
-<<<<<<< HEAD
   application:
     name: cobee server
 
@@ -21,7 +20,6 @@ google:
   maps:
     api-key: ${GOOGLE_MAPS_API_KEY}
 
-=======
   datasource:
     url: jdbc:h2:mem:testdb
     driver-class-name: org.h2.Driver
@@ -33,4 +31,3 @@ google:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
->>>>>>> b21609e8827bbf2c18cc16f9b70ff90dbb699730

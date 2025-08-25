@@ -1,6 +1,5 @@
 package org.cobee.server.publicProfile.dto;
-import org.cobee.server.publicProfile.domain.enums.Lifestyle;
-import org.cobee.server.publicProfile.domain.enums.Personality;
+import org.cobee.server.publicProfile.domain.enums.*;
 import org.cobee.server.publicProfile.domain.PublicProfile;
 import org.cobee.server.member.domain.Member;
 
@@ -11,9 +10,9 @@ public record PublicProfileResponseDto(
         String info,
         Lifestyle mLifestyle,
         Personality mPersonality,
-        Boolean mSmoking,
-        Boolean mSnoring,
-        Boolean mPet
+        Smoking mSmoking,
+        Snoring mSnoring,
+        Pets mPet
 ) {
 
     public static PublicProfileResponseDto from(PublicProfile publicProfile, Member member){

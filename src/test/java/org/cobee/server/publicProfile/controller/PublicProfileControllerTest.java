@@ -13,10 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.cobee.server.member.domain.Member;
-<<<<<<< HEAD
 import org.cobee.server.member.domain.enums.SocialType;
-=======
->>>>>>> b21609e8827bbf2c18cc16f9b70ff90dbb699730
 import org.cobee.server.member.repository.MemberRepository;
 import org.cobee.server.publicProfile.domain.PublicProfile;
 import org.cobee.server.publicProfile.dto.PublicProfileUpdateRequestDto;
@@ -44,16 +41,14 @@ public class PublicProfileControllerTest {
 
     @BeforeEach
     void setUp() {
-<<<<<<< HEAD
+
         member = Member.builder()
                 .name("testUser")
                 .email("test@example.com")
                 .socialType(SocialType.KAKAO)
                 .socialId("testSocialId")
                 .build();
-=======
-        member = new Member(null, "testUser", "test@example.com", "2000-01-01", "male", null, false, false, null, null, null, null, null, null, null, null);
->>>>>>> b21609e8827bbf2c18cc16f9b70ff90dbb699730
+
         memberRepository.save(member);
     }
 
@@ -62,8 +57,8 @@ public class PublicProfileControllerTest {
         // given
         PublicProfileRequestDto requestDto = new PublicProfileRequestDto(
                 "저는 조용한 성격이에요.",
-                Lifestyle.morning,
-                Personality.introvert,
+                Lifestyle.MORNING,
+                Personality.INTROVERT,
                 false,
                 true,
                 false
@@ -81,7 +76,7 @@ public class PublicProfileControllerTest {
     @Test
     void getPublicProfile() throws Exception {
         // given
-        PublicProfile publicProfile = new PublicProfile("info", Lifestyle.morning, Personality.introvert, false, true, false);
+        PublicProfile publicProfile = new PublicProfile("info", Lifestyle.MORNING, Personality.INTROVERT, false, true, false);
         member.setPublicProfile(publicProfile);
         memberRepository.save(member);
 
@@ -95,14 +90,14 @@ public class PublicProfileControllerTest {
     @Test
     void updatePublicProfile() throws Exception {
         // given
-        PublicProfile publicProfile = new PublicProfile("info", Lifestyle.morning, Personality.introvert, false, true, false);
+        PublicProfile publicProfile = new PublicProfile("info", Lifestyle.MORNING, Personality.INTROVERT, false, true, false);
         member.setPublicProfile(publicProfile);
         memberRepository.save(member);
 
         PublicProfileUpdateRequestDto requestDto = new PublicProfileUpdateRequestDto(
                 "외향적인 성격이고 반려동물 좋아해요.",
-                Lifestyle.night,
-                Personality.extrovert,
+                Lifestyle.NIGHT,
+                Personality.EXTROVERT,
                 false,
                 false,
                 true
@@ -116,7 +111,4 @@ public class PublicProfileControllerTest {
                 .andExpect(jsonPath("$.message").value("Public profile modified successfully"));
     }
 }
-<<<<<<< HEAD
 
-=======
->>>>>>> b21609e8827bbf2c18cc16f9b70ff90dbb699730

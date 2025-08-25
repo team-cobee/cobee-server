@@ -1,14 +1,13 @@
 package org.cobee.server.publicProfile.dto;
 
-import org.cobee.server.publicProfile.domain.enums.Lifestyle;
-import org.cobee.server.publicProfile.domain.enums.Personality;
+import org.cobee.server.publicProfile.domain.enums.*;
 
 public record PublicProfileUpdateRequestDto(
         String info,
         Lifestyle lifestyle,
         Personality personality,
-        Boolean isSmoking,
-        Boolean isSnoring,
-        Boolean hasPet
+        Smoking isSmoking,
+        Snoring isSnoring,
+        Pets hasPet
 ) {
 }
