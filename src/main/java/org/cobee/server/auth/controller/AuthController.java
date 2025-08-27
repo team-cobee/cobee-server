@@ -35,9 +35,9 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ApiResponse<Void> logout(HttpServletRequest request, HttpServletResponse response) {
-        authService.logout(request, response);
-        return ApiResponse.success("로그아웃 성공", "200", null);
+    public ApiResponse<MemberInfoDto> logout(HttpServletRequest request, HttpServletResponse response) {
+        MemberInfoDto logout = authService.logout(request, response);
+        return ApiResponse.success("로그아웃 성공", "200", logout);
     }
 
     @DeleteMapping("/withdraw")

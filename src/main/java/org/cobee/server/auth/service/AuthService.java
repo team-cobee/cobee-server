@@ -3,6 +3,7 @@ package org.cobee.server.auth.service;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.cobee.server.auth.dto.MemberInfoDto;
 import org.cobee.server.auth.handler.HttpCookieOAuth2AuthorizationRequestRepository;
 import org.cobee.server.auth.jwt.JwtTokenProvider;
 import org.cobee.server.auth.jwt.TokenInfo;
@@ -27,13 +28,13 @@ public class AuthService {
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
-    public void logout(HttpServletRequest request, HttpServletResponse response) {
+    public MemberInfoDto logout(HttpServletRequest request, HttpServletResponse response) {
         httpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
         String token = extractTokenFromRequest(request);
 
+        Claims claims = jwtTokenProvider.parseClaims(token);
+        long memberId = Long.parseLong(claims.getSubject());
         try {
-            Claims claims = jwtTokenProvider.parseClaims(token);
-            long memberId = Long.parseLong(claims.getSubject());
             jwtTokenProvider.deleteRefreshToken(memberId);
             log.info("Logout successful for member id {}", memberId);
         } catch (Exception e) {
@@ -41,6 +42,9 @@ public class AuthService {
             throw new CustomException(ErrorCode.LOGOUT_TOKEN_PROCESSING_FAILED);
         }
 
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        return MemberInfoDto.from(member);
     }
 
     public void withdrawMember(Long memberId, HttpServletRequest request, HttpServletResponse response) {
