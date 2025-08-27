@@ -45,3 +45,5 @@ resources/application.yml
 resources/firebase/
 **/src/test/resources/application.yml
 
+### docker-compose.yml
+docker-compose.yml
