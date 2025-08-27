@@ -42,5 +42,6 @@ out/
 .env
 ### application ###
 resources/application.yml
+resources/firebase/
 **/src/test/resources/application.yml
 
