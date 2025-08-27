@@ -27,6 +27,8 @@ public enum ErrorCode {
 
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "AUTH-001", "Unauthorized access"),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "AUTH-002", "Cannot find Member"),
+    LOGOUT_TOKEN_PROCESSING_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "AUTH-003", "Token processing failed during logout"),
+
     POST_NOT_FOUND(HttpStatus.NOT_FOUND, "POST-001", "Cannot find RecruitPost"),
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "COMMENT-001", "Cannot find Comment"),
     APPLY_NOT_FOUND(HttpStatus.NOT_FOUND, "APPLY-001", "APPLY find Comment"),
@@ -40,10 +42,14 @@ public enum ErrorCode {
     JWT_CLAIMS_EMPTY(HttpStatus.UNAUTHORIZED, "JWT-005", "JWT claims string is empty"),
     JWT_TOKEN_MISSING_AUTHORITIES(HttpStatus.UNAUTHORIZED, "JWT-006", "JWT token is missing authorities"),
 
+    // AuthService 내 에러
+    BEARER_TOKEN_HAS_ISSUE(HttpStatus.UNAUTHORIZED, "BEARER-001", "Bearer token has been null or invalidated"),
     // RefreshToken 관련 에러
     REFRESH_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "REFRESH-001", "RefreshToken not found"),
     REFRESH_TOKEN_MISMATCH(HttpStatus.UNAUTHORIZED, "REFRESH-002", "RefreshToken does not match"),
     INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "REFRESH-003", "Invalid RefreshToken");
+
+
 
     private final HttpStatus status;
     private final String code;

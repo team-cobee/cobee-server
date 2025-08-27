@@ -2,6 +2,8 @@ package org.cobee.server.auth.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.cobee.server.auth.dto.MemberInfoDto;
+import org.cobee.server.auth.dto.RefreshTokenRequest;
+import org.cobee.server.auth.jwt.TokenInfo;
 import org.cobee.server.auth.service.AuthService;
 import org.cobee.server.auth.service.PrincipalDetails;
 import org.cobee.server.global.response.ApiResponse;
@@ -24,6 +26,12 @@ public class AuthController {
         Member member = principalDetails.getMember();
         MemberInfoDto memberInfo = MemberInfoDto.from(member);
         return ApiResponse.success("사용자 정보 조회 성공", "200", memberInfo);
+    }
+
+    @PostMapping("/refresh")
+    public ApiResponse<TokenInfo> refreshToken(@RequestBody RefreshTokenRequest request) {
+        TokenInfo tokenInfo = authService.reissueToken(request.getRefreshToken());
+        return ApiResponse.success("토큰 재발급 성공", "TOKEN_REFRESH_SUCCESS", tokenInfo);
     }
 
     @PostMapping("/logout")
