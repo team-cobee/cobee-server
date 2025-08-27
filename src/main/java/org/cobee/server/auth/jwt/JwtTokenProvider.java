@@ -4,6 +4,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.cobee.server.auth.domain.RefreshToken;
 import org.cobee.server.auth.repository.RefreshTokenRepository;
 import org.cobee.server.auth.service.PrincipalDetails;
 import org.cobee.server.global.error.code.ErrorCode;
@@ -79,6 +80,12 @@ public class JwtTokenProvider {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
+        RefreshToken refreshTokenEntity = RefreshToken.of(
+                member.getId(),
+                refreshToken,
+                REFRESH_TOKEN_EXPIRE_TIME / 1000
+        );
+        refreshTokenRepository.save(refreshTokenEntity);
         return TokenInfo.builder()
                 .grantType(BEARER_TYPE)
                 .accessToken(accessToken)
@@ -138,6 +145,48 @@ public class JwtTokenProvider {
         } catch (ExpiredJwtException e) {
             return e.getClaims();
         }
+    }
+
+    // RefreshToken으로 새 AccessToken 발급
+    public TokenInfo reissueAccessToken(String refreshToken) {
+        // RefreshToken 검증
+        if (!validateToken(refreshToken))
+            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
+
+        // Refreshtoken에서 memberId 추출
+        Claims claims = parseClaims(refreshToken);
+        long memberId = Long.parseLong((claims.getSubject()));
+
+        // redis 에서 refreshToken 확인
+        RefreshToken storedToken = refreshTokenRepository.findById(String.valueOf(memberId))
+                .orElseThrow(() -> new CustomException(ErrorCode.REFRESH_TOKEN_NOT_FOUND));
+
+        if(!storedToken.getToken().equals(refreshToken))
+            throw new CustomException(ErrorCode.REFRESH_TOKEN_MISMATCH);
+
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        // 새 accessToken 생성
+        long now = (new Date()).getTime();
+        Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
+        String newAccessToken = Jwts.builder()
+                .setSubject(String.valueOf(member.getId()))
+                .claim(AUTHORITIES_KEY, "ROLE_USER")
+                .setExpiration(accessTokenExpiresIn)
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+        return TokenInfo.builder()
+                .grantType(BEARER_TYPE)
+                .accessToken(newAccessToken)
+                .refreshToken(refreshToken)
+                .refreshTokenExpirationTime(REFRESH_TOKEN_EXPIRE_TIME)
+                .build();
+    }
+
+    // logout (RefreshToken) 삭제
+    public void deleteRefreshToken(Long memberId) {
+        refreshTokenRepository.deleteById(String.valueOf(memberId));
+        log.info("Refresh token deleted for memberId: {}", memberId);
     }
 
     public Long getExpiration(String accessToken) {
