@@ -30,7 +30,20 @@ public enum ErrorCode {
     POST_NOT_FOUND(HttpStatus.NOT_FOUND, "POST-001", "Cannot find RecruitPost"),
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "COMMENT-001", "Cannot find Comment"),
     APPLY_NOT_FOUND(HttpStatus.NOT_FOUND, "APPLY-001", "APPLY find Comment"),
-    ALARM_NOT_CREATED(HttpStatus.BAD_REQUEST, "ALARM-001", "Alarm cannot be created");
+    ALARM_NOT_CREATED(HttpStatus.BAD_REQUEST, "ALARM-001", "Alarm cannot be created"),
+
+    // JWT & Token 관련 에러
+    INVALID_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "JWT-001", "Invalid JWT token"),
+    EXPIRED_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "JWT-002", "Expired JWT token"),
+    MALFORMED_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "JWT-003", "Malformed JWT token"),
+    UNSUPPORTED_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "JWT-004", "Unsupported JWT token"),
+    JWT_CLAIMS_EMPTY(HttpStatus.UNAUTHORIZED, "JWT-005", "JWT claims string is empty"),
+    JWT_TOKEN_MISSING_AUTHORITIES(HttpStatus.UNAUTHORIZED, "JWT-006", "JWT token is missing authorities"),
+
+    // RefreshToken 관련 에러
+    REFRESH_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "REFRESH-001", "RefreshToken not found"),
+    REFRESH_TOKEN_MISMATCH(HttpStatus.UNAUTHORIZED, "REFRESH-002", "RefreshToken does not match"),
+    INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "REFRESH-003", "Invalid RefreshToken");
 
     private final HttpStatus status;
     private final String code;
