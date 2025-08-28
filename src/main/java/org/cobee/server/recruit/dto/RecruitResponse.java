@@ -6,7 +6,6 @@ import org.cobee.server.comment.domain.Comment;
 import org.cobee.server.comment.dto.CommentResponse;
 import org.cobee.server.member.domain.Member;
 import org.cobee.server.member.domain.enums.Gender;
-import org.cobee.server.member.domain.enums.SocialType;
 import org.cobee.server.publicProfile.domain.enums.*;
 import org.cobee.server.recruit.domain.RecruitPost;
 import org.cobee.server.recruit.domain.enums.RecruitStatus;
@@ -24,7 +23,6 @@ public class RecruitResponse{
     /* 제목 */
     private Long postId;
     private String title;
-    private String address;
     private Integer viewed;
     private Integer bookmarked;
     private String createdAt;
@@ -54,9 +52,9 @@ public class RecruitResponse{
     private Pets preferedHasPet;
 
     /* 지도 정보 */
-    private Float latitude;
-    private Float longitude;
-    private Float distance;
+    private String address;
+    private Double latitude;
+    private Double longitude;
 
     /* 추가 정보 */
     private String detailDescript;
@@ -109,11 +107,8 @@ public class RecruitResponse{
                 .preferedSmoking(post.getIsSmoking())
                 .preferedSnoring(post.getIsSnoring())
                 .preferedHasPet(post.getIsPetsAllowed())
-
                 .latitude(post.getRegionLatitude())
                 .longitude(post.getRegionLongitude())
-                .distance(post.getDistance())
-
                 .detailDescript(post.getDetailDescription())
                 .additionalDescript(post.getAdditionalDescription())
 
