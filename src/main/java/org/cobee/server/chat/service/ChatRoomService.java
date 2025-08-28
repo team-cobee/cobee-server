@@ -1,7 +1,6 @@
 package org.cobee.server.chat.service;
 
 import java.util.List;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.cobee.server.chat.domain.ChatRoom;
