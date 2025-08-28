@@ -22,6 +22,12 @@ public enum ErrorCode {
 
     GOOGLE_MAP_API_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "GOOGLE-001", "Google Map API error"),
     GOOGLE_NEARBY_API_ERROR(HttpStatus.BAD_GATEWAY, "GOOGLE-002", "Google Nearby Search API error"),
+    ADDRESS_NOT_FOUND(HttpStatus.NOT_FOUND, "GOOGLE-003", "Address not found"),
+    GOOGLE_RESPONSE_PARSE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "GOOGLE-004", "Error parsing Google API response"),
+    GOOGLE_OVER_QUERY_LIMIT(HttpStatus.TOO_MANY_REQUESTS, "GOOGLE-005", "Google API query limit exceeded"),
+    GOOGLE_REQUEST_DENIED(HttpStatus.FORBIDDEN, "GOOGLE-006", "Google API request denied"),
+    GOOGLE_INVALID_REQUEST(HttpStatus.BAD_REQUEST, "GOOGLE-007", "Invalid request to Google API"),
+
 
     MESSAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "MESSAGE-001", "Cannot find Message"),
 
@@ -31,7 +37,6 @@ public enum ErrorCode {
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "COMMENT-001", "Cannot find Comment"),
     APPLY_NOT_FOUND(HttpStatus.NOT_FOUND, "APPLY-001", "APPLY find Comment"),
     ALARM_NOT_CREATED(HttpStatus.BAD_REQUEST, "ALARM-001", "Alarm cannot be created");
-
     private final HttpStatus status;
     private final String code;
     private final String message;
