@@ -41,10 +41,11 @@ public class AuthController {
     }
 
     @DeleteMapping("/withdraw")
-    public ApiResponse<Void> withdraw(@AuthenticationPrincipal PrincipalDetails principalDetails,
+    public ApiResponse<MemberInfoDto> withdraw(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                      HttpServletRequest request, HttpServletResponse response) {
         Member member = principalDetails.getMember();
         authService.withdrawMember(member.getId(), request, response);
-        return ApiResponse.success("회원 탈퇴 성공", "200", null);
+        MemberInfoDto memberInfo = MemberInfoDto.from(member);
+        return ApiResponse.success("회원 탈퇴 성공", "200", memberInfo);
     }
 }
