@@ -1,6 +1,7 @@
 package org.cobee.server.recruit.domain;
 
 import jakarta.persistence.*;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -97,17 +98,11 @@ public class RecruitPost {
     @Column
     private LocalDateTime createdAt;
 
-
-    /* 지도 */
+    @Column
+    private Double regionLatitude; // 위도
 
     @Column
-    private Float regionLatitude; // 위도
-
-    @Column
-    private Float regionLongitude; // 경도
-
-    @Column
-    private Float distance;  // 거리
+    private Double regionLongitude; // 경도
 
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
@@ -119,26 +114,63 @@ public class RecruitPost {
     private List<ApplyRecord> applyRecords = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     private Member member;
 
 
-    public void updatePost(RecruitRequest dto) {
-        if (dto.getTitle() != null) this.title = dto.getTitle();
-        if (dto.getRecruitCount() != null) this.recruitCount = dto.getRecruitCount();
-        if (dto.getRentCostMin() != null) this.rentCostMin = dto.getRentCostMin();
-        if (dto.getRentCostMax() != null) this.rentCostMax = dto.getRentCostMax();
-        if (dto.getMonthlyCostMin() != null) this.monthlyCostMin = dto.getMonthlyCostMin();
-        if (dto.getMonthlyCostMax() != null) this.monthlyCostMax = dto.getMonthlyCostMax();
-        if (dto.getMinAge() != null) this.minAge = dto.getMinAge();
-        if (dto.getMaxAge() != null) this.maxAge = dto.getMaxAge();
-        if (dto.getLifestyle() != null) this.lifeStyle = dto.getLifestyle();
-        if (dto.getPersonality() != null) this.personality = dto.getPersonality();
-        if (dto.getIsSmoking() != null) this.isSmoking = dto.getIsSmoking();
-        if (dto.getIsSnoring() != null) this.isSnoring = dto.getIsSnoring();
-        if (dto.getIsPetsAllowed() != null) this.isPetsAllowed = dto.getIsPetsAllowed();
-        if (dto.getHasRoom() != null) this.hasRoom = dto.getHasRoom();
-        if (dto.getAddress() != null) this.address = dto.getAddress();
+    public void updatePost(RecruitRequest dto, Map<String, Object> geocodeData) {
+        if (dto.getTitle() != null) {
+            this.title = dto.getTitle();
+        }
+        if (dto.getRecruitCount() != null) {
+            this.recruitCount = dto.getRecruitCount();
+        }
+        if (dto.getRentCostMin() != null) {
+            this.rentCostMin = dto.getRentCostMin();
+        }
+        if (dto.getRentCostMax() != null) {
+            this.rentCostMax = dto.getRentCostMax();
+        }
+        if (dto.getMonthlyCostMin() != null) {
+            this.monthlyCostMin = dto.getMonthlyCostMin();
+        }
+        if (dto.getMonthlyCostMax() != null) {
+            this.monthlyCostMax = dto.getMonthlyCostMax();
+        }
+        if (dto.getMinAge() != null) {
+            this.minAge = dto.getMinAge();
+        }
+        if (dto.getMaxAge() != null) {
+            this.maxAge = dto.getMaxAge();
+        }
+        if (dto.getLifestyle() != null) {
+            this.lifeStyle = dto.getLifestyle();
+        }
+        if (dto.getPersonality() != null) {
+            this.personality = dto.getPersonality();
+        }
+        if (dto.getIsSmoking() != null) {
+            this.isSmoking = dto.getIsSmoking();
+        }
+        if (dto.getIsSnoring() != null) {
+            this.isSnoring = dto.getIsSnoring();
+        }
+        if (dto.getIsPetsAllowed() != null) {
+            this.isPetsAllowed = dto.getIsPetsAllowed();
+        }
+        if (dto.getHasRoom() != null) {
+            this.hasRoom = dto.getHasRoom();
+        }
+        if (dto.getAddress() != null) {
+            this.address = dto.getAddress();
+        }
+
+        if (geocodeData != null) {
+            this.address = (String) geocodeData.get("formattedAddress");
+            this.regionLatitude = (Double) geocodeData.get("latitude");
+            this.regionLongitude = (Double) geocodeData.get("longitude");
+        }
+
     }
 
     public void addComment(Comment comment) {

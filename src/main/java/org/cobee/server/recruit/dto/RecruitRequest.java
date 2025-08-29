@@ -6,7 +6,7 @@ import org.cobee.server.publicProfile.domain.enums.*;
 import java.util.List;
 
 @Getter
-public class RecruitRequest{
+public class RecruitRequest {
     private String title;
     private Integer recruitCount;
     private Integer rentCostMin;
@@ -22,10 +22,10 @@ public class RecruitRequest{
     private Pets isPetsAllowed;
     private Boolean hasRoom;
     private List<String> imgUrl;
-    private String address;  //  지도가 처리?
-    private Float latitude;
-    private Float longitude;
-    private Float distance;
+    private String address;
+//    private Double latitude;
+//    private Double longitude;
     private String detailDescription;
     private String additionalDescription;
+
 }
