@@ -3,9 +3,12 @@ package org.cobee.server.auth.jwt;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.cobee.server.auth.domain.RefreshToken;
+import org.cobee.server.auth.repository.RefreshTokenRepository;
 import org.cobee.server.auth.service.PrincipalDetails;
+import org.cobee.server.global.error.code.ErrorCode;
+import org.cobee.server.global.error.exception.CustomException;
 import org.cobee.server.member.domain.Member;
 import org.cobee.server.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,8 +16,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -29,16 +30,26 @@ public class JwtTokenProvider {
 
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_TYPE = "Bearer";
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 30 * 60 * 1000L;              // 30분
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L;    // 7일
+    private final long ACCESS_TOKEN_EXPIRE_TIME;
+    private final long REFRESH_TOKEN_EXPIRE_TIME;
 
     private final Key key;
     private final MemberRepository memberRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
-    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey, MemberRepository memberRepository) {
+    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey,
+                            @Value("${jwt.access-token-expire-time}")
+                                    long accessTokenExpireTime,
+                            @Value("${jwt.refresh-token-expire-time}")
+                                    long refreshTokenExpireTime,
+                            MemberRepository memberRepository,
+                            RefreshTokenRepository refreshTokenRepository) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
+        this.ACCESS_TOKEN_EXPIRE_TIME = accessTokenExpireTime;
+        this.REFRESH_TOKEN_EXPIRE_TIME = refreshTokenExpireTime;
         this.memberRepository = memberRepository;
+        this.refreshTokenRepository = refreshTokenRepository;
     }
 
     // 유저 정보를 가지고 AccessToken, RefreshToken 을 생성하는 메서드
@@ -64,10 +75,17 @@ public class JwtTokenProvider {
 
         // Refresh Token 생성
         String refreshToken = Jwts.builder()
+                .setSubject(String.valueOf(member.getId()))
                 .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
+        RefreshToken refreshTokenEntity = RefreshToken.of(
+                member.getId(),
+                refreshToken,
+                REFRESH_TOKEN_EXPIRE_TIME / 1000
+        );
+        refreshTokenRepository.save(refreshTokenEntity);
         return TokenInfo.builder()
                 .grantType(BEARER_TYPE)
                 .accessToken(accessToken)
@@ -82,7 +100,7 @@ public class JwtTokenProvider {
         Claims claims = parseClaims(accessToken);
 
         if (claims.get(AUTHORITIES_KEY) == null) {
-            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
+            throw new CustomException(ErrorCode.JWT_TOKEN_MISSING_AUTHORITIES);
         }
 
         // 클레임에서 권한 정보 가져오기
@@ -94,7 +112,7 @@ public class JwtTokenProvider {
         // 토큰의 subject(사용자 식별자)로 Member 조회
         String subject = claims.getSubject();
         Member member = memberRepository.findById(Long.parseLong(subject))
-                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         // PrincipalDetails 객체를 만들어서 Authentication 리턴
         PrincipalDetails principalDetails = new PrincipalDetails(member, null);
@@ -108,22 +126,67 @@ public class JwtTokenProvider {
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.info("Invalid JWT Token", e);
+            throw new CustomException(ErrorCode.INVALID_JWT_TOKEN);
         } catch (ExpiredJwtException e) {
             log.info("Expired JWT Token", e);
+            throw new CustomException(ErrorCode.EXPIRED_JWT_TOKEN);
         } catch (UnsupportedJwtException e) {
             log.info("Unsupported JWT Token", e);
+            throw new CustomException(ErrorCode.UNSUPPORTED_JWT_TOKEN);
         } catch (IllegalArgumentException e) {
             log.info("JWT claims string is empty.", e);
+            throw new CustomException(ErrorCode.JWT_CLAIMS_EMPTY);
         }
-        return false;
     }
 
-    private Claims parseClaims(String accessToken) {
+    public Claims parseClaims(String accessToken) {
         try {
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
         } catch (ExpiredJwtException e) {
             return e.getClaims();
         }
+    }
+
+    // RefreshToken으로 새 AccessToken 발급
+    public TokenInfo reissueAccessToken(String refreshToken) {
+        // RefreshToken 검증
+        if (!validateToken(refreshToken))
+            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
+
+        // Refreshtoken에서 memberId 추출
+        Claims claims = parseClaims(refreshToken);
+        long memberId = Long.parseLong((claims.getSubject()));
+
+        // redis 에서 refreshToken 확인
+        RefreshToken storedToken = refreshTokenRepository.findById(String.valueOf(memberId))
+                .orElseThrow(() -> new CustomException(ErrorCode.REFRESH_TOKEN_NOT_FOUND));
+
+        if(!storedToken.getToken().equals(refreshToken))
+            throw new CustomException(ErrorCode.REFRESH_TOKEN_MISMATCH);
+
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        // 새 accessToken 생성
+        long now = (new Date()).getTime();
+        Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
+        String newAccessToken = Jwts.builder()
+                .setSubject(String.valueOf(member.getId()))
+                .claim(AUTHORITIES_KEY, "ROLE_USER")
+                .setExpiration(accessTokenExpiresIn)
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+        return TokenInfo.builder()
+                .grantType(BEARER_TYPE)
+                .accessToken(newAccessToken)
+                .refreshToken(refreshToken)
+                .refreshTokenExpirationTime(REFRESH_TOKEN_EXPIRE_TIME)
+                .build();
+    }
+
+    // logout (RefreshToken) 삭제
+    public void deleteRefreshToken(Long memberId) {
+        refreshTokenRepository.deleteById(String.valueOf(memberId));
+        log.info("Refresh token deleted for memberId: {}", memberId);
     }
 
     public Long getExpiration(String accessToken) {

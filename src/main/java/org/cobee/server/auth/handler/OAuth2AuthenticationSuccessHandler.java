@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.cobee.server.auth.jwt.JwtTokenProvider;
 import org.cobee.server.auth.jwt.TokenInfo;
@@ -68,7 +67,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
 
         return UriComponentsBuilder.fromUriString(targetUrl)
-                .queryParam("token", tokenInfo.getAccessToken())
+                .queryParam("access_token", tokenInfo.getAccessToken())
+                .queryParam("refresh_token", tokenInfo.getRefreshToken())
+                .queryParam("expiresIn", tokenInfo.getRefreshTokenExpirationTime())
                 .build().toUriString();
     }
 
