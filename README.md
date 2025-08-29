@@ -49,12 +49,8 @@
 
 **4. branch 규칙**
 
-<<<<<<< HEAD
 - 브랜치 네이밍 규칙: `feat/{도메인_혹은_큰_기능}/이슈번호` ex) `feat/user/9`
 - 도메인 혹은 큰 기능이 여러 단어일 경우, - 로 연결한다. ex) `feat/user-update/9`
-=======
-- 브랜치 네이밍 규칙: `feat/{도메인_혹은_큰_기능}` ex) `feat/user`
->>>>>>> b21609e8827bbf2c18cc16f9b70ff90dbb699730
 - `feat -> develop -> deploy -> main` 순으로 merge
 - `feat` : 각 기능을 개발하는 브랜치
 - `develop` : 각 기능의 개발을 완료하고 테스트 완료 후 병합하는 브랜치
