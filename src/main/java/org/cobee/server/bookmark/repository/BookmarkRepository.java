@@ -14,4 +14,6 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
     List<Bookmark> findByMemberOrderByCreatedAtDesc(Member member); // 최신순 정렬
 
     Optional<Bookmark> findById(Long id);
+
+    int deleteByMember(Member member);
 }

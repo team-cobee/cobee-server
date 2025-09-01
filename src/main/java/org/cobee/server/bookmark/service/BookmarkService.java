@@ -71,7 +71,8 @@ public class BookmarkService {
         return bookmarkResponse;
     }
 
-    public void deleteAllBookmark(Member member) {
-
+    @Transactional
+    public int deleteAllBookmark(Member member) {
+        return bookmarkRepository.deleteByMember(member);
     }
 }

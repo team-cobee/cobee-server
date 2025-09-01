@@ -49,10 +49,11 @@ public class BookmarkController {
     }
 
     @DeleteMapping("/all")
-    public ApiResponse<?> deleteAllBookmark(
+    public ApiResponse<String> deleteAllBookmark(
             @AuthenticationPrincipal PrincipalDetails principalDetails
     ){
         Member member = principalDetails.getMember();
-        bookmarkService.deleteAllBookmark(member);
+        int bookmarkCount = bookmarkService.deleteAllBookmark(member);
+        return ApiResponse.success("bookmark 전체 삭제",  "DELETE_ALL_BOOKMARK", "bookmark 해제 개수 : " + bookmarkCount);
     }
 }
