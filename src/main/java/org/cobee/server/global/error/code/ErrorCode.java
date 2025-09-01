@@ -54,7 +54,6 @@ public enum ErrorCode {
     REFRESH_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "REFRESH-001", "RefreshToken not found"),
     REFRESH_TOKEN_MISMATCH(HttpStatus.UNAUTHORIZED, "REFRESH-002", "RefreshToken does not match"),
     INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "REFRESH-003", "Invalid RefreshToken"),
-    ALARM_NOT_CREATED(HttpStatus.BAD_REQUEST, "ALARM-001", "Alarm cannot be created"),
 
     BOOKMARK_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "BOOKMARK-001", "Bookmark already exists"),
     CANNOT_BOOKMARK_OWN_POST(HttpStatus.BAD_REQUEST, "BOOKMARK-002", "Cannot bookmark own post");

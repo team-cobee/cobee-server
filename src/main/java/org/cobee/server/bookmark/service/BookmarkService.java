@@ -2,15 +2,19 @@ package org.cobee.server.bookmark.service;
 
 import lombok.RequiredArgsConstructor;
 import org.cobee.server.bookmark.domain.Bookmark;
+import org.cobee.server.bookmark.dto.BookmarkListResponse;
+import org.cobee.server.bookmark.dto.BookmarkResponse;
 import org.cobee.server.bookmark.repository.BookmarkRepository;
 import org.cobee.server.global.error.code.ErrorCode;
 import org.cobee.server.global.error.exception.CustomException;
 import org.cobee.server.member.domain.Member;
 import org.cobee.server.recruit.domain.RecruitPost;
-import org.cobee.server.recruit.dto.RecruitResponse;
 import org.cobee.server.recruit.repository.RecruitPostRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +23,7 @@ public class BookmarkService {
     private final BookmarkRepository bookmarkRepository;
 
     @Transactional
-    public RecruitResponse addBookmark(Member member, Long postId) {
+    public BookmarkResponse addBookmark(Member member, Long postId) {
         RecruitPost recruitPost = recruitPostRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
         // bookmark 중복 체크
@@ -31,7 +35,7 @@ public class BookmarkService {
                 .build();
         // bookmark 저장
         bookmarkRepository.save(bookmark);
-        return RecruitResponse.from(recruitPost, member);
+        return BookmarkResponse.from(recruitPost, member, bookmark);
     }
 
     public void checkExceptionBookmark(Member member, RecruitPost recruitPost) {
@@ -45,4 +49,13 @@ public class BookmarkService {
         }
     }
 
+    @Transactional(readOnly = true)
+    public BookmarkListResponse getBookmarkList(Member member) {
+        List<Bookmark> bookmarkList = bookmarkRepository.findByMemberOrderByCreatedAtDesc(member);
+        List<BookmarkResponse> bookmarkResponses = bookmarkList.stream()
+                .map(bookmark ->
+                        BookmarkResponse.from(bookmark.getRecruitPost(), member, bookmark))
+                .collect(Collectors.toList());
+        return BookmarkListResponse.from(bookmarkResponses);
+    }
 }
