@@ -7,8 +7,8 @@ WORKDIR /app
 # 모든 프로젝트 파일 복사
 COPY . .
 
-# Gradle 캐시 디렉터리 권한 문제 해결 <- 오류 해결을 위한 추가
-RUN chown -R gradle:gradle /home/gradle/.gradle
+# Gradle 빌드 명령어를 'gradle' 사용자로 실행 <- 권한 문제에 대해서 해결하기 위해 추가
+USER gradle
 
 # Gradle 빌드 및 테스트 실행 (테스트 생략)
 RUN gradle clean build -x test
