@@ -51,7 +51,7 @@ public class BookmarkService {
 
     @Transactional(readOnly = true)
     public BookmarkListResponse getBookmarkList(Member member) {
-        List<Bookmark> bookmarkList = bookmarkRepository.findByMemberOrderByCreatedAtDesc(member);
+        List<Bookmark> bookmarkList = bookmarkRepository.findByMemberWithRecruitPostOrderByCreatedAtDesc(member);
         List<BookmarkResponse> bookmarkResponses = bookmarkList.stream()
                 .map(bookmark ->
                         BookmarkResponse.from(bookmark.getRecruitPost(), member, bookmark))
