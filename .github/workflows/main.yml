@@ -4,18 +4,18 @@ on:
   push:
     branches: [ develop ]
 
+# 모든 변수를 전역(Global) 환경 변수로 정의!!!
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   REGION: asia-northeast3
   REPO_NAME: cobee-server
+  # IMAGE_REPO가 다른 env 변수들을 참조할 수 있도록 전역에 위치
+  IMAGE_REPO: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/cobee-server
+  IMAGE_TAG: ${{ github.sha }}
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    env:
-      IMAGE_REPO: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/cobee-server
-      IMAGE_TAG: ${{ github.sha }}
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
