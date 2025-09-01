@@ -6,15 +6,14 @@ on:
 
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  REGION: asia-northeast3
-  REPO_NAME: cobee-server
+  REGION: ${{ secrets.GCP_REGION }}
+  REPO_NAME: ${{ secrets.AR_REPO_NAME }}
+  IMAGE_REPO: ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.AR_REPO_NAME }}/cobee-server
+  IMAGE_TAG: ${{ github.sha }}
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    env:
-      IMAGE_REPO: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/cobee-server
-      IMAGE_TAG: ${{ github.sha }}
 
     steps:
       - name: Checkout Repository
@@ -28,7 +27,7 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
         with:
-          project_id: ${{ env.PROJECT_ID }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
 
       - name: Configure Docker for Artifact Registry
         run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
@@ -48,7 +47,7 @@ jobs:
         uses: google-github-actions/deploy-cloudrun@v2
         with:
           service: cobee-server
-          region: ${{ env.REGION }}
+          region: ${{ secrets.GCP_REGION }}
           image: ${{ env.IMAGE_REPO }}:${{ env.IMAGE_TAG }}
           env_vars: |
             POSTGRES_URL=${{ secrets.POSTGRES_URL }}
