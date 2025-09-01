@@ -56,8 +56,9 @@ public enum ErrorCode {
     INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "REFRESH-003", "Invalid RefreshToken"),
 
     BOOKMARK_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "BOOKMARK-001", "Bookmark already exists"),
-    CANNOT_BOOKMARK_OWN_POST(HttpStatus.BAD_REQUEST, "BOOKMARK-002", "Cannot bookmark own post");
-
+    CANNOT_BOOKMARK_OWN_POST(HttpStatus.BAD_REQUEST, "BOOKMARK-002", "Cannot bookmark own post"),
+    BOOKMARK_NOT_FOUND(HttpStatus.NOT_FOUND, "BOOKMARK-003", "Bookmark not found"),
+    BOOKMARK_ACCESS_DENIED(HttpStatus.FORBIDDEN, "BOOKMARK-004", "Access denied to bookmark");
 
     private final HttpStatus status;
     private final String code;

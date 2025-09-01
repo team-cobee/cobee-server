@@ -36,4 +36,23 @@ public class BookmarkController {
         BookmarkListResponse bookmarkList = bookmarkService.getBookmarkList(member);
         return ApiResponse.success("bookmark 목록 반환 완료", "GET_BOOKMARK", bookmarkList);
     }
+
+    @DeleteMapping("/{bookmarkId}")
+    public ApiResponse<BookmarkResponse> deleteBookmark(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable(name = "bookmarkId") Long bookmarkId
+    )
+    {
+        Member member = principalDetails.getMember();
+        BookmarkResponse bookmarkResponse = bookmarkService.deleteBookmark(bookmarkId, member);
+        return ApiResponse.success("bookmark 삭제",  "DELETE_BOOKMARK", bookmarkResponse);
+    }
+
+    @DeleteMapping("/all")
+    public ApiResponse<?> deleteAllBookmark(
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+    ){
+        Member member = principalDetails.getMember();
+        bookmarkService.deleteAllBookmark(member);
+    }
 }

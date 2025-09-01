@@ -58,4 +58,20 @@ public class BookmarkService {
                 .collect(Collectors.toList());
         return BookmarkListResponse.from(bookmarkResponses);
     }
+
+    @Transactional
+    public BookmarkResponse deleteBookmark(Long bookmarkId, Member member) {
+        Bookmark bookmark = bookmarkRepository.findById(bookmarkId)
+                .orElseThrow(() -> new CustomException(ErrorCode.BOOKMARK_NOT_FOUND));
+        if (!bookmark.getMember().getId().equals(member.getId())) {
+            throw new CustomException(ErrorCode.BOOKMARK_ACCESS_DENIED);
+        }
+        BookmarkResponse bookmarkResponse = BookmarkResponse.from(bookmark.getRecruitPost(), member, bookmark);
+        bookmarkRepository.delete(bookmark);
+        return bookmarkResponse;
+    }
+
+    public void deleteAllBookmark(Member member) {
+
+    }
 }
