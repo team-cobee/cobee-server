@@ -53,6 +53,7 @@ jobs:
           flags: >
             --add-cloudsql-instances=cobee-470811:asia-northeast3:cobee-postgre
             --timeout=300
+            --service-account=${{ secrets.CLOUD_RUN_RUNTIME_SA }}
 
           env_vars: |
             GOOGLE_APPLICATION_CREDENTIALS=/secrets/firebase.json
