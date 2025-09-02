@@ -55,6 +55,7 @@ jobs:
             --timeout=300
 
           env_vars: |
+            GOOGLE_APPLICATION_CREDENTIALS=/secrets/firebase.json
             SPRING_DATASOURCE_URL=jdbc:postgresql:///cobee-postgre?socketFactory=com.google.cloud.sql.postgres.SocketFactory&cloudSqlInstance=cobee-470811:asia-northeast3:cobee-postgre&sslmode=disable
             SPRING_DATASOURCE_USERNAME=${{ secrets.DB_USERNAME }}
             SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }}
@@ -67,4 +68,4 @@ jobs:
             OCR_API_URL=${{ secrets.OCR_API_URL }}
 
           secrets: |
-            FIREBASE_SERVICE_ACCOUNT_KEY=firebase-service-account:latest
+            /secrets/firebase.json=firebase-service-account:latest
