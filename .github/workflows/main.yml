@@ -49,14 +49,11 @@ jobs:
           service: cobee-server
           region: ${{ secrets.GCP_REGION }}
           image: ${{ env.IMAGE_REPO }}:${{ env.IMAGE_TAG }}
-
           flags: >
             --add-cloudsql-instances=cobee-470811:asia-northeast3:cobee-postgre
             --timeout=300
             --service-account=${{ secrets.CLOUD_RUN_RUNTIME_SA }}
-
           env_vars: |
-            GOOGLE_APPLICATION_CREDENTIALS=/secrets/firebase.json
             SPRING_DATASOURCE_URL=jdbc:postgresql:///cobee-postgre?socketFactory=com.google.cloud.sql.postgres.SocketFactory&cloudSqlInstance=cobee-470811:asia-northeast3:cobee-postgre&sslmode=disable
             SPRING_DATASOURCE_USERNAME=${{ secrets.DB_USERNAME }}
             SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }}
@@ -67,6 +64,3 @@ jobs:
             GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
             JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}
             OCR_API_URL=${{ secrets.OCR_API_URL }}
-
-          secrets: |
-            /secrets/firebase.json=firebase-service-account:latest
