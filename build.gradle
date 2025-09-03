@@ -50,6 +50,8 @@ dependencies {
 	// logging
 	implementation 'org.springframework.boot:spring-boot-starter-logging'
 
+	runtimeOnly 'com.google.cloud.sql:postgres-socket-factory:1.18.0'
+
 }
 
 tasks.named('test') {
