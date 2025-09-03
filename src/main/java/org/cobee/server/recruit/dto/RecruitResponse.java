@@ -66,6 +66,7 @@ public class RecruitResponse{
     */
 
     private List<CommentResponse> comments;
+    private List<String> imgUrl;
 
     public static RecruitResponse from(RecruitPost post, Member member) {
         List<CommentResponse> responses = new ArrayList<>();

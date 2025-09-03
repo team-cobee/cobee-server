@@ -61,11 +61,7 @@ jwt:
 
 ocr:
   api:
-    url: ${OCR_API_URL:http://localhost:8000}
-
-logging:
-  level:
-    org.springframework.security: DEBUG
+    url: ${OCR_API_URL}
 
 google:
   maps:

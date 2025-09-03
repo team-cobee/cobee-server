@@ -1,6 +1,7 @@
 package org.cobee.server.recruit.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.cobee.server.auth.service.PrincipalDetails;
 import org.cobee.server.global.error.code.ErrorCode;
 import org.cobee.server.global.response.ApiResponse;
@@ -15,16 +16,22 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/recruits")
+@Slf4j
 public class RecruitController {
 
     private final RecruitService recruitService;
 
     @PostMapping("")
     public ApiResponse<RecruitResponse> createRecruitPost(@RequestBody RecruitRequest request,
-                                                          @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        Long memberId = principalDetails.getMember().getId();
-        RecruitResponse result = recruitService.createRecruitPost(request, memberId);
-        return ApiResponse.success("구인글 생성 완료", "RECRUIT_CREATED", result);
+                                                          @AuthenticationPrincipal PrincipalDetails principalDetails){
+        try{
+            Long memberId = principalDetails.getMember().getId();
+            RecruitResponse result = recruitService.createRecruitPost(request, memberId);
+            return ApiResponse.success("구인글 생성 완료", "RECRUIT_CREATED", result);
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            return null;
+        }
     }
 
     @PutMapping("/{postId}")
@@ -43,9 +50,14 @@ public class RecruitController {
     }
 
     @GetMapping("")
-    public ApiResponse<List<RecruitResponse>> getRecruitPosts() {
-        List<RecruitResponse> result = recruitService.getAllRecruitPosts();
-        return ApiResponse.success("모든 구인글 조회 완료", "RECRUIT_GET_ALL", result);
+    public ApiResponse<List<RecruitResponse>> getRecruitPosts(@AuthenticationPrincipal PrincipalDetails principalDetails){
+        try{
+            List<RecruitResponse> result = recruitService.getAllRecruitPosts();
+            return ApiResponse.success("모든 구인글 조회 완료","RECRUIT_GET_ALL",result);
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            return null;
+        }
     }
 
     @DeleteMapping("/{postId}")
