@@ -6,7 +6,7 @@ RUN chmod +x ./gradlew
 COPY . .
 RUN ./gradlew clean build -x test --no-daemon
 
-FROM openjdk:17-jdk-slim-buster
+FROM openjdk:17-jdk-slim-bullseye
 RUN apt-get update && apt-get install -y redis-server
 WORKDIR /app
 COPY firebase-adminsdk.json /app/firebase-adminsdk.json
