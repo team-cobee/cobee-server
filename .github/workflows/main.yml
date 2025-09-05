@@ -43,6 +43,11 @@ jobs:
           docker build -t "${{ env.IMAGE_REPO }}:${{ env.IMAGE_TAG }}" .
           docker push "${{ env.IMAGE_REPO }}:${{ env.IMAGE_TAG }}"
 
+      - name: Create Firebase Admin SDK JSON File
+        run: |
+          echo "${{ secrets.FIREBASE_ADMINSDK_JSON }}" > firebase-adminsdk.json
+
+
       - name: Deploy to Google Cloud Run
         uses: google-github-actions/deploy-cloudrun@v2
         with:
@@ -50,11 +55,11 @@ jobs:
           region: ${{ secrets.GCP_REGION }}
           image: ${{ env.IMAGE_REPO }}:${{ env.IMAGE_TAG }}
           flags: >
-            --add-cloudsql-instances=cobee-470811:asia-northeast3:cobee-postgre
+            --add-cloudsql-instances=cobee-d675e:asia-northeast3:cobee-postgre
             --timeout=300
             --service-account=${{ secrets.CLOUD_RUN_RUNTIME_SA }}
           env_vars: |
-            SPRING_DATASOURCE_URL=jdbc:postgresql:///cobee-postgre?socketFactory=com.google.cloud.sql.postgres.SocketFactory&cloudSqlInstance=cobee-470811:asia-northeast3:cobee-postgre&sslmode=disable
+            SPRING_DATASOURCE_URL=jdbc:postgresql:///cobee-postgre?socketFactory=com.google.cloud.sql.postgres.SocketFactory&cloudSqlInstance=cobee-d675e:asia-northeast3:cobee-postgre&sslmode=disable
             SPRING_DATASOURCE_USERNAME=${{ secrets.DB_USERNAME }}
             SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }}
             SPRING_DATA_MONGODB_URI=${{ secrets.MONGODB_URI }}
@@ -64,3 +69,4 @@ jobs:
             GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
             JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}
             OCR_API_URL=${{ secrets.OCR_API_URL }}
+            
