@@ -42,7 +42,7 @@ out/
 .env
 ### application ###
 resources/application.yml
-resources/firebase/
+resources/firebase/**
 **/src/test/resources/application.yml
 
 ### docker-compose.yml

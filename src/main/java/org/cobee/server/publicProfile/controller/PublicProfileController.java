@@ -26,14 +26,16 @@ public class PublicProfileController {
         return ApiResponse.success("Public profile created successfully", "201");
     }
 
-    @GetMapping("/{memberId}")
-    public ApiResponse<PublicProfileResponseDto> getPublicProfile(@PathVariable("memberId") Long memberId) {
+    @GetMapping("")
+    public ApiResponse<PublicProfileResponseDto> getPublicProfile(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Long memberId = principalDetails.getMember().getId();
         PublicProfileResponseDto profile = publicProfileService.getPublicProfile(memberId);
         return ApiResponse.success("Public profile retrieved successfully", "200", profile);
     }
 
-    @PatchMapping("/{memberId}")
-    public ApiResponse<Void> updatePublicProfile(@PathVariable("memberId") Long memberId, @RequestBody PublicProfileUpdateRequestDto requestDto) {
+    @PatchMapping("")
+    public ApiResponse<Void> updatePublicProfile(@AuthenticationPrincipal PrincipalDetails principalDetails, @RequestBody PublicProfileUpdateRequestDto requestDto) {
+        Long memberId = principalDetails.getMember().getId();
         publicProfileService.updatePublicProfile(memberId, requestDto);
         return ApiResponse.success("Public profile modified successfully", "200");
     }
