@@ -30,7 +30,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         this.jwtTokenProvider = jwtTokenProvider;
         this.httpCookieOAuth2AuthorizationRequestRepository = httpCookieOAuth2AuthorizationRequestRepository;
         this.objectMapper = objectMapper;
-        setDefaultTargetUrl("http://localhost:8080/home");
+        setDefaultTargetUrl("https://cobee-server-108875465480.asia-northeast3.run.app/home");
     }
 
     @Override
