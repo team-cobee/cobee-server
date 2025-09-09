@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ApplyRecordRepository extends JpaRepository<ApplyRecord, Long> {
@@ -23,4 +24,6 @@ public interface ApplyRecordRepository extends JpaRepository<ApplyRecord, Long> 
     @Query("select applies from ApplyRecord applies where applies.isMatched=:status and applies.post.id=:postId")
     List<ApplyRecord> findApplyProfilesByMemberIdAndStatus(@Param("postId") Long postId, @Param("status") MatchStatus status);
 
+    @Query("select applies from ApplyRecord applies where applies.post.id=:postId and applies.member.id=:memberId")
+    Optional<ApplyRecord> findByPostIdAndMemberId(@Param("postId") Long postId, @Param("memberId") Long memberId);
 }
