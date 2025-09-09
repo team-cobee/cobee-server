@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -184,6 +185,17 @@ public class ApplyService {
             return appliers;
         } else {
             throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
+    }
+
+    public Boolean checkIfIAppliedThisPost(Long postId, Long memberId) {
+        Member  member = memberRepository.findById(memberId).orElseThrow();
+        RecruitPost post = postRepository.findById(postId).orElseThrow();
+        Optional<ApplyRecord> record = applyRepository.findByPostIdAndMemberId(postId, memberId);
+        if (record.isPresent()){
+            return true;
+        } else {
+            return false;
         }
     }
 

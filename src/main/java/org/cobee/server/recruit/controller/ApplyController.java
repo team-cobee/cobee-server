@@ -139,6 +139,18 @@ public class ApplyController {
         }
     }
 
+    @GetMapping("/isApplied/{postId}")
+    public ApiResponse<Boolean> checkIfApplied(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                               @PathVariable(name="postId") Long postId){
+        try{
+            Long memberId = principalDetails.getMember().getId();
+            Boolean result = applyService.checkIfIAppliedThisPost(postId, memberId);
+            return ApiResponse.success("지원여부 확인 완료", "", result);
+        } catch (Exception e){
+            return ApiResponse.failure("지원여부 확인 불가", "", e.getMessage());
+        }
+    }
+
 
 
 }

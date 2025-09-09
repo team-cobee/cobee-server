@@ -29,6 +29,7 @@ public class RecruitResponse{
     private RecruitStatus status;
 
     /* 작성자 정보 */
+    private Long authorId;
     private String authorName;
     private Gender authorGender;
     private String birthdate; // 나이 변환은 프론트에서??
@@ -89,6 +90,7 @@ public class RecruitResponse{
                 .status(post.getStatus())
                 .createdAt(post.getCreatedAt().toString())
 
+                .authorId(post.getMember().getId())
                 .authorName(post.getMember().getName())
                 .authorGender(Gender.valueOf(post.getMember().getGender()))
                 .birthdate(post.getMember().getBirthDate())
