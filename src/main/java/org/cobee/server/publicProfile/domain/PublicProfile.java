@@ -23,11 +23,11 @@ public class PublicProfile {
 
     @Enumerated(EnumType.STRING)
     private Personality personality;
-
+    @Enumerated(EnumType.STRING)
     private Smoking isSmoking;
-
+    @Enumerated(EnumType.STRING)
     private Snoring isSnoring;
-
+    @Enumerated(EnumType.STRING)
     private Pets hasPet;
 
 //    @OneToOne
