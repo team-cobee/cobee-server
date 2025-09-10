@@ -7,6 +7,5 @@ import lombok.Getter;
 @Builder
 public class ChatRoomCreateRequestDto {
     private String name;
-    private int maxUserCount;
     private Long postId;
 }

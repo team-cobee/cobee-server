@@ -31,10 +31,17 @@ public class ChatRoomService {
 
         ChatRoom newRoom = ChatRoom.builder()
                 .name(request.getName())
-                .maxMemberCount(request.getMaxUserCount())
+                .maxMemberCount(post.getRecruitCount())
                 .host(host)
                 .post(post)
                 .build();
+
+        RecruitPost addChatIdToPost = RecruitPost.builder()
+                .id(post.getId())
+                .chattingRoom(newRoom)
+                .build();
+
+        recruitPostRepository.save(addChatIdToPost);
 
         return chatRoomRepository.save(newRoom);
     }
