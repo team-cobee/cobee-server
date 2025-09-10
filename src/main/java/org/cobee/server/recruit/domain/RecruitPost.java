@@ -107,9 +107,6 @@ public class RecruitPost {
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
 
-    @OneToOne
-    private ChatRoom chattingRoom;
-
     @OneToMany(mappedBy = "post")
     private List<ApplyRecord> applyRecords = new ArrayList<>();
 

@@ -36,13 +36,6 @@ public class ChatRoomService {
                 .post(post)
                 .build();
 
-        RecruitPost addChatIdToPost = RecruitPost.builder()
-                .id(post.getId())
-                .chattingRoom(newRoom)
-                .build();
-
-        recruitPostRepository.save(addChatIdToPost);
-
         return chatRoomRepository.save(newRoom);
     }
 
