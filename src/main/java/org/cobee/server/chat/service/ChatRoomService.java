@@ -31,7 +31,7 @@ public class ChatRoomService {
 
         ChatRoom newRoom = ChatRoom.builder()
                 .name(request.getName())
-                .maxMemberCount(request.getMaxUserCount())
+                .maxMemberCount(post.getRecruitCount())
                 .host(host)
                 .post(post)
                 .build();
