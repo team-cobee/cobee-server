@@ -68,3 +68,6 @@ google:
   maps:
     api-key: ${GOOGLE_MAPS_API_KEY}
 
+app:
+  backend:
+    url: ${BACKEND_URL:http://localhost:8080}

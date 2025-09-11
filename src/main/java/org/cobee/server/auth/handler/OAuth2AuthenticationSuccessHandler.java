@@ -2,12 +2,15 @@ package org.cobee.server.auth.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.cobee.server.auth.jwt.JwtTokenProvider;
 import org.cobee.server.auth.jwt.TokenInfo;
 import org.cobee.server.auth.util.CookieUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -26,11 +29,14 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
     private final ObjectMapper objectMapper;
 
-    public OAuth2AuthenticationSuccessHandler(JwtTokenProvider jwtTokenProvider, HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository, ObjectMapper objectMapper) {
+    @Value("${app.backend.url:http://localhost:8080}")
+    private String backendUrl;
+
+
+  public OAuth2AuthenticationSuccessHandler(JwtTokenProvider jwtTokenProvider, HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository, ObjectMapper objectMapper) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.httpCookieOAuth2AuthorizationRequestRepository = httpCookieOAuth2AuthorizationRequestRepository;
         this.objectMapper = objectMapper;
-        setDefaultTargetUrl("https://cobee-server-108875465480.asia-northeast3.run.app/home");
     }
 
     @Override
@@ -47,10 +53,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        Optional<String> redirectUri = CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
+      HttpSession session = request.getSession();
+      Optional<String> redirectUri = CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
                 .map(jakarta.servlet.http.Cookie::getValue);
 
-        String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
+        String targetUrl = redirectUri.orElse(backendUrl + "/home");
 
         TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
 
@@ -66,10 +73,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             }
         }
 
+        // 세션에 토큰 저장
+        session.setAttribute("tokenInfo", tokenInfo);
+
         return UriComponentsBuilder.fromUriString(targetUrl)
-                .queryParam("access_token", tokenInfo.getAccessToken())
-                .queryParam("refresh_token", tokenInfo.getRefreshToken())
-                .queryParam("expiresIn", tokenInfo.getRefreshTokenExpirationTime())
                 .build().toUriString();
     }
 
