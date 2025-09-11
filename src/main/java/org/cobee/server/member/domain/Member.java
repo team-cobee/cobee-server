@@ -9,6 +9,7 @@ import org.cobee.server.alarm.domain.Alarm;
 import org.cobee.server.alarm.domain.AlarmNotice;
 import org.cobee.server.chat.domain.ChatRoom;
 import org.cobee.server.comment.domain.Comment;
+import org.cobee.server.global.BaseEntity;
 import org.cobee.server.member.domain.enums.SocialType;
 import org.cobee.server.publicProfile.domain.PublicProfile;
 import org.cobee.server.recruit.domain.ApplyRecord;
@@ -21,7 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Builder
-public class Member {
+public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

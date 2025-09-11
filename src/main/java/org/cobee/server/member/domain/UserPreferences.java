@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.cobee.server.global.BaseEntity;
 import org.cobee.server.member.domain.enums.Gender;
 import org.cobee.server.publicProfile.domain.enums.Lifestyle;
 import org.cobee.server.publicProfile.domain.enums.Personality;
@@ -12,7 +13,7 @@ import org.cobee.server.publicProfile.domain.enums.Personality;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class UserPreferences {
+public class UserPreferences extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

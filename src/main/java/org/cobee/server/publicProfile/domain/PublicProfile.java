@@ -4,12 +4,14 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.cobee.server.global.BaseEntity;
+import org.cobee.server.member.domain.Member;
 import org.cobee.server.publicProfile.domain.enums.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PublicProfile {
+public class PublicProfile extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,8 +32,8 @@ public class PublicProfile {
     @Enumerated(EnumType.STRING)
     private Pets hasPet;
 
-//    @OneToOne
-//    private Member member;
+    @OneToOne
+    private Member member;
 
     public PublicProfile(String info, Lifestyle lifestyle, Personality personality, Smoking isSmoking, Snoring isSnoring, Pets hasPet) {
         this.info = info;
