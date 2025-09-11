@@ -25,7 +25,6 @@ public class RecruitResponse{
     private String title;
     private Integer viewed;
     private Integer bookmarked;
-    private String createdAt;
     private RecruitStatus status;
 
     /* 작성자 정보 */
@@ -88,7 +87,6 @@ public class RecruitResponse{
                 .viewed(0)
                 .bookmarked(0)
                 .status(post.getStatus())
-                .createdAt(post.getCreatedAt().toString())
 
                 .authorId(post.getMember().getId())
                 .authorName(post.getMember().getName())

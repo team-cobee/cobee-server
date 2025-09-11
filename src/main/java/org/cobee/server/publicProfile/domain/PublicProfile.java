@@ -32,8 +32,9 @@ public class PublicProfile extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Pets hasPet;
 
-    @OneToOne
-    private Member member;
+    // 생각해보니 이미 Member에 OneToOne으로 매핑되어 있기에 주석 처리했던 것 같다..
+//    @OneToOne
+//    private Member member;
 
     public PublicProfile(String info, Lifestyle lifestyle, Personality personality, Smoking isSmoking, Snoring isSnoring, Pets hasPet) {
         this.info = info;

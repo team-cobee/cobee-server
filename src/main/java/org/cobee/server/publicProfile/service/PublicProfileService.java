@@ -1,6 +1,8 @@
 package org.cobee.server.publicProfile.service;
 
 import lombok.RequiredArgsConstructor;
+import org.cobee.server.global.error.code.ErrorCode;
+import org.cobee.server.global.error.exception.CustomException;
 import org.cobee.server.publicProfile.domain.PublicProfile;
 import org.cobee.server.publicProfile.dto.PublicProfileRequestDto;
 import org.cobee.server.publicProfile.repository.PublicProfileRepository;
@@ -21,8 +23,9 @@ public class PublicProfileService {
     @Transactional
     public void createPublicProfile(Long memberId, PublicProfileRequestDto requestDto) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("해당하는 사용자가 없습니다."));
-
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        if (member.getPublicProfile() != null)
+          throw new CustomException(ErrorCode.PUBLIC_PROFILE_ALREADY_EXIST);
         PublicProfile publicProfile = new PublicProfile(
                 requestDto.info(),
                 requestDto.lifestyle(),
@@ -38,9 +41,10 @@ public class PublicProfileService {
     @Transactional(readOnly = true)
     public PublicProfileResponseDto getPublicProfile(Long memberId) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("해당하는 사용자가 없습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         PublicProfile publicProfile = member.getPublicProfile();
-
+        if (publicProfile == null)
+            throw new CustomException(ErrorCode.PUBLIC_PROFILE_NOT_FOUND);
         return new PublicProfileResponseDto(
                 member.getId(),
                 member.getName(),
@@ -57,8 +61,10 @@ public class PublicProfileService {
     @Transactional
     public void updatePublicProfile(Long memberId, PublicProfileUpdateRequestDto requestDto) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("해당하는 사용자가 없습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         PublicProfile publicProfile = member.getPublicProfile();
+        if (publicProfile == null)
+          throw new CustomException(ErrorCode.PUBLIC_PROFILE_NOT_FOUND);
         publicProfile.update(
                 requestDto.info(),
                 requestDto.lifestyle(),

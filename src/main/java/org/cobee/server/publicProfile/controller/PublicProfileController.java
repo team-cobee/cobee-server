@@ -20,7 +20,9 @@ public class PublicProfileController {
     private final PublicProfileService publicProfileService;
 
     @PostMapping()
-    public ApiResponse<Void> createPublicProfile(@AuthenticationPrincipal PrincipalDetails principalDetails, @RequestBody PublicProfileRequestDto requestDto) {
+    public ApiResponse<Void> createPublicProfile(
+        @AuthenticationPrincipal PrincipalDetails principalDetails,
+        @RequestBody PublicProfileRequestDto requestDto) {
         Long memberId = principalDetails.getMember().getId();
         publicProfileService.createPublicProfile(memberId, requestDto);
         return ApiResponse.success("Public profile created successfully", "201");

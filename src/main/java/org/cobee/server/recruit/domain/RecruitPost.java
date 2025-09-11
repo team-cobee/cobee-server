@@ -14,7 +14,6 @@ import org.cobee.server.comment.domain.Comment;
 import org.cobee.server.member.domain.Member;
 import org.cobee.server.recruit.dto.RecruitRequest;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
