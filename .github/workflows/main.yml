@@ -56,7 +56,7 @@ jobs:
             --timeout=300
             --service-account=${{ secrets.CLOUD_RUN_RUNTIME_SA }}
           env_vars: |
-            SPRING_DATASOURCE_URL=jdbc:postgresql:///cobee-postgre?socketFactory=com.google.cloud.sql.postgres.SocketFactory&cloudSqlInstance=cobee-d675e:asia-northeast3:cobee-postgre&sslmode=disable
+            SPRING_DATASOURCE_URL=${{ secrets.SPRING_DATASOURCE_URL }}
             SPRING_DATASOURCE_USERNAME=${{ secrets.DB_USERNAME }}
             SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }}
             SPRING_DATA_MONGODB_URI=${{ secrets.MONGODB_URI }}
@@ -68,4 +68,4 @@ jobs:
             GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
             JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}
             OCR_API_URL=${{ secrets.OCR_API_URL }}
-            
+            BACKEND_URL=${{ secrets.BACKEND_URL }}
