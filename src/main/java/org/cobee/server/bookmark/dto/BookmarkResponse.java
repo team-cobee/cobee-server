@@ -52,7 +52,6 @@ public class BookmarkResponse {
                 .rentalCostMax(post.getRentCostMax())
                 .monthlyCostMin(post.getMonthlyCostMin())
                 .monthlyCostMax(post.getMonthlyCostMax())
-
                 .preferedGender(post.getPreferedGender())
                 .preferedMinAge(post.getMinAge())
                 .preferedMaxAge(post.getMaxAge())
@@ -62,7 +61,6 @@ public class BookmarkResponse {
                 .preferedSnoring(post.getIsSnoring())
                 .preferedHasPet(post.getIsPetsAllowed())
                 .address(post.getAddress())
-                .createdAt(bookmark.getCreatedAt())
                 .build();
     }
 

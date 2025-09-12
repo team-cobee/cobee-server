@@ -3,6 +3,9 @@ package org.cobee.server.publicProfile.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cobee.server.publicProfile.domain.enums.Lifestyle;
 import org.cobee.server.publicProfile.domain.enums.Personality;
+import org.cobee.server.publicProfile.domain.enums.Pets;
+import org.cobee.server.publicProfile.domain.enums.Smoking;
+import org.cobee.server.publicProfile.domain.enums.Snoring;
 import org.cobee.server.publicProfile.dto.PublicProfileRequestDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,9 +62,9 @@ public class PublicProfileControllerTest {
                 "저는 조용한 성격이에요.",
                 Lifestyle.MORNING,
                 Personality.INTROVERT,
-                false,
-                true,
-                false
+                Smoking.IMPOSSIBLE,
+                Snoring.IMPOSSIBLE,
+                Pets.IMPOSSIBLE
         );
 
         // when & then
@@ -76,7 +79,7 @@ public class PublicProfileControllerTest {
     @Test
     void getPublicProfile() throws Exception {
         // given
-        PublicProfile publicProfile = new PublicProfile("info", Lifestyle.MORNING, Personality.INTROVERT, false, true, false);
+        PublicProfile publicProfile = new PublicProfile("info", Lifestyle.MORNING, Personality.INTROVERT, Smoking.IMPOSSIBLE, Snoring.IMPOSSIBLE, Pets.IMPOSSIBLE);
         member.setPublicProfile(publicProfile);
         memberRepository.save(member);
 
@@ -90,17 +93,14 @@ public class PublicProfileControllerTest {
     @Test
     void updatePublicProfile() throws Exception {
         // given
-        PublicProfile publicProfile = new PublicProfile("info", Lifestyle.MORNING, Personality.INTROVERT, false, true, false);
+        PublicProfile publicProfile = new PublicProfile("info", Lifestyle.MORNING, Personality.INTROVERT, Smoking.IMPOSSIBLE, Snoring.IMPOSSIBLE, Pets.IMPOSSIBLE);
         member.setPublicProfile(publicProfile);
         memberRepository.save(member);
 
         PublicProfileUpdateRequestDto requestDto = new PublicProfileUpdateRequestDto(
                 "외향적인 성격이고 반려동물 좋아해요.",
                 Lifestyle.NIGHT,
-                Personality.EXTROVERT,
-                false,
-                false,
-                true
+                Personality.EXTROVERT, Smoking.IMPOSSIBLE, Snoring.IMPOSSIBLE, Pets.IMPOSSIBLE
         );
 
         // when & then

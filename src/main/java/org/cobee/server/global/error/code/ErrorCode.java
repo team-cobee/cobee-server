@@ -58,7 +58,11 @@ public enum ErrorCode {
     BOOKMARK_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "BOOKMARK-001", "Bookmark already exists"),
     CANNOT_BOOKMARK_OWN_POST(HttpStatus.BAD_REQUEST, "BOOKMARK-002", "Cannot bookmark own post"),
     BOOKMARK_NOT_FOUND(HttpStatus.NOT_FOUND, "BOOKMARK-003", "Bookmark not found"),
-    BOOKMARK_ACCESS_DENIED(HttpStatus.FORBIDDEN, "BOOKMARK-004", "Access denied to bookmark");
+    BOOKMARK_ACCESS_DENIED(HttpStatus.FORBIDDEN, "BOOKMARK-004", "Access denied to bookmark"),
+
+    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "MEMBER-001", "Member not found"),
+    PUBLIC_PROFILE_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "PUBLIC-PROFILE-001", "Public profile already exists"),
+    PUBLIC_PROFILE_NOT_FOUND(HttpStatus.NOT_FOUND, "PUBLIC-PROFILE-002", "Public profile not found");
 
     private final HttpStatus status;
     private final String code;

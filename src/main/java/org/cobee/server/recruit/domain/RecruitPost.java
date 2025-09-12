@@ -6,15 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.cobee.server.global.BaseEntity;
 import org.cobee.server.member.domain.enums.Gender;
 import org.cobee.server.publicProfile.domain.enums.*;
 import org.cobee.server.recruit.domain.enums.RecruitStatus;
-import org.cobee.server.chat.domain.ChatRoom;
 import org.cobee.server.comment.domain.Comment;
 import org.cobee.server.member.domain.Member;
 import org.cobee.server.recruit.dto.RecruitRequest;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Builder
-public class RecruitPost {
+public class RecruitPost extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -94,9 +93,6 @@ public class RecruitPost {
     @Column
     @Enumerated(EnumType.STRING)
     private RecruitStatus status;
-
-    @Column
-    private LocalDateTime createdAt;
 
     @Column
     private Double regionLatitude; // 위도

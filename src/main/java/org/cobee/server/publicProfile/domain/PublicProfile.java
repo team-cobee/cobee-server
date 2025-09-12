@@ -4,12 +4,14 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.cobee.server.global.BaseEntity;
+import org.cobee.server.member.domain.Member;
 import org.cobee.server.publicProfile.domain.enums.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PublicProfile {
+public class PublicProfile extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +32,7 @@ public class PublicProfile {
     @Enumerated(EnumType.STRING)
     private Pets hasPet;
 
+    // 생각해보니 이미 Member에 OneToOne으로 매핑되어 있기에 주석 처리했던 것 같다..
 //    @OneToOne
 //    private Member member;
 

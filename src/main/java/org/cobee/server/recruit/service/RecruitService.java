@@ -53,7 +53,6 @@ public class RecruitService {
                 .isPetsAllowed(request.getIsPetsAllowed())
                 .hasRoom(request.getHasRoom())
                 .address(formattedAddress)
-                .createdAt(LocalDateTime.now())
                 .status(RecruitStatus.RECRUITING)
                 .regionLongitude(longitude)
                 .regionLatitude(latitude)
