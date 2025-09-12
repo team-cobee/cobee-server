@@ -2,6 +2,7 @@ package org.cobee.server.chat.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.cobee.server.auth.service.PrincipalDetails;
 import org.cobee.server.chat.document.ChatMessage;
@@ -84,7 +85,16 @@ public class ChatRoomController {
         List<ChatMessage> history = chatService.getChatHistory(roomId);
         return ApiResponse.success("채팅 기록 조회 성공", "CHAT_HISTORY", ChatRoomMapper.toMessageDtoList(history));
     }
-
+    //내가 속한 채팅방 조회
+    @GetMapping("/rooms/my")
+    public ApiResponse<ChatRoomResponseDto> getMyRoom(@AuthenticationPrincipal PrincipalDetails principal) {
+        Optional<ChatRoom> myRoom = chatRoomService.findRoomByUser(principal.getMember());
+        if (myRoom.isPresent()) {
+            return ApiResponse.success("내 채팅방 조회 성공", "MY_CHAT_ROOM", ChatRoomMapper.toDto(myRoom.get()));
+        } else {
+            return ApiResponse.failure("속한 채팅방이 없습니다", "NO_CHAT_ROOM", "No chat room found for the user");
+        }
+    }
     //채팅방 나가기
     @PostMapping("/rooms/exit/{roomId}")
     public ApiResponse<Void> exitRoom(@PathVariable Long roomId, @RequestBody Map<String, Object> payload) {

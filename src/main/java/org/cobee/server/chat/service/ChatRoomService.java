@@ -1,6 +1,7 @@
 package org.cobee.server.chat.service;
 
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.cobee.server.chat.domain.ChatRoom;
@@ -123,5 +124,9 @@ public class ChatRoomService {
 
         room.removeUser(memberToOut);
         chatRoomRepository.save(room);
+    }
+
+    public Optional<ChatRoom> findRoomByUser(Member member) {
+        return chatRoomRepository.findByMember(member);
     }
 }
