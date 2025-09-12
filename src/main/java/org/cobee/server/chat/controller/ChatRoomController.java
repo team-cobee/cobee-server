@@ -77,6 +77,7 @@ public class ChatRoomController {
         }
     }
 
+
     //특정 채팅방의 채팅 기록 조회
     @GetMapping("/rooms/history/{roomId}")
     public ApiResponse<List<ChatMessageResponseDto>> getChatHistory(@PathVariable Long roomId) {

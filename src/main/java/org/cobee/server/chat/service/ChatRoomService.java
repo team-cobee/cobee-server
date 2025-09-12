@@ -70,24 +70,13 @@ public class ChatRoomService {
 
     @Transactional
     public void deleteChatRoom(Long roomId) {
-        try {
-            ChatRoom room = findRoomById(roomId);
-            if (room == null) {
-                throw new CustomException(ErrorCode.CHAT_ROOM_NOT_FOUND);
-            }
+        ChatRoom room = chatRoomRepository.findById(roomId)
+                .orElseThrow(() -> new CustomException(ErrorCode.CHAT_ROOM_NOT_FOUND));
 
-            if (room.getCurrentUserCount() == 0) {
-                chatRoomRepository.delete(room);
-                log.info("채팅방 정상 삭제, roomId=" + roomId);
-            } else {
-                throw new CustomException(ErrorCode.CHAT_ROOM_EXISTS_USER);
-            }
-        } catch (IllegalArgumentException e) {
-            System.err.println("채팅방 삭제 실패: " + e.getMessage());
-        } catch (Exception e) {
-            System.err.println("알 수 없는 오류 발생: " + e.getMessage());
-            e.printStackTrace();
+        if (room.getCurrentUserCount() > 0) {
+            throw new CustomException(ErrorCode.CHAT_ROOM_EXISTS_USER);
         }
+        chatRoomRepository.delete(room);
     }
 
     @Transactional
