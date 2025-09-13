@@ -82,12 +82,10 @@ public class RecruitPost extends BaseEntity {
     @Column
     private String address;
 
-    @Column
-    @Lob
+    @Column(columnDefinition = "TEXT")
     private String detailDescription;
 
-    @Column
-    @Lob
+    @Column(columnDefinition = "TEXT")
     private String additionalDescription;
 
     @Column
