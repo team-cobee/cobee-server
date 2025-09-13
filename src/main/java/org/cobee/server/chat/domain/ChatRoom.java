@@ -41,7 +41,7 @@ public class ChatRoom {
     @OneToMany(mappedBy = "chatRoom")
     private Set<Member> users = new HashSet<>();
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private RecruitPost post;
 
