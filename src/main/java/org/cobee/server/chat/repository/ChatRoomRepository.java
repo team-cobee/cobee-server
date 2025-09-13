@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
-    @Query("SELECT r FROM ChatRoom r JOIN r.users u WHERE u = :member")
+    @Query("SELECT r FROM ChatRoom r JOIN FETCH r.post JOIN r.users u WHERE u = :member")
     Optional<ChatRoom> findByMember(@Param("member") Member member);
 
 }
