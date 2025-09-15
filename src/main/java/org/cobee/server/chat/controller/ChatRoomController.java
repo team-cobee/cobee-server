@@ -86,6 +86,7 @@ public class ChatRoomController {
         List<ChatMessage> history = chatService.getChatHistory(roomId);
         return ApiResponse.success("채팅 기록 조회 성공", "CHAT_HISTORY", ChatRoomMapper.toMessageDtoList(history));
     }
+
     //내가 속한 채팅방 조회
     @GetMapping("/rooms/my")
     public ApiResponse<ChatRoomResponseDto> getMyRoom(@AuthenticationPrincipal PrincipalDetails principal) {
@@ -96,6 +97,7 @@ public class ChatRoomController {
             return ApiResponse.failure("속한 채팅방이 없습니다", "NO_CHAT_ROOM", "No chat room found for the user");
         }
     }
+
     //채팅방 내의 유저 목록 조회
     @GetMapping("/rooms/{roomId}/users")
     public ApiResponse<List<ChatRoomUserListResponseDto>> getUsersInRoom(@PathVariable Long roomId) {
@@ -106,6 +108,7 @@ public class ChatRoomController {
             return ApiResponse.failure("채팅방을 찾을 수 없습니다", "CHAT_ROOM_NOT_FOUND", e.getMessage());
         }
     }
+
     //채팅방 나가기
     @PostMapping("/rooms/exit/{roomId}")
     public ApiResponse<Void> exitRoom(@PathVariable Long roomId, @RequestBody Map<String, Object> payload) {
@@ -139,6 +142,7 @@ public class ChatRoomController {
             return ApiResponse.failure("채팅방을 찾을 수 없습니다", "CHAT_ROOM_NOT_FOUND", e.getMessage());
         }
     }
+
     // 채팅방에서 유저 강퇴 (채팅방 방장인 host만 가능)
     @DeleteMapping("/rooms/{roomId}/users/{userId}")
     public ApiResponse<Void> outUser(
