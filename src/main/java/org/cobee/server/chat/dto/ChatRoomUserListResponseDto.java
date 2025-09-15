@@ -5,10 +5,8 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class ChatRoomResponseDto {
+public class ChatRoomUserListResponseDto {
     private Long id;
     private String name;
-    private Long postId;
-    private int maxMemberCount;
-    private int currentUserCount;
+    private boolean isHost;
 }
