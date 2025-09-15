@@ -38,13 +38,9 @@ public class ChatRoomService {
                 .post(post)
                 .build();
 
-        Member isHostUser = memberRepository.findById(host.getId())
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-
-        // 멤버에서의 isHost 업데이트
-        if (isHostUser.getIsHost() == false) {
-            isHostUser.setIsHost(true);
-            memberRepository.save(isHostUser);
+        if (host.getIsHost() == false) {
+            host.setIsHost(true);
+            memberRepository.save(host);
         }
 
         return chatRoomRepository.save(newRoom);
