@@ -11,6 +11,7 @@ import org.cobee.server.chat.dto.ChatRoomCreateRequestDto;
 import org.cobee.server.chat.dto.ChatRoomMapper;
 import org.cobee.server.chat.dto.ChatRoomResponseDto;
 import org.cobee.server.chat.dto.ChatMessageResponseDto;
+import org.cobee.server.chat.dto.ChatRoomUserListResponseDto;
 import org.cobee.server.chat.dto.JoinRoomRequestDto;
 import org.cobee.server.chat.service.ChatRoomService;
 import org.cobee.server.chat.service.ChatService;
@@ -93,6 +94,16 @@ public class ChatRoomController {
             return ApiResponse.success("내 채팅방 조회 성공", "MY_CHAT_ROOM", ChatRoomMapper.toDto(myRoom.get()));
         } else {
             return ApiResponse.failure("속한 채팅방이 없습니다", "NO_CHAT_ROOM", "No chat room found for the user");
+        }
+    }
+    //채팅방 내의 유저 목록 조회
+    @GetMapping("/rooms/{roomId}/users")
+    public ApiResponse<List<ChatRoomUserListResponseDto>> getUsersInRoom(@PathVariable Long roomId) {
+        try {
+            List<ChatRoomUserListResponseDto> users = chatRoomService.getUsernamesInRoom(roomId);
+            return ApiResponse.success("채팅방 유저 목록 조회 성공", "CHAT_ROOM_USERS", users);
+        } catch (IllegalArgumentException e) {
+            return ApiResponse.failure("채팅방을 찾을 수 없습니다", "CHAT_ROOM_NOT_FOUND", e.getMessage());
         }
     }
     //채팅방 나가기

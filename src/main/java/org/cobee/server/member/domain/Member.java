@@ -123,5 +123,9 @@ public class Member extends BaseEntity {
         this.fcmToken=fcmToken;
         return fcmToken;
     }
+
+    public void setIsHost(boolean b) {
+        this.isHost=b;
+    }
 }
 

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.cobee.server.chat.domain.ChatRoom;
 import org.cobee.server.chat.dto.ChatRoomCreateRequestDto;
+import org.cobee.server.chat.dto.ChatRoomUserListResponseDto;
 import org.cobee.server.chat.repository.ChatRoomRepository;
 import org.cobee.server.global.error.code.ErrorCode;
 import org.cobee.server.global.error.exception.CustomException;
@@ -36,6 +37,15 @@ public class ChatRoomService {
                 .host(host)
                 .post(post)
                 .build();
+
+        Member isHostUser= memberRepository.findById(host.getId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        // 멤버에서의 isHost 업데이트
+        if(isHostUser.getIsHost() == false) {
+        	isHostUser.setIsHost(true);
+        	memberRepository.save(isHostUser);
+        }
 
         return chatRoomRepository.save(newRoom);
     }
@@ -129,4 +139,18 @@ public class ChatRoomService {
     public Optional<ChatRoom> findRoomByUser(Member member) {
         return chatRoomRepository.findByMember(member);
     }
+
+    public List<ChatRoomUserListResponseDto> getUsernamesInRoom(Long roomId) {
+        ChatRoom room = chatRoomRepository.findById(roomId)
+                .orElseThrow(() -> new CustomException(ErrorCode.CHAT_ROOM_NOT_FOUND));
+
+        return room.getUsers().stream()
+                .map(user -> ChatRoomUserListResponseDto.builder()
+                        .id(user.getId())
+                        .name(user.getName())
+                        .isHost(user.getIsHost())
+                        .build())
+                .toList();
+    }
+
 }
