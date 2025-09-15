@@ -38,7 +38,7 @@ public class ChatRoomService {
                 .post(post)
                 .build();
 
-        if (host.getIsHost() == false) {
+        if (!Boolean.TRUE.equals(host.getIsHost())) {
             host.setIsHost(true);
             memberRepository.save(host);
         }
