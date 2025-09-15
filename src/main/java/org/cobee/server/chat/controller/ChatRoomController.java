@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.cobee.server.auth.service.PrincipalDetails;
 import org.cobee.server.chat.document.ChatMessage;
 import org.cobee.server.chat.domain.ChatRoom;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/chat")
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class ChatRoomController {
     private final ChatRoomService chatRoomService;
     private final ChatService chatService;
@@ -38,9 +40,15 @@ public class ChatRoomController {
     public ApiResponse<ChatRoomResponseDto> createRoom(
             @RequestBody ChatRoomCreateRequestDto request,
             @AuthenticationPrincipal PrincipalDetails principal) {
-        ChatRoom room = chatRoomService.createChatRoom(request, principal.getMember());
-        chatRoomService.addUserToRoom(room.getId(), principal.getMember().getId());
-        return ApiResponse.success("채팅방 생성 성공", "CHAT_ROOM_CREATED", ChatRoomMapper.toDto(room));
+        try{
+            ChatRoom room = chatRoomService.createChatRoom(request, principal.getMember());
+            chatRoomService.addUserToRoom(room.getId(), principal.getMember().getId());
+            return ApiResponse.success("채팅방 생성 성공", "CHAT_ROOM_CREATED", ChatRoomMapper.toDto(room));
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
+            return ApiResponse.failure("", "", e.getMessage());
+        }
+
     }
 
 
@@ -52,6 +60,7 @@ public class ChatRoomController {
             ChatRoom updatedRoom = chatRoomService.updateChatRoom(roomId, request);
             return ApiResponse.success("채팅방 이름 수정 성공", "CHAT_ROOM_UPDATED", ChatRoomMapper.toDto(updatedRoom));
         } catch (IllegalArgumentException e) {
+            log.error(e.getMessage(), e);
             return ApiResponse.failure("채팅방을 찾을 수 없습니다", "CHAT_ROOM_NOT_FOUND", e.getMessage());
         }
     }
@@ -76,6 +85,9 @@ public class ChatRoomController {
             return ApiResponse.failure("채팅방을 찾을 수 없습니다", "CHAT_ROOM_NOT_FOUND", e.getMessage());
         } catch (IllegalStateException e) {
             return ApiResponse.failure("이미 채팅방에 참여 중입니다", "CHAT_ROOM_ALREADY_JOINED", e.getMessage());
+        } catch (Exception e) {
+            log.info(e.getMessage(), e);
+            return ApiResponse.failure("", "", e.getMessage());
         }
     }
 
@@ -83,8 +95,14 @@ public class ChatRoomController {
     //특정 채팅방의 채팅 기록 조회
     @GetMapping("/rooms/history/{roomId}")
     public ApiResponse<List<ChatMessageResponseDto>> getChatHistory(@PathVariable Long roomId) {
-        List<ChatMessage> history = chatService.getChatHistory(roomId);
-        return ApiResponse.success("채팅 기록 조회 성공", "CHAT_HISTORY", ChatRoomMapper.toMessageDtoList(history));
+        try{
+            List<ChatMessage> history = chatService.getChatHistory(roomId);
+            return ApiResponse.success("채팅 기록 조회 성공", "CHAT_HISTORY", ChatRoomMapper.toMessageDtoList(history));
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return ApiResponse.failure("", "", e.getMessage());
+        }
+
     }
 
     //내가 속한 채팅방 조회
@@ -106,6 +124,9 @@ public class ChatRoomController {
             return ApiResponse.success("채팅방 유저 목록 조회 성공", "CHAT_ROOM_USERS", users);
         } catch (IllegalArgumentException e) {
             return ApiResponse.failure("채팅방을 찾을 수 없습니다", "CHAT_ROOM_NOT_FOUND", e.getMessage());
+        } catch (Exception e) {
+            log.info(e.getMessage(), e);
+            return ApiResponse.failure("", "", e.getMessage());
         }
     }
 
@@ -149,7 +170,13 @@ public class ChatRoomController {
             @PathVariable Long roomId,
             @PathVariable Long userId,
             @AuthenticationPrincipal PrincipalDetails principal) {
-        chatRoomService.outUserFromRoom(roomId, principal.getMember(), userId);
-        return ApiResponse.success("유저 강퇴 성공", "USER_KICKED");
+        try{
+            chatRoomService.outUserFromRoom(roomId, principal.getMember(), userId);
+            return ApiResponse.success("유저 강퇴 성공", "USER_KICKED");
+        } catch (Exception e) {
+            log.info(e.getMessage(), e);
+            return ApiResponse.failure("", "", e.getMessage());
+        }
+
     }
 }
