@@ -143,6 +143,7 @@ public class ChatRoomService {
         return room.getUsers().stream()
                 .map(user -> ChatRoomUserListResponseDto.builder()
                         .id(user.getId())
+                        .postId(room.getPost().getId())
                         .name(user.getName())
                         .isHost(user.getIsHost())
                         .build())
