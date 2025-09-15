@@ -7,7 +7,6 @@ import lombok.Getter;
 @Builder
 public class ChatRoomUserListResponseDto {
     private Long id;
-    private Long postId;
     private String name;
     private boolean isHost;
 }

@@ -8,6 +8,7 @@ import lombok.Getter;
 public class ChatRoomResponseDto {
     private Long id;
     private String name;
+    private Long postId;
     private int maxMemberCount;
     private int currentUserCount;
 }

@@ -10,6 +10,7 @@ public class ChatRoomMapper {
     public static ChatRoomResponseDto toDto(ChatRoom room) {
         return ChatRoomResponseDto.builder()
                 .id(room.getId())
+                .postId(room.getPost().getId())
                 .name(room.getName())
                 .maxMemberCount(room.getMaxMemberCount())
                 .currentUserCount(room.getCurrentUserCount())
