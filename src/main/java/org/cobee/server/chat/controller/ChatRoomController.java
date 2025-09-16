@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.cobee.server.auth.service.PrincipalDetails;
 import org.cobee.server.chat.document.ChatMessage;
 import org.cobee.server.chat.domain.ChatRoom;
+import org.cobee.server.chat.dto.ChatRoomCompleteResponseDto;
 import org.cobee.server.chat.dto.ChatRoomCreateRequestDto;
 import org.cobee.server.chat.dto.ChatRoomMapper;
 import org.cobee.server.chat.dto.ChatRoomResponseDto;
@@ -180,15 +181,13 @@ public class ChatRoomController {
     }
     //채팅방 모집 완료 여부 확인
     @GetMapping("/rooms/complete/{roomId}")
-    public ApiResponse<Boolean> isRoomFull(@PathVariable Long roomId) {
+    public ApiResponse<ChatRoomCompleteResponseDto> isRoomFull(@PathVariable Long roomId) {
         ChatRoom isCompletedRoom = chatRoomService.findRoomById(roomId);
-        String currentUserCount = String.valueOf(isCompletedRoom.getCurrentUserCount());
-        String maxMemberCount = String.valueOf(isCompletedRoom.getMaxMemberCount());
-        if (isCompletedRoom.getCurrentUserCount() >= isCompletedRoom.getMaxMemberCount()){
-            boolean isComplete = true;
-            return ApiResponse.success("채팅방 가득참 모집 완료", "CHAT_ROOM_COMPLETE_STATUS", isComplete);
-        } else {
-            return ApiResponse.failure("채팅방에 모집 인원 다 안 찬 상태", "CHAT_ROOM_COMPLETE_STATUS", "현재 참여자수:"+ currentUserCount+", 최대인원:"+ maxMemberCount);
-        }
+        boolean isComplete = isCompletedRoom.getCurrentUserCount() >= isCompletedRoom.getMaxMemberCount();
+        ChatRoomCompleteResponseDto responseDto = ChatRoomCompleteResponseDto.builder()
+                .isComplete(isComplete)
+                .postId(isCompletedRoom.getPost().getId())
+                .build();
+        return ApiResponse.success("채팅방 모집 완료 여부 조회 성공", "CHAT_ROOM_COMPLETION_STATUS", responseDto);
     }
 }
