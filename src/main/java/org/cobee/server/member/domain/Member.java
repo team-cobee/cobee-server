@@ -3,6 +3,7 @@ package org.cobee.server.member.domain;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cobee.server.alarm.domain.Alarm;
@@ -59,7 +60,8 @@ public class Member extends BaseEntity {
     private Boolean ocrValidation;
 
     @Column
-    private Boolean isHost;
+    @Builder.Default
+    private Boolean isHost = false;
 
     @Column
     private String fcmToken; // 앱 로그인 시 갱신 저장
