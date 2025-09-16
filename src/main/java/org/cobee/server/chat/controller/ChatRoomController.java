@@ -178,4 +178,17 @@ public class ChatRoomController {
         }
 
     }
+    //채팅방 모집 완료 여부 확인
+    @GetMapping("/rooms/complete/{roomId}")
+    public ApiResponse<Boolean> isRoomFull(@PathVariable Long roomId) {
+        ChatRoom isCompletedRoom = chatRoomService.findRoomById(roomId);
+        String currentUserCount = String.valueOf(isCompletedRoom.getCurrentUserCount());
+        String maxMemberCount = String.valueOf(isCompletedRoom.getMaxMemberCount());
+        if (isCompletedRoom.getCurrentUserCount() >= isCompletedRoom.getMaxMemberCount()){
+            boolean isComplete = true;
+            return ApiResponse.success("채팅방 가득참 모집 완료", "CHAT_ROOM_COMPLETE_STATUS", isComplete);
+        } else {
+            return ApiResponse.failure("채팅방에 모집 인원 다 안 찬 상태", "CHAT_ROOM_COMPLETE_STATUS", "현재 참여자수:"+ currentUserCount+", 최대인원:"+ maxMemberCount);
+        }
+    }
 }
