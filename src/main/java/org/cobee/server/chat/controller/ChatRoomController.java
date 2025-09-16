@@ -13,7 +13,6 @@ import org.cobee.server.chat.dto.ChatRoomMapper;
 import org.cobee.server.chat.dto.ChatRoomResponseDto;
 import org.cobee.server.chat.dto.ChatMessageResponseDto;
 import org.cobee.server.chat.dto.ChatRoomUserListResponseDto;
-import org.cobee.server.chat.dto.JoinRoomRequestDto;
 import org.cobee.server.chat.service.ChatRoomService;
 import org.cobee.server.chat.service.ChatService;
 import org.cobee.server.global.response.ApiResponse;
@@ -76,10 +75,10 @@ public class ChatRoomController {
     @PostMapping("/rooms/join/{roomId}")
     public ApiResponse<ChatRoomResponseDto> joinRoom(
             @PathVariable Long roomId,
-            @RequestBody JoinRoomRequestDto req
+            @AuthenticationPrincipal PrincipalDetails principal
     ) {
         try {
-            ChatRoom updatedRoom = chatRoomService.addUserToRoom(roomId, req.getUserId());
+            ChatRoom updatedRoom = chatRoomService.addUserToRoom(roomId, principal.getMember().getId());
             return ApiResponse.success("채팅방 참여 성공", "CHAT_ROOM_JOINED", ChatRoomMapper.toDto(updatedRoom));
         } catch (IllegalArgumentException e) {
             return ApiResponse.failure("채팅방을 찾을 수 없습니다", "CHAT_ROOM_NOT_FOUND", e.getMessage());
