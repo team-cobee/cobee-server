@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.cobee.server.auth.service.PrincipalDetails;
 import org.cobee.server.chat.document.ChatMessage;
 import org.cobee.server.chat.domain.ChatRoom;
+import org.cobee.server.chat.dto.ChatRoomCompleteResponseDto;
 import org.cobee.server.chat.dto.ChatRoomCreateRequestDto;
 import org.cobee.server.chat.dto.ChatRoomMapper;
 import org.cobee.server.chat.dto.ChatRoomResponseDto;
@@ -177,5 +178,16 @@ public class ChatRoomController {
             return ApiResponse.failure("", "", e.getMessage());
         }
 
+    }
+    //채팅방 모집 완료 여부 확인
+    @GetMapping("/rooms/complete/{roomId}")
+    public ApiResponse<ChatRoomCompleteResponseDto> isRoomFull(@PathVariable Long roomId) {
+        ChatRoom isCompletedRoom = chatRoomService.findRoomById(roomId);
+        boolean isComplete = isCompletedRoom.getCurrentUserCount() >= isCompletedRoom.getMaxMemberCount();
+        ChatRoomCompleteResponseDto responseDto = ChatRoomCompleteResponseDto.builder()
+                .isComplete(isComplete)
+                .postId(isCompletedRoom.getPost().getId())
+                .build();
+        return ApiResponse.success("채팅방 모집 완료 여부 조회 성공", "CHAT_ROOM_COMPLETION_STATUS", responseDto);
     }
 }
