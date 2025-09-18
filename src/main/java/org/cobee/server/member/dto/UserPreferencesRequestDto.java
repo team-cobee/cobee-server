@@ -18,6 +18,6 @@ public class UserPreferencesRequestDto {
   private Personality personality;
   private Boolean smokingPreference;
   private Boolean snoringPreference;
-  private Integer CohabitantCount;
+  private Integer cohabitantCount;
   private Boolean petPreference;
 }
