@@ -8,20 +8,28 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.ResourceUtils;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 @Configuration
 public class StorageConfig {
 
-    @Value("${spring.cloud.gcp.storage.credentials.location}")
-    private String keyFileLocation;
+    @Value("${GOOGLE_CREDENTIALS_JSON}")
+    private String credentialsJson;
+
+    @Value("${spring.cloud.gcp.storage.project-id}")
+    private String projectId;
+
 
     @Bean
     public Storage storage() throws IOException {
-        InputStream keyFile = ResourceUtils.getURL(keyFileLocation).openStream();
+        InputStream credentialsStream = new ByteArrayInputStream(credentialsJson.getBytes());
+        GoogleCredentials credentials = GoogleCredentials.fromStream(credentialsStream);
+
         return StorageOptions.newBuilder()
-                .setCredentials(GoogleCredentials.fromStream(keyFile))
+                .setProjectId(projectId)
+                .setCredentials(credentials)
                 .build()
                 .getService();
     }
