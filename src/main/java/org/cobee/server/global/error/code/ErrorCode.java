@@ -62,7 +62,10 @@ public enum ErrorCode {
 
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "MEMBER-001", "Member not found"),
     PUBLIC_PROFILE_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "PUBLIC-PROFILE-001", "Public profile already exists"),
-    PUBLIC_PROFILE_NOT_FOUND(HttpStatus.NOT_FOUND, "PUBLIC-PROFILE-002", "Public profile not found");
+    PUBLIC_PROFILE_NOT_FOUND(HttpStatus.NOT_FOUND, "PUBLIC-PROFILE-002", "Public profile not found"),
+
+    FAILED_OCR_API(HttpStatus.INTERNAL_SERVER_ERROR, "OCR-API-001", "No response received from OCR API");
+
 
     private final HttpStatus status;
     private final String code;
