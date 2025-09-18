@@ -22,7 +22,6 @@ public class AlarmListener {
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void onCommentCreated(CommentCreatedEvent e) {
-        // title과 body는 프론트가 보게 될 메시지 (백엔드가 메시지 구성함)
         var title = e.isReply() ? "대댓글 알림" : "새 댓글 알림";
         var body  = e.isReply() ? "내 댓글에 답글이 달렸어요" : "내 글에 댓글이 달렸어요";
 
@@ -31,7 +30,7 @@ public class AlarmListener {
                 e.getToUserId(),             // toUserId: 수신자
                 AlarmType.COMMENT,        // 타입
                 AlarmSourceType.COMMENT,  // 출처 타입
-                e.getCommentId(),            // 출처 ID(댓글 PK)
+                e.getCommentId() ,// 출처 ID(댓글 PK)
                 title,
                 body
         ));
@@ -40,9 +39,9 @@ public class AlarmListener {
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void onApplyCreated(ApplyCreatedEvent e) {
+        // 누군가가 지원을 나한테 했을때
         var title = "지원 알림";
         var body  = "새로운 지원이 도착했습니다.";
-
         alarmService.createAndSend(new AlarmCreateRequest(
                 e.getFromUserId(),
                 e.getToUserId(),
@@ -60,6 +59,7 @@ public class AlarmListener {
         var title = e.isAccepted() ? "매칭성공" : "매칭거절";
         var body  = e.isAccepted() ? "매칭이 성사되었습니다." : "매칭이 거절되었습니다.";
 
+        // 구인글 주인이 승인을 했을 때,
         alarmService.createAndSend(new AlarmCreateRequest(
                 e.getFromUserId(),
                 e.getToUserId(),

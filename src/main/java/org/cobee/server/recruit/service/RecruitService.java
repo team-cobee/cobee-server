@@ -83,6 +83,7 @@ public class RecruitService {
 
         return RecruitResponse.from(recruitPost, member);
     }
+
     @Transactional
     public RecruitResponse updateRecruitPost(RecruitRequest request, Long postId, Long memberId) {
         RecruitPost post = recruitRepository.findById(postId)
@@ -190,5 +191,14 @@ public class RecruitService {
             }
         }
         return imageUrls;
+    }
+    @Transactional
+    public RecruitResponse updateRecruitStatus(Long memberId, Long postId, RecruitStatus status) {
+        Member member  = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        RecruitPost post = recruitRepository.findById(postId).orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+        post.updateStatus(status);
+        recruitRepository.save(post);
+        return RecruitResponse.from(post, member);
     }
 }

@@ -23,8 +23,6 @@ public class RecruitRequest {
     private Boolean hasRoom;
     private List<String> imgUrl;
     private String address;
-//    private Double latitude;
-//    private Double longitude;
     private String detailDescription;
     private String additionalDescription;
 

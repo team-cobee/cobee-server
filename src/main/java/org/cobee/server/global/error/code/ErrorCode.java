@@ -64,6 +64,7 @@ public enum ErrorCode {
     PUBLIC_PROFILE_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "PUBLIC-PROFILE-001", "Public profile already exists"),
     PUBLIC_PROFILE_NOT_FOUND(HttpStatus.NOT_FOUND, "PUBLIC-PROFILE-002", "Public profile not found"),
 
+    FAILED_OCR_API(HttpStatus.INTERNAL_SERVER_ERROR, "OCR-API-001", "No response received from OCR API"),
     // UserPreferences 관련 에러
     USER_PREFERENCES_NOT_FOUND(HttpStatus.NOT_FOUND, "PREFERENCE-001", "Cannot find UserPreferences"),
     ALREADY_EXISTS_ERROR(HttpStatus.BAD_REQUEST, "PREFERENCE-002", "UserPreferences already exists"),
@@ -76,7 +77,7 @@ public enum ErrorCode {
     TOO_MANY_FILES(HttpStatus.BAD_REQUEST, "IMAGE-005", "Too many files (max 3)"),
     IMAGE_UPLOAD_FAILED(HttpStatus.BAD_REQUEST, "IMAGE-006", "Image upload failed");
 
-  private final HttpStatus status;
+    private final HttpStatus status;
     private final String code;
     private final String message;
 
