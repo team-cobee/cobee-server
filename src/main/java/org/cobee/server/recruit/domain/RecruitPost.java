@@ -173,4 +173,8 @@ public class RecruitPost extends BaseEntity {
         apply.setPost(this); // FK 가진 소유자 쪽도 세팅
     }
 
+    public void updateStatus(RecruitStatus status) {
+        this.status = status;
+    }
+
 }

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.cobee.server.auth.service.PrincipalDetails;
 import org.cobee.server.global.error.code.ErrorCode;
 import org.cobee.server.global.response.ApiResponse;
+import org.cobee.server.recruit.domain.RecruitPost;
 import org.cobee.server.recruit.domain.enums.RecruitStatus;
 import org.cobee.server.recruit.dto.RecruitRequest;
 import org.cobee.server.recruit.dto.RecruitResponse;
@@ -24,8 +25,8 @@ public class RecruitController {
 
     @PostMapping("")
     public ApiResponse<RecruitResponse> createRecruitPost(@RequestBody RecruitRequest request,
-                                                          @AuthenticationPrincipal PrincipalDetails principalDetails){
-        try{
+                                                          @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        try {
             Long memberId = principalDetails.getMember().getId();
             RecruitResponse result = recruitService.createRecruitPost(request, memberId);
             return ApiResponse.success("구인글 생성 완료", "RECRUIT_CREATED", result);
@@ -51,10 +52,10 @@ public class RecruitController {
     }
 
     @GetMapping("")
-    public ApiResponse<List<RecruitResponse>> getRecruitPosts(@AuthenticationPrincipal PrincipalDetails principalDetails){
-        try{
+    public ApiResponse<List<RecruitResponse>> getRecruitPosts(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        try {
             List<RecruitResponse> result = recruitService.getAllRecruitPosts();
-            return ApiResponse.success("모든 구인글 조회 완료","RECRUIT_GET_ALL",result);
+            return ApiResponse.success("모든 구인글 조회 완료", "RECRUIT_GET_ALL", result);
         } catch (Exception e) {
             log.info(e.getMessage());
             return null;
@@ -80,12 +81,13 @@ public class RecruitController {
         return ApiResponse.success("나의 모든 구인글 조회 완료", "MY_RECRUIT_VIEWED", result);
     }
 
-    @PatchMapping("/status/{status}")
+    @PatchMapping("/{postId}/status/{status}")
     public ApiResponse<RecruitResponse> changeRecruitStatus(@AuthenticationPrincipal PrincipalDetails principalDetails,
-                                             @PathVariable(name="status") RecruitStatus status)
-
-    {
+                                                            @PathVariable(name = "status") RecruitStatus status,
+                                                            @PathVariable(name="postId") Long postId) {
         Long memberId = principalDetails.getMember().getId();
+        RecruitResponse post = recruitService.updateRecruitStatus(memberId, postId, status);
+        return ApiResponse.success("", "", post);
 
     }
 }

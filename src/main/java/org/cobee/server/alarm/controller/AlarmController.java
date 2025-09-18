@@ -4,8 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.cobee.server.alarm.dto.AlarmNoticeResponse;
 import org.cobee.server.alarm.dto.MarkReadRequest;
 import org.cobee.server.alarm.service.AlarmService;
+import org.cobee.server.auth.service.PrincipalDetails;
 import org.cobee.server.global.response.ApiResponse;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -19,7 +23,15 @@ public class AlarmController {
     }
 
     @GetMapping("/my")
-    public ApiResponse<List<AlarmNoticeResponse>> myAlarm(){
+    public ApiResponse<List<AlarmNoticeResponse>> myAlarm(@AuthenticationPrincipal PrincipalDetails principalDetails){
+        try{
+            Long memberId = principalDetails.getMember().getId();
+            List<AlarmNoticeResponse> result = alarmService.findMyAllAlarm(memberId);
+            return ApiResponse.success("", "", result);
+        } catch (Exception e){
+            return ApiResponse.failure("", "", e.getMessage());
+        }
+
 
     }
 }
