@@ -10,8 +10,10 @@ import org.cobee.server.recruit.domain.enums.RecruitStatus;
 import org.cobee.server.recruit.dto.RecruitRequest;
 import org.cobee.server.recruit.dto.RecruitResponse;
 import org.cobee.server.recruit.service.RecruitService;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -79,6 +81,17 @@ public class RecruitController {
         Long memberId = principalDetails.getMember().getId();
         List<RecruitResponse> result = recruitService.getAllMyPost(memberId);
         return ApiResponse.success("나의 모든 구인글 조회 완료", "MY_RECRUIT_VIEWED", result);
+    }
+
+    @PostMapping(value = "/profile/image/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ApiResponse<List<String>> uploadRecruitImages(
+            @RequestParam("files") MultipartFile[] files,
+            @PathVariable Long postId,
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+    ) {
+        Long memberId = principalDetails.getMember().getId();
+        List<String> imageUrls = recruitService.addImages(files, postId, memberId);
+        return ApiResponse.success("구인글 이미지 업로드 완료", "RECRUIT_IMAGES_UPLOADED", imageUrls);
     }
 
     @PatchMapping("/{postId}/status/{status}")

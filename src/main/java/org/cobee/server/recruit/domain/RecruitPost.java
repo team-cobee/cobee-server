@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cobee.server.global.BaseEntity;
+import org.cobee.server.image.domain.Images;
 import org.cobee.server.member.domain.enums.Gender;
 import org.cobee.server.publicProfile.domain.enums.*;
 import org.cobee.server.recruit.domain.enums.RecruitStatus;
@@ -103,6 +104,9 @@ public class RecruitPost extends BaseEntity {
 
     @OneToMany(mappedBy = "post")
     private List<ApplyRecord> applyRecords = new ArrayList<>();
+
+    @OneToMany(mappedBy = "recruitPost", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Images> images = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "user_id")

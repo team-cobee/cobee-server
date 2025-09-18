@@ -9,6 +9,9 @@ import org.cobee.server.member.domain.enums.Gender;
 import org.cobee.server.publicProfile.domain.enums.*;
 import org.cobee.server.recruit.domain.RecruitPost;
 import org.cobee.server.recruit.domain.enums.RecruitStatus;
+import org.cobee.server.image.domain.Images;
+import java.util.stream.Collectors;
+import java.util.Comparator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -114,6 +117,10 @@ public class RecruitResponse{
                 .additionalDescript(post.getAdditionalDescription())
 
                 .comments(responses)
+                .imgUrl(post.getImages().stream()
+                        .sorted(Comparator.comparing(Images::getDisplayOrder))
+                        .map(Images::getImageUrl)
+                        .collect(Collectors.toList()))
                 .build();
     }
 }

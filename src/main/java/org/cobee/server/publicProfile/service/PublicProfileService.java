@@ -49,6 +49,7 @@ public class PublicProfileService {
                 member.getId(),
                 member.getName(),
                 member.getGender(),
+                member.getProfileUrl(),
                 publicProfile.getInfo(),
                 publicProfile.getLifestyle(),
                 publicProfile.getPersonality(),

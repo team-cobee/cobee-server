@@ -1,9 +1,14 @@
 package org.cobee.server.recruit.service;
 
+import java.io.IOException;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.cobee.server.global.error.code.ErrorCode;
 import org.cobee.server.global.error.exception.CustomException;
+import org.cobee.server.image.domain.Images;
+import org.cobee.server.image.repository.ImagesRepository;
+import org.cobee.server.image.service.DataBucketUtil;
+import org.cobee.server.image.service.ImageValidationUtil;
 import org.cobee.server.map.service.GoogleMapService;
 import org.cobee.server.member.domain.Member;
 import org.cobee.server.member.repository.MemberRepository;
@@ -17,8 +22,9 @@ import org.cobee.server.recruit.repository.ApplyRecordRepository;
 import org.cobee.server.recruit.repository.RecruitPostRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +35,8 @@ public class RecruitService {
     private final MemberRepository memberRepository;
     private final ApplyRecordRepository applyRepository;
     private final GoogleMapService googleMapService;
+    private final DataBucketUtil dataBucketUtil;
+    private final ImagesRepository imagesRepository;
 
     @Transactional
     public RecruitResponse createRecruitPost(RecruitRequest request, Long memberId) {
@@ -154,6 +162,36 @@ public class RecruitService {
         return result;
     }
 
+    public List<String> addImages(MultipartFile[] files, Long postId, Long memberId) {
+        // 권한 확인 (본인 게시글인지)
+        RecruitPost post = recruitRepository.findById(postId).orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        if (!post.getMember().getId().equals(memberId)) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
+        // 파일 검증
+        ImageValidationUtil.validateMultipleImageFiles(files);
+        List<String> imageUrls = new ArrayList<>();
+
+        for (int i = 0; i < files.length; i++) {
+            try {
+                String imageUrl = dataBucketUtil.uploadImage(files[i]);
+                // Images 엔티티에 저장
+                Images image = Images.builder()
+                        .imageUrl(imageUrl)
+                        .originalName(files[i].getOriginalFilename())
+                        .displayOrder(i + 1)
+                        .recruitPost(post)
+                        .build();
+                imagesRepository.save(image);
+
+                imageUrls.add(imageUrl);
+            } catch (IOException e) {
+                throw new CustomException(ErrorCode.IMAGE_UPLOAD_FAILED);
+            }
+        }
+        return imageUrls;
+    }
     @Transactional
     public RecruitResponse updateRecruitStatus(Long memberId, Long postId, RecruitStatus status) {
         Member member  = memberRepository.findById(memberId)

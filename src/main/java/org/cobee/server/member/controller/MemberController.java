@@ -1,10 +1,17 @@
 package org.cobee.server.member.controller;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.cobee.server.alarm.fcm.FcmTokenRequest;
+import org.cobee.server.auth.service.PrincipalDetails;
 import org.cobee.server.global.response.ApiResponse;
 import org.cobee.server.member.service.MemberService;
+import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,6 +27,16 @@ public class MemberController {
     ) {
         String fcm = memberService.updateFcmToken(memberId, request);
         return ApiResponse.success("fcm 전송 성공", "FCM-001",fcm);
+    }
+
+    @PostMapping(value = "/profile/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ApiResponse<String> uploadProfileImage(
+            @RequestParam("file") MultipartFile file,
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+    ) throws IOException {
+        Long memberId = principalDetails.getMember().getId();
+        String imageUrl = memberService.updateProfileImage(file, memberId);
+        return ApiResponse.success("프로필 이미지 업데이트 완료", "PROFILE_IMAGE_UPDATED", imageUrl);
     }
 }
 
