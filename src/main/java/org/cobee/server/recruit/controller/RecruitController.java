@@ -8,6 +8,7 @@ import org.cobee.server.global.response.ApiResponse;
 import org.cobee.server.recruit.dto.RecruitRequest;
 import org.cobee.server.recruit.dto.RecruitResponse;
 import org.cobee.server.recruit.service.RecruitService;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -80,7 +81,7 @@ public class RecruitController {
         return ApiResponse.success("나의 모든 구인글 조회 완료", "MY_RECRUIT_VIEWED", result);
     }
 
-    @PostMapping("/{postId}/images")
+    @PostMapping(value = "/profile/image/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<List<String>> uploadRecruitImages(
             @RequestParam("files") MultipartFile[] files,
             @PathVariable Long postId,
