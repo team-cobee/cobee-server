@@ -29,6 +29,7 @@ public class RecruitService {
     private final MemberRepository memberRepository;
     private final ApplyRecordRepository applyRepository;
     private final GoogleMapService googleMapService;
+
     @Transactional
     public RecruitResponse createRecruitPost(RecruitRequest request, Long memberId) {
         Map<String, Object> geocodeData = googleMapService.getGeocode(request.getAddress());
@@ -74,6 +75,7 @@ public class RecruitService {
 
         return RecruitResponse.from(recruitPost, member);
     }
+
     @Transactional
     public RecruitResponse updateRecruitPost(RecruitRequest request, Long postId, Long memberId) {
         RecruitPost post = recruitRepository.findById(postId)
@@ -150,5 +152,15 @@ public class RecruitService {
             result.add(RecruitResponse.from(post, post.getMember()));
         }
         return result;
+    }
+
+    @Transactional
+    public RecruitResponse updateRecruitStatus(Long memberId, Long postId, RecruitStatus status) {
+        Member member  = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        RecruitPost post = recruitRepository.findById(postId).orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+        post.updateStatus(status);
+        recruitRepository.save(post);
+        return RecruitResponse.from(post, member);
     }
 }

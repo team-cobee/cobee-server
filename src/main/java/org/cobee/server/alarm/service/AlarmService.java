@@ -16,6 +16,9 @@ import org.cobee.server.member.repository.MemberRepository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -59,5 +62,14 @@ public class AlarmService {
         notice.updateIsRead(true);
         alarmNoticeRepository.save(notice);
         return notice.getIsRead();
+    }
+
+    public List<AlarmNoticeResponse> findMyAllAlarm(Long toUserId){
+        List<AlarmNotice> notices = alarmNoticeRepository.findMyAllAlarmNotice(toUserId);
+        List<AlarmNoticeResponse> responses = new ArrayList<>();
+        for (AlarmNotice notice : notices) {
+            responses.add(AlarmNoticeResponse.of(notice));
+        }
+        return responses;
     }
 }
