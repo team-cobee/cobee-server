@@ -37,6 +37,15 @@ out/
 .vscode/
 ### env 파일 추가 ###
 .env
-### application ###
-src/main/resources/application.yml
-src/test/resources/application.yml
+
+# Docker Compose file
+docker-compose.yml
+
+# MongoDB data directory
+mongodb/
+
+# Firebase credentials
+src/main/resources/firebase/
+
+# Static build outputs or assets
+src/main/resources/static/
