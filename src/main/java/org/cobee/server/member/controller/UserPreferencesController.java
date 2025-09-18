@@ -1,5 +1,6 @@
 package org.cobee.server.member.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.cobee.server.auth.service.PrincipalDetails;
 import org.cobee.server.global.response.ApiResponse;
@@ -22,7 +23,7 @@ public class UserPreferencesController {
   @PostMapping()
   public ApiResponse<UserPreferencesResponseDto> createUserPreferences(
       @AuthenticationPrincipal PrincipalDetails principalDetails,
-      @RequestBody UserPreferencesRequestDto requestDto) {
+      @Valid @RequestBody UserPreferencesRequestDto requestDto) {
     Long memberId = principalDetails.getMember().getId();
     UserPreferencesResponseDto responseDto = userPreferencesService.createUserPreferences(memberId, requestDto);
 
@@ -48,7 +49,7 @@ public class UserPreferencesController {
   @PutMapping()
   public ApiResponse<UserPreferencesResponseDto> updateUserPreferences(
       @AuthenticationPrincipal PrincipalDetails principalDetails,
-      @RequestBody UserPreferencesRequestDto requestDto) {
+      @Valid @RequestBody UserPreferencesRequestDto requestDto) {
 
     Long memberId = principalDetails.getMember().getId();
     UserPreferencesResponseDto responseDto = userPreferencesService.updateUserPreferences(memberId, requestDto);
