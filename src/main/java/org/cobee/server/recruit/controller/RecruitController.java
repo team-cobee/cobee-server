@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.cobee.server.auth.service.PrincipalDetails;
 import org.cobee.server.global.error.code.ErrorCode;
 import org.cobee.server.global.response.ApiResponse;
+import org.cobee.server.recruit.domain.enums.RecruitStatus;
 import org.cobee.server.recruit.dto.RecruitRequest;
 import org.cobee.server.recruit.dto.RecruitResponse;
 import org.cobee.server.recruit.service.RecruitService;
@@ -34,7 +35,7 @@ public class RecruitController {
         }
     }
 
-    @PutMapping("/{postId}")
+    @PatchMapping("/{postId}")
     public ApiResponse<RecruitResponse> updateRecruitPost(@RequestBody RecruitRequest request,
                                                           @AuthenticationPrincipal PrincipalDetails principalDetails,
                                                           @PathVariable(name = "postId") Long postId) {
@@ -79,4 +80,12 @@ public class RecruitController {
         return ApiResponse.success("나의 모든 구인글 조회 완료", "MY_RECRUIT_VIEWED", result);
     }
 
+    @PatchMapping("/status/{status}")
+    public ApiResponse<RecruitResponse> changeRecruitStatus(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                             @PathVariable(name="status") RecruitStatus status)
+
+    {
+        Long memberId = principalDetails.getMember().getId();
+
+    }
 }
