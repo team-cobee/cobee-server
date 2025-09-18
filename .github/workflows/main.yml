@@ -70,4 +70,3 @@ jobs:
             BACKEND_URL=${{ secrets.BACKEND_URL }}
             PROJECT_ID=${{ secrets.PROJECT_ID }}
             BUCKET=${{ secrets.BUCKET }}
-            GOOGLE_CREDENTIALS_JSON=${{ secrets.GOOGLE_CREDENTIALS_JSON }}
