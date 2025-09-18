@@ -31,7 +31,5 @@ public class AlarmController {
         } catch (Exception e){
             return ApiResponse.failure("", "", e.getMessage());
         }
-
-
     }
 }
