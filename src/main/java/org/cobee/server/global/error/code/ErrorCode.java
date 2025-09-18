@@ -64,10 +64,17 @@ public enum ErrorCode {
     PUBLIC_PROFILE_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "PUBLIC-PROFILE-001", "Public profile already exists"),
     PUBLIC_PROFILE_NOT_FOUND(HttpStatus.NOT_FOUND, "PUBLIC-PROFILE-002", "Public profile not found"),
 
-  // UserPreferences 관련 에러
-  USER_PREFERENCES_NOT_FOUND(HttpStatus.NOT_FOUND, "PREFERENCE-001", "Cannot find UserPreferences"),
-  ALREADY_EXISTS_ERROR(HttpStatus.BAD_REQUEST, "PREFERENCE-002", "UserPreferences already exists");
+    // UserPreferences 관련 에러
+    USER_PREFERENCES_NOT_FOUND(HttpStatus.NOT_FOUND, "PREFERENCE-001", "Cannot find UserPreferences"),
+    ALREADY_EXISTS_ERROR(HttpStatus.BAD_REQUEST, "PREFERENCE-002", "UserPreferences already exists"),
 
+    // 이미지 관련 에러
+    INVALID_FILE(HttpStatus.BAD_REQUEST, "IMAGE-001", "Invalid File"),
+    FILE_SIZE_EXCEEDED(HttpStatus.BAD_REQUEST, "IMAGE-002", "File size exceeded 5MB"),
+    INVALID_FILE_TYPE(HttpStatus.BAD_REQUEST, "IMAGE-003", "Invalid File Type"),
+    NO_FILES_PROVIDED(HttpStatus.BAD_REQUEST, "IMAGE-004", "No Files provided"),
+    TOO_MANY_FILES(HttpStatus.BAD_REQUEST, "IMAGE-005", "Too many files (max 3)"),
+    IMAGE_UPLOAD_FAILED(HttpStatus.BAD_REQUEST, "IMAGE-006", "Image upload failed");
 
   private final HttpStatus status;
     private final String code;

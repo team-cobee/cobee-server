@@ -52,7 +52,6 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private Boolean isCompleted;
 
-    // OCR 주민등록증 인증 여부
     @Column
     private String profileUrl;
 
@@ -128,6 +127,9 @@ public class Member extends BaseEntity {
 
     public void setIsHost(boolean b) {
         this.isHost=b;
+    }
+    public void updateProfileUrl(String profileUrl) {
+        this.profileUrl = profileUrl;
     }
 }
 
