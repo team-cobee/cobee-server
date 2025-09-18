@@ -44,9 +44,6 @@ jobs:
           docker build -t "${{ env.IMAGE_REPO }}:${{ env.IMAGE_TAG }}" .
           docker push "${{ env.IMAGE_REPO }}:${{ env.IMAGE_TAG }}"
 
-      - name: Create GCP credentials file
-        run: echo "${{ secrets.GOOGLE_CREDENTIALS_JSON }}" > gcp-credentials.json
-
       - name: Deploy to Google Cloud Run
         uses: google-github-actions/deploy-cloudrun@v2
         with:
@@ -73,3 +70,4 @@ jobs:
             BACKEND_URL=${{ secrets.BACKEND_URL }}
             PROJECT_ID=${{ secrets.PROJECT_ID }}
             BUCKET=${{ secrets.BUCKET }}
+            GOOGLE_CREDENTIALS_JSON=${{ secrets.GOOGLE_CREDENTIALS_JSON }}
