@@ -12,8 +12,8 @@ public class AlarmCreateRequest{
     private AlarmType alarmType;
     private AlarmSourceType sourceType;
     private Long sourceId;
-//    private String pushTitle;   // 푸시 타이틀
-//    private String pushBody;    // 푸시 내용
+    private String pushTitle;   // 푸시 타이틀
+    private String pushBody;    // 푸시 내용
 
 }
 
