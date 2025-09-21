@@ -84,6 +84,7 @@ public class UserPreferencesService {
         return UserPreferencesResponseDto.from(updatedPreferences);
     }
 
+    @Transactional
     public void deleteUserPreferences(Long memberId) {
         UserPreferences userPreferences = userPreferencesRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_PREFERENCES_NOT_FOUND));
