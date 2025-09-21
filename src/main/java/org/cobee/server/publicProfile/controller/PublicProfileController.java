@@ -23,9 +23,15 @@ public class PublicProfileController {
     public ApiResponse<Void> createPublicProfile(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @RequestBody PublicProfileRequestDto requestDto) {
-        Long memberId = principalDetails.getMember().getId();
-        publicProfileService.createPublicProfile(memberId, requestDto);
-        return ApiResponse.success("Public profile created successfully", "201");
+        try {
+            Long memberId = principalDetails.getMember().getId();
+            publicProfileService.createPublicProfile(memberId, requestDto);
+            return ApiResponse.success("Public profile created successfully", "201");
+        } catch (IllegalArgumentException e) {
+            return ApiResponse.failure("요청이 유효하지 않음", "400", e.getMessage());
+        } catch (Exception e) {
+            return ApiResponse.failure("서버 내부 에러", "500", e.getMessage());
+        }
     }
 
     @GetMapping("")
