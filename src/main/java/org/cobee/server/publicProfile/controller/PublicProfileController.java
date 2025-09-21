@@ -1,6 +1,7 @@
 package org.cobee.server.publicProfile.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.cobee.server.auth.service.PrincipalDetails;
 import org.cobee.server.global.response.ApiResponse;
 import org.cobee.server.publicProfile.dto.PublicProfileRequestDto;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/public-profiles")
+@Slf4j
 public class PublicProfileController {
 
     private final PublicProfileService publicProfileService;
@@ -30,6 +32,7 @@ public class PublicProfileController {
         } catch (IllegalArgumentException e) {
             return ApiResponse.failure("요청이 유효하지 않음", "400", e.getMessage());
         } catch (Exception e) {
+            log.info(e.getMessage());
             return ApiResponse.failure("서버 내부 에러", "500", e.getMessage());
         }
     }
