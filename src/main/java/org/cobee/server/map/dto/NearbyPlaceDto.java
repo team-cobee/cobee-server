@@ -14,5 +14,6 @@ public class NearbyPlaceDto {
     private String address;
     private Double latitude;
     private Double longitude;
+    // 구인글아이디 추가
 }
 
