@@ -15,45 +15,51 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserPreferencesController {
 
-  private final UserPreferencesService userPreferencesService;
+    private final UserPreferencesService userPreferencesService;
 
-  /**
-   * 사용자 선호도 등록
-   */
-  @PostMapping()
-  public ApiResponse<UserPreferencesResponseDto> createUserPreferences(
-      @AuthenticationPrincipal PrincipalDetails principalDetails,
-      @Valid @RequestBody UserPreferencesRequestDto requestDto) {
-    Long memberId = principalDetails.getMember().getId();
-    UserPreferencesResponseDto responseDto = userPreferencesService.createUserPreferences(memberId, requestDto);
+    /**
+     * 사용자 선호도 등록
+     */
+    @PostMapping()
+    public ApiResponse<UserPreferencesResponseDto> createUserPreferences(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @Valid @RequestBody UserPreferencesRequestDto requestDto) {
+        Long memberId = principalDetails.getMember().getId();
+        UserPreferencesResponseDto responseDto = userPreferencesService.createUserPreferences(memberId, requestDto);
 
-    return ApiResponse.success("사용자 선호도 등록이 완료되었습니다.", "201", responseDto);
-  }
+        return ApiResponse.success("사용자 선호도 등록이 완료되었습니다.", "201", responseDto);
+    }
 
-  /**
-   * 사용자 선호도 조회
-   */
-  @GetMapping()
-  public ApiResponse<UserPreferencesResponseDto> getUserPreferences(
-      @AuthenticationPrincipal PrincipalDetails principalDetails)
-  {
-    Long memberId = principalDetails.getMember().getId();
-    UserPreferencesResponseDto responseDto = userPreferencesService.getUserPreferences(memberId);
+    /**
+     * 사용자 선호도 조회
+     */
+    @GetMapping()
+    public ApiResponse<UserPreferencesResponseDto> getUserPreferences(
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Long memberId = principalDetails.getMember().getId();
+        UserPreferencesResponseDto responseDto = userPreferencesService.getUserPreferences(memberId);
 
-    return ApiResponse.success("사용자 선호도 조회가 완료되었습니다.", "200", responseDto);
-  }
+        return ApiResponse.success("사용자 선호도 조회가 완료되었습니다.", "200", responseDto);
+    }
 
-  /**
-   * 사용자 선호도 수정
-   */
-  @PutMapping()
-  public ApiResponse<UserPreferencesResponseDto> updateUserPreferences(
-      @AuthenticationPrincipal PrincipalDetails principalDetails,
-      @Valid @RequestBody UserPreferencesRequestDto requestDto) {
+    /**
+     * 사용자 선호도 수정
+     */
+    @PutMapping()
+    public ApiResponse<UserPreferencesResponseDto> updateUserPreferences(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @Valid @RequestBody UserPreferencesRequestDto requestDto) {
 
-    Long memberId = principalDetails.getMember().getId();
-    UserPreferencesResponseDto responseDto = userPreferencesService.updateUserPreferences(memberId, requestDto);
+        Long memberId = principalDetails.getMember().getId();
+        UserPreferencesResponseDto responseDto = userPreferencesService.updateUserPreferences(memberId, requestDto);
 
-    return ApiResponse.success("사용자 선호도 수정이 완료되었습니다.", "200", responseDto);
-  }
+        return ApiResponse.success("사용자 선호도 수정이 완료되었습니다.", "200", responseDto);
+    }
+
+    @DeleteMapping("")
+    public ApiResponse<Void> deleteUserPreferences(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Long memberId = principalDetails.getMember().getId();
+        userPreferencesService.deleteUserPreferences(memberId);
+        return ApiResponse.success("사용자 선호도 삭제가 완료되었습니다.", "200");
+    }
 }

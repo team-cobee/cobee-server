@@ -79,6 +79,7 @@ public class PublicProfileService {
         );
     }
 
+    @Transactional
     public void deletePublicProfile(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
