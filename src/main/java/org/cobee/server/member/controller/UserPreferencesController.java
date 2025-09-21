@@ -56,4 +56,10 @@ public class UserPreferencesController {
 
     return ApiResponse.success("사용자 선호도 수정이 완료되었습니다.", "200", responseDto);
   }
+  @DeleteMapping("")
+    public ApiResponse<Void> deleteUserPreferences(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Long memberId = principalDetails.getMember().getId();
+        userPreferencesService.deleteUserPreferences(memberId);
+        return ApiResponse.success("사용자 선호도 삭제가 완료되었습니다.", "200");
+    }
 }
