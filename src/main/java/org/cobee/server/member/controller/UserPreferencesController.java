@@ -2,6 +2,7 @@ package org.cobee.server.member.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.cobee.server.auth.service.PrincipalDetails;
 import org.cobee.server.global.response.ApiResponse;
 import org.cobee.server.member.dto.UserPreferencesRequestDto;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/preferences")
+@Slf4j
 @RequiredArgsConstructor
 public class UserPreferencesController {
 
@@ -58,8 +60,14 @@ public class UserPreferencesController {
 
     @DeleteMapping("")
     public ApiResponse<Void> deleteUserPreferences(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        Long memberId = principalDetails.getMember().getId();
-        userPreferencesService.deleteUserPreferences(memberId);
-        return ApiResponse.success("사용자 선호도 삭제가 완료되었습니다.", "200");
+        try{
+            Long memberId = principalDetails.getMember().getId();
+            userPreferencesService.deleteUserPreferences(memberId);
+            return ApiResponse.success("사용자 선호도 삭제가 완료되었습니다.", "200");
+        } catch (Exception ex) {
+            log.info(ex.getMessage());
+            return null;
+        }
+
     }
 }
