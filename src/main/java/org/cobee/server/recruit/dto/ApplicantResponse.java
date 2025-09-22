@@ -23,7 +23,7 @@ public class ApplicantResponse {
         return ApplicantResponse.builder()
                 .applyId(record.getId())
                 .profileId(profile.getId())
-                .memberName(member.getName())
+                .memberName(record.getMember().getName())
                 .gender(Gender.valueOf(member.getGender()))
                 .birthDate(member.getBirthDate())
                 .build();
