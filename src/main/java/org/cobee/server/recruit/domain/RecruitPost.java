@@ -99,10 +99,10 @@ public class RecruitPost extends BaseEntity {
     @Column
     private Double regionLongitude; // 경도
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<ApplyRecord> applyRecords = new ArrayList<>();
 
     @OneToMany(mappedBy = "recruitPost", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
