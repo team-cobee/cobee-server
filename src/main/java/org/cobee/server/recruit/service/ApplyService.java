@@ -127,13 +127,12 @@ public class ApplyService {
         // 작성자 본인 확인 체크
         try {
             Member member = memberRepository.findById(memberId).orElseThrow();
-            PublicProfile profile = member.getPublicProfile();
             postRepository.findById(postId).orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
             List<ApplicantResponse> applicantResponses = new ArrayList<>();
 
             List<ApplyRecord> records = applyRepository.findMyPostAppliersExceptMe(postId, memberId);
             for (ApplyRecord record : records) {
-                applicantResponses.add(ApplicantResponse.from(member, profile, record));
+                applicantResponses.add(ApplicantResponse.from(member, record));
             }
             return applicantResponses;
         } catch (Exception e) {
