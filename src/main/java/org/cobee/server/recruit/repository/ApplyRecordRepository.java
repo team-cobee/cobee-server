@@ -17,6 +17,16 @@ public interface ApplyRecordRepository extends JpaRepository<ApplyRecord, Long> 
     @Query("select applies from ApplyRecord applies where applies.post.id=:postId")
     List<ApplyRecord> findMyPostAppliers(@Param("postId") Long postId);
 
+    @Query("""
+        select a
+        from ApplyRecord a
+        where a.post.id = :postId
+          and a.member.id <> :memberId
+        """)
+    List<ApplyRecord> findMyPostAppliersExceptMe(@Param("postId") Long postId,
+                                                 @Param("memberId") Long memberId);
+
+
     // 내가 지원한 구인글 매칭상태 변수에 따라 가져오기(on wait, matching, matched)
     @Query("select applies from ApplyRecord applies where applies.isMatched=:status and applies.member.id=:memberId")
     List<ApplyRecord> findApplyRecordsByMemberIdAndStatus(@Param("memberId") Long memberId, @Param("status") MatchStatus status);

@@ -5,10 +5,7 @@ import org.cobee.server.auth.service.PrincipalDetails;
 import org.cobee.server.global.error.exception.CustomException;
 import org.cobee.server.global.response.ApiResponse;
 import org.cobee.server.publicProfile.dto.PublicProfileResponseDto;
-import org.cobee.server.recruit.dto.ApplyAcceptRequest;
-import org.cobee.server.recruit.dto.ApplyRequest;
-import org.cobee.server.recruit.dto.ApplyResponse;
-import org.cobee.server.recruit.dto.RecruitResponse;
+import org.cobee.server.recruit.dto.*;
 import org.cobee.server.recruit.service.ApplyService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -76,12 +73,12 @@ public class ApplyController {
 
     // 나의 특정 구인글에 지원한 지원자 공개프로필 리스트
     @GetMapping("/{postId}/all")
-    public ApiResponse<List<PublicProfileResponseDto>> myAllAppliers(@PathVariable(name="postId") Long postId,
-                                                                  @AuthenticationPrincipal PrincipalDetails principalDetails)
+    public ApiResponse<List<ApplicantResponse>> myAllAppliers(@PathVariable(name="postId") Long postId,
+                                                              @AuthenticationPrincipal PrincipalDetails principalDetails)
     {
         try{
             Long memberId = principalDetails.getMember().getId();
-            List<PublicProfileResponseDto> result = applyService.getMyAllPostAppliers(postId, memberId);
+            List<ApplicantResponse> result = applyService.getMyAllPostAppliers(postId, memberId);
             if (result.isEmpty()) {
                 return ApiResponse.success("지원한 멤버가 없습니다.", "APPLY-007", result);
             }

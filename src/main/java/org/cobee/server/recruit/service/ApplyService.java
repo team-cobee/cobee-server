@@ -1,6 +1,7 @@
 package org.cobee.server.recruit.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.cobee.server.alarm.domain.enums.AlarmSourceType;
 import org.cobee.server.alarm.domain.enums.AlarmType;
 import org.cobee.server.alarm.dto.AlarmCreateRequest;
@@ -9,6 +10,7 @@ import org.cobee.server.global.error.code.ErrorCode;
 import org.cobee.server.global.error.exception.CustomException;
 import org.cobee.server.member.domain.Member;
 import org.cobee.server.member.repository.MemberRepository;
+import org.cobee.server.publicProfile.domain.PublicProfile;
 import org.cobee.server.publicProfile.dto.PublicProfileResponseDto;
 import org.cobee.server.recruit.domain.ApplyRecord;
 import org.cobee.server.recruit.domain.RecruitPost;
@@ -27,6 +29,8 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
+@Transactional
 public class ApplyService {
     private final MemberRepository memberRepository;
     private final RecruitPostRepository postRepository;
@@ -62,34 +66,38 @@ public class ApplyService {
     }
 
     @Transactional
-    public ApplyResponse accept(Long memberId, Long applyId, ApplyAcceptRequest applyAccept){
-        ApplyRecord applyRecord = applyRepository.findById(applyId).orElseThrow(()->new CustomException(ErrorCode.APPLY_NOT_FOUND));
-        Long checkAuthor = applyRecord.getPost().getMember().getId();
-        if(memberId.equals(checkAuthor)) {
-            Boolean accept = applyAccept.getIsAccept();
-            applyRecord.acceptMatching(accept);
-            applyRepository.save(applyRecord);
+    public ApplyResponse accept(Long memberId, Long applyId, ApplyAcceptRequest applyAccept) {
+        try {
+            ApplyRecord applyRecord = applyRepository.findById(applyId).orElseThrow(() -> new CustomException(ErrorCode.APPLY_NOT_FOUND));
+            Long checkAuthor = applyRecord.getPost().getMember().getId();
+            if (memberId.equals(checkAuthor)) {
+                Boolean accept = applyAccept.getIsAccept();
+                applyRecord.acceptMatching(accept);
+                applyRepository.save(applyRecord);
 
-            publisher.publishEvent(new ApplyAcceptResultEvent(
-                    applyRecord.getId(),
-                    applyRecord.getPost().getId(),
-                    memberId,
-                    applyRecord.getMember().getId(),
-                    accept
-            ));
+                publisher.publishEvent(new ApplyAcceptResultEvent(
+                        applyRecord.getId(),
+                        applyRecord.getPost().getId(),
+                        memberId,
+                        applyRecord.getMember().getId(),
+                        accept
+                ));
 
-            return ApplyResponse.from(applyRecord);
-        } else {
-            throw new CustomException(ErrorCode.UNAUTHORIZED);
+                return ApplyResponse.from(applyRecord);
+            } else {
+                throw new CustomException(ErrorCode.UNAUTHORIZED);
+            }
+        } catch (CustomException e) {
+            log.info(e.getMessage());
+            return null;
         }
-
     }
 
     public List<RecruitResponse> getMyAppliesOnWait(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow();
         List<ApplyRecord> myRecords = applyRepository.findApplyRecordsByMemberIdAndStatus(memberId, MatchStatus.ON_WAIT);
         List<RecruitResponse> myApplies = new ArrayList<>();
-        for (ApplyRecord record : myRecords){
+        for (ApplyRecord record : myRecords) {
             myApplies.add(RecruitResponse.from(record.getPost(), member));
         }
         return myApplies;
@@ -99,7 +107,7 @@ public class ApplyService {
         Member member = memberRepository.findById(memberId).orElseThrow();
         List<ApplyRecord> myRecords = applyRepository.findApplyRecordsByMemberIdAndStatus(memberId, MatchStatus.MATCHING);
         List<RecruitResponse> myApplies = new ArrayList<>();
-        for (ApplyRecord record : myRecords){
+        for (ApplyRecord record : myRecords) {
             myApplies.add(RecruitResponse.from(record.getPost(), member));
         }
         return myApplies;
@@ -109,30 +117,33 @@ public class ApplyService {
         Member member = memberRepository.findById(memberId).orElseThrow();
         List<ApplyRecord> myRecords = applyRepository.findApplyRecordsByMemberIdAndStatus(memberId, MatchStatus.MATCHED);
         List<RecruitResponse> myApplies = new ArrayList<>();
-        for (ApplyRecord record : myRecords){
+        for (ApplyRecord record : myRecords) {
             myApplies.add(RecruitResponse.from(record.getPost(), member));
         }
         return myApplies;
     }
 
-    public List<PublicProfileResponseDto> getMyAllPostAppliers(Long postId, Long memberId) {
+    public List<ApplicantResponse> getMyAllPostAppliers(Long postId, Long memberId) {
         // 작성자 본인 확인 체크
-        RecruitPost post = postRepository.findById(postId).orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
-        Long checkAuthor = post.getMember().getId();
+        try {
+            Member member = memberRepository.findById(memberId).orElseThrow();
+            PublicProfile profile = member.getPublicProfile();
+            postRepository.findById(postId).orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+            List<ApplicantResponse> applicantResponses = new ArrayList<>();
 
-        if (checkAuthor.equals(memberId)){
-            List<ApplyRecord> records = applyRepository.findMyPostAppliers(postId);
-            List<PublicProfileResponseDto> appliers = new ArrayList<>();
-
-            for (ApplyRecord record : records){
-                appliers.add(PublicProfileResponseDto.from(record.getMember().getPublicProfile(), record.getMember()));
+            List<ApplyRecord> records = applyRepository.findMyPostAppliersExceptMe(postId, memberId);
+            for (ApplyRecord record : records) {
+                applicantResponses.add(ApplicantResponse.from(member, profile, record));
             }
-            return appliers;
-        } else {
-            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            throw new RuntimeException(e);
         }
 
+
+        throw new CustomException(ErrorCode.UNAUTHORIZED);
     }
+
 
     public List<PublicProfileResponseDto> getMyOnConsideredPostAppliers(Long postId, Long memberId) {
         // 작성자 본인 확인 체크
@@ -140,10 +151,10 @@ public class ApplyService {
         Long checkAuthor = post.getMember().getId();
 
 
-        if (checkAuthor.equals(memberId)){
+        if (checkAuthor.equals(memberId)) {
             List<ApplyRecord> records = applyRepository.findApplyProfilesByMemberIdAndStatus(postId, MatchStatus.ON_WAIT);
             List<PublicProfileResponseDto> appliers = new ArrayList<>();
-            for (ApplyRecord record : records){
+            for (ApplyRecord record : records) {
                 appliers.add(PublicProfileResponseDto.from(record.getMember().getPublicProfile(), record.getMember()));
             }
             return appliers;
@@ -157,11 +168,11 @@ public class ApplyService {
         RecruitPost post = postRepository.findById(postId).orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
         Long checkAuthor = post.getMember().getId();
 
-        if (checkAuthor.equals(memberId)){
+        if (checkAuthor.equals(memberId)) {
             List<ApplyRecord> records = applyRepository.findApplyProfilesByMemberIdAndStatus(postId, MatchStatus.MATCHING);
             List<PublicProfileResponseDto> appliers = new ArrayList<>();
 
-            for (ApplyRecord record : records){
+            for (ApplyRecord record : records) {
                 appliers.add(PublicProfileResponseDto.from(record.getMember().getPublicProfile(), record.getMember()));
             }
             return appliers;
@@ -175,11 +186,11 @@ public class ApplyService {
         RecruitPost post = postRepository.findById(postId).orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
         Long checkAuthor = post.getMember().getId();
 
-        if (checkAuthor.equals(memberId)){
+        if (checkAuthor.equals(memberId)) {
             List<ApplyRecord> records = applyRepository.findApplyProfilesByMemberIdAndStatus(postId, MatchStatus.REJECTED);
             List<PublicProfileResponseDto> appliers = new ArrayList<>();
 
-            for (ApplyRecord record : records){
+            for (ApplyRecord record : records) {
                 appliers.add(PublicProfileResponseDto.from(record.getMember().getPublicProfile(), record.getMember()));
             }
             return appliers;
@@ -189,15 +200,14 @@ public class ApplyService {
     }
 
     public Boolean checkIfIAppliedThisPost(Long postId, Long memberId) {
-        Member  member = memberRepository.findById(memberId).orElseThrow();
+        Member member = memberRepository.findById(memberId).orElseThrow();
         RecruitPost post = postRepository.findById(postId).orElseThrow();
         Optional<ApplyRecord> record = applyRepository.findByPostIdAndMemberId(postId, memberId);
-        if (record.isPresent()){
+        if (record.isPresent()) {
             return true;
         } else {
             return false;
         }
     }
-
-
 }
+
