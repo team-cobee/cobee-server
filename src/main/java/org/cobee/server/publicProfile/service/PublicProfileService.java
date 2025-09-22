@@ -36,6 +36,7 @@ public class PublicProfileService {
                 requestDto.hasPet()
         );
         member.setPublicProfile(publicProfile);
+        member.setIsCompleted(true);
         publicProfileRepository.save(publicProfile);
     }
 
