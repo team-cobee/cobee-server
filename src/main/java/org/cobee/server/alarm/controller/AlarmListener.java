@@ -3,6 +3,7 @@ package org.cobee.server.alarm.controller;
 import lombok.RequiredArgsConstructor;
 import org.cobee.server.alarm.domain.enums.AlarmSourceType;
 import org.cobee.server.alarm.domain.enums.AlarmType;
+import org.cobee.server.chat.dto.ChatRoomInvitedDto;
 import org.cobee.server.comment.dto.CommentCreatedEvent;
 import org.cobee.server.recruit.dto.ApplyAcceptResultEvent;
 import org.cobee.server.recruit.dto.ApplyCreatedEvent;
@@ -66,6 +67,24 @@ public class AlarmListener {
                 AlarmType.START_MATCHING,
                 AlarmSourceType.RECRUIT_POST,
                 e.getApplyId(),
+                title,
+                body
+        ));
+    }
+
+    @Async
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void onChatRoomInvited(ChatRoomInvitedDto e) {
+        var roomName = e.getChatRoomName();
+        var title = "채팅방 초대";
+        var body  = roomName != null ? roomName + " 채팅방에 초대되었어요." : "새로운 채팅방에 초대되었어요.";
+
+        alarmService.createAndSend(new AlarmCreateRequest(
+                e.getFromUserId(),
+                e.getToUserId(),
+                AlarmType.INVITED,
+                AlarmSourceType.CHATROOM,
+                e.getChatRoomId(),
                 title,
                 body
         ));
