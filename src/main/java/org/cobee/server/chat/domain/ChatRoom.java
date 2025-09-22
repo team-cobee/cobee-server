@@ -38,7 +38,7 @@ public class ChatRoom {
     private int maxMemberCount;
 
     @Builder.Default
-    @OneToMany(mappedBy = "chatRoom")
+    @OneToMany(mappedBy = "chatRoom",cascade = CascadeType.ALL)
     private Set<Member> users = new HashSet<>();
 
     @OneToOne(fetch = FetchType.LAZY)
