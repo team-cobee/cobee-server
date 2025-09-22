@@ -135,13 +135,11 @@ public class ApplyService {
             for (ApplyRecord record : records) {
                 applicantResponses.add(ApplicantResponse.from(member, profile, record));
             }
+            return applicantResponses;
         } catch (Exception e) {
             log.info(e.getMessage());
             throw new RuntimeException(e);
         }
-
-
-        throw new CustomException(ErrorCode.UNAUTHORIZED);
     }
 
 
