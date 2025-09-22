@@ -6,6 +6,9 @@ import org.cobee.server.alarm.domain.enums.AlarmSourceType;
 import org.cobee.server.alarm.domain.enums.AlarmType;
 import org.cobee.server.alarm.dto.AlarmCreateRequest;
 import org.cobee.server.alarm.service.AlarmService;
+import org.cobee.server.chat.domain.ChatRoom;
+import org.cobee.server.chat.dto.ChatRoomInvitedDto;
+import org.cobee.server.chat.repository.ChatRoomRepository;
 import org.cobee.server.global.error.code.ErrorCode;
 import org.cobee.server.global.error.exception.CustomException;
 import org.cobee.server.member.domain.Member;
@@ -35,6 +38,7 @@ public class ApplyService {
     private final MemberRepository memberRepository;
     private final RecruitPostRepository postRepository;
     private final ApplyRecordRepository applyRepository;
+    private final ChatRoomRepository chatRoomRepository;
     private final AlarmService alarmService;
     private final ApplicationEventPublisher publisher;
 
@@ -74,6 +78,22 @@ public class ApplyService {
                 Boolean accept = applyAccept.getIsAccept();
                 applyRecord.acceptMatching(accept);
                 applyRepository.save(applyRecord);
+
+                if (Boolean.TRUE.equals(accept)) {
+                    Optional<ChatRoom> chatRoomOptional = chatRoomRepository.findByPostId(applyRecord.getPost().getId());
+                    if (chatRoomOptional.isPresent()) {
+                        ChatRoom chatRoom = chatRoomOptional.get();
+                        publisher.publishEvent(new ChatRoomInvitedDto(
+                                chatRoom.getId(),
+                                chatRoom.getPost().getId(),
+                                memberId,
+                                applyRecord.getMember().getId(),
+                                chatRoom.getName()
+                        ));
+                    } else {
+                        log.warn("Chat room not found for post {} when accepting apply {}", applyRecord.getPost().getId(), applyId);
+                    }
+                }
 
                 publisher.publishEvent(new ApplyAcceptResultEvent(
                         applyRecord.getId(),
