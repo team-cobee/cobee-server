@@ -8,24 +8,26 @@ import org.cobee.server.member.domain.Member;
 import org.cobee.server.member.domain.enums.Gender;
 import org.cobee.server.publicProfile.domain.PublicProfile;
 import org.cobee.server.recruit.domain.ApplyRecord;
+import org.cobee.server.recruit.domain.enums.MatchStatus;
 
 @Builder
 @Getter
 public class ApplicantResponse {
     private String memberName;
-    private Long profileId;
-    @Enumerated(EnumType.STRING)
+    private Long publicProfileId;
     private Gender gender;
     private String birthDate;
     private Long applyId;
+    private MatchStatus matchStatus;
 
-    public static ApplicantResponse from (Member member, PublicProfile profile, ApplyRecord record) {
+    public static ApplicantResponse from (Member member, ApplyRecord record) {
         return ApplicantResponse.builder()
                 .applyId(record.getId())
-                .profileId(profile.getId())
+                .publicProfileId(member.getPublicProfile().getId())
                 .memberName(record.getMember().getName())
-                .gender(Gender.valueOf(member.getGender()))
-                .birthDate(member.getBirthDate())
+                .gender(Gender.valueOf(record.getMember().getGender()))
+                .birthDate(record.getMember().getBirthDate())
+                .matchStatus(record.getIsMatched())
                 .build();
     }
 
