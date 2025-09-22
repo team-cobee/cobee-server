@@ -50,7 +50,6 @@ public class SecurityConfig {
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**").permitAll()
                         .requestMatchers("/auth/refresh").permitAll()
                         .requestMatchers("/auth/**").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/public-profiles").authenticated()
                         .anyRequest().permitAll())
 
                 // OAuth2 로그인 설정
