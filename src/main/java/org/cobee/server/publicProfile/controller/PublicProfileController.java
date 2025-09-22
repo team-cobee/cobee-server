@@ -21,7 +21,7 @@ public class PublicProfileController {
 
     private final PublicProfileService publicProfileService;
 
-    @PostMapping()
+    @PostMapping("")
     public ApiResponse<Void> createPublicProfile(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @RequestBody PublicProfileRequestDto requestDto) {
