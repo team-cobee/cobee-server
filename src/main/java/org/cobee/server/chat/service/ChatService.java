@@ -1,6 +1,5 @@
 package org.cobee.server.chat.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;

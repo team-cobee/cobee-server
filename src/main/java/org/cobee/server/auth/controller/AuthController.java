@@ -1,6 +1,5 @@
 package org.cobee.server.auth.controller;
 
-import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
 import org.cobee.server.auth.dto.MemberInfoDto;
 import org.cobee.server.auth.dto.RefreshTokenRequest;
