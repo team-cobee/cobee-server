@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cobee.server.chat.domain.enums.MessageType;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "chat_messages")
@@ -25,6 +26,7 @@ public class ChatMessage {
 
     private Long chatRoomId;
 
+    @Indexed
     private Long senderId;
 
     private String senderUsername;
@@ -38,6 +40,7 @@ public class ChatMessage {
 
     private LocalDateTime timestamp;
 
+    @Builder.Default
     private Set<Long> readBy = new HashSet<>();
 
     public ChatMessage(Long chatRoomId, Long senderId, String senderUsername, String message) {

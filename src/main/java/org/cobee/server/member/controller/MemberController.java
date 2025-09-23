@@ -1,6 +1,5 @@
 package org.cobee.server.member.controller;
 
-import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.cobee.server.alarm.fcm.FcmTokenRequest;
 import org.cobee.server.auth.service.PrincipalDetails;

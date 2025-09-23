@@ -64,4 +64,10 @@ public class ChatService {
         return chatMessageRepository.findById(messageId)
                 .map(ChatMessage::getChatRoomId);
     }
+
+    @Transactional
+    public long deleteMessagesByMember(Long memberId) {
+        return chatMessageRepository.deleteBySenderId(memberId);
+    }
+
 }
