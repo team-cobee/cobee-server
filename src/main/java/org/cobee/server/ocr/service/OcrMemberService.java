@@ -33,16 +33,17 @@ public class OcrMemberService {
         if (ocrData.getName() != null && ocrData.getSsnFront() != null && ocrData.getSsnBackFirst() != null) {
             String birthDate = extractBirthDateFromOcrData(ocrData.getSsnFront(), ocrData.getSsnBackFirst());
             String genderCode = extractGenderFromSsnBackFirst(ocrData.getSsnBackFirst());
-            
-            // Member 엔티티 업데이트
-            if (!ocrData.getName().equals(member.getName())) {
-                throw new CustomException(ErrorCode.OCR_NAME_MISMATCH);
+
+            String cleanOcrName = cleanKoreanName(ocrData.getName());
+            if (!member.getName().contains(cleanOcrName)) {
+                throw new
+                        CustomException(ErrorCode.OCR_NAME_MISMATCH);
             }
             member.updateOcrValidation(birthDate, genderCode);
-            
+
             memberRepository.save(member);
-            log.info("Member OCR 정보 업데이트 완료 - ID: {}, 이름: {}, 생년월일: {}, 성별: {}", 
-                memberId, ocrData.getName(), birthDate, genderCode);
+            log.info("Member OCR 정보 업데이트 완료 - ID: {}, 이름: {}, 생년월일: {}, 성별: {}",
+                    memberId, ocrData.getName(), birthDate, genderCode);
         }
     }
 
@@ -56,7 +57,7 @@ public class OcrMemberService {
 
         try {
             int backFirstDigit = Integer.parseInt(ssnBackFirst);
-            
+
             // 1,2: 1900년대, 3,4: 2000년대
             String year;
             if (backFirstDigit == 1 || backFirstDigit == 2) {
@@ -89,14 +90,14 @@ public class OcrMemberService {
 
         try {
             int backFirstDigit = Integer.parseInt(ssnBackFirst);
-            
+
             // 홀수: 남성, 짝수: 여성
             if (backFirstDigit % 2 == 1) {
                 return "MALE";
             } else if (backFirstDigit % 2 == 0) {
                 return "FEMALE";
             }
-            
+
             return null;
         } catch (Exception e) {
             log.error("성별 추출 실패: ssnBackFirst={}", ssnBackFirst, e);
@@ -111,7 +112,7 @@ public class OcrMemberService {
         if (genderKorean == null) {
             return null;
         }
-        
+
         return switch (genderKorean) {
             case "남성" -> "MALE";
             case "여성" -> "FEMALE";
@@ -162,14 +163,14 @@ public class OcrMemberService {
 
         try {
             String genderDigit = residentNumber.substring(6, 7);
-            
+
             // 1,3: 남성, 2,4: 여성
             if (genderDigit.equals("1") || genderDigit.equals("3")) {
                 return "MALE";
             } else if (genderDigit.equals("2") || genderDigit.equals("4")) {
                 return "FEMALE";
             }
-            
+
             return null;
         } catch (Exception e) {
             log.error("성별 추출 실패: {}", residentNumber, e);
@@ -184,7 +185,17 @@ public class OcrMemberService {
     public boolean isOcrVerified(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
-        
+
         return member.getOcrValidation() != null && member.getOcrValidation();
+    }
+
+    private String cleanKoreanName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            return name;
+        }
+        // 한글 문자만 유지 (가-힣, ㄱ-ㅎ, ㅏ-ㅣ)
+        return name.replaceAll("[^가-힣ㄱ-ㅎㅏ-ㅣ]",
+                "").trim();
+
     }
 }
