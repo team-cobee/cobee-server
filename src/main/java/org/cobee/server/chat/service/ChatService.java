@@ -1,5 +1,6 @@
 package org.cobee.server.chat.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -64,4 +65,10 @@ public class ChatService {
         return chatMessageRepository.findById(messageId)
                 .map(ChatMessage::getChatRoomId);
     }
+
+    @Transactional
+    public long deleteMessagesByMember(Long memberId) {
+        return chatMessageRepository.deleteBySenderId(memberId);
+    }
+
 }

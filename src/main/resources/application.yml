@@ -29,6 +29,7 @@ spring:
   data:
     mongodb:
       uri: ${MONGODB_URI}
+      auto-index-creation: true
     redis:
       url: redis://localhost:6379
       timeout: 2000ms
