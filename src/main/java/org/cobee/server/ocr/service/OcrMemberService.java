@@ -2,6 +2,8 @@ package org.cobee.server.ocr.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.cobee.server.global.error.code.ErrorCode;
+import org.cobee.server.global.error.exception.CustomException;
 import org.cobee.server.member.domain.Member;
 import org.cobee.server.member.repository.MemberRepository;
 import org.cobee.server.ocr.dto.OcrResponse;
@@ -33,7 +35,10 @@ public class OcrMemberService {
             String genderCode = extractGenderFromSsnBackFirst(ocrData.getSsnBackFirst());
             
             // Member 엔티티 업데이트
-            member.updateOcrValidation(ocrData.getName(), birthDate, genderCode);
+            if (!ocrData.getName().equals(member.getName())) {
+                throw new CustomException(ErrorCode.OCR_NAME_MISMATCH);
+            }
+            member.updateOcrValidation(birthDate, genderCode);
             
             memberRepository.save(member);
             log.info("Member OCR 정보 업데이트 완료 - ID: {}, 이름: {}, 생년월일: {}, 성별: {}", 

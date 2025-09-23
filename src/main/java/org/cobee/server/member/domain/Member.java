@@ -113,8 +113,7 @@ public class Member extends BaseEntity {
         return this;
     }
 
-    public void updateOcrValidation(String realName, String birthDate, String gender) {
-        this.name = realName;
+    public void updateOcrValidation(String birthDate, String gender) {
         this.birthDate = birthDate;
         this.gender = gender;
         this.ocrValidation = true;
