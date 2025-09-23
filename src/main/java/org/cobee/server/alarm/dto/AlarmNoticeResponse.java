@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Getter;
 import org.cobee.server.alarm.domain.Alarm;
 import org.cobee.server.alarm.domain.AlarmNotice;
+import org.cobee.server.alarm.domain.enums.AlarmSourceType;
+import org.cobee.server.alarm.domain.enums.AlarmType;
+
 @Builder
 @Getter
 @AllArgsConstructor
@@ -13,8 +16,8 @@ public class AlarmNoticeResponse {
         private Long noticeId;
         private boolean isRead;
         private Long alarmId;
-        private String alarmType;
-        private String sourceType;
+        private AlarmType alarmType;
+        private AlarmSourceType sourceType;
         private Long sourceId;
         private Long fromUserId;
         private Long toUserId;
@@ -25,8 +28,8 @@ public class AlarmNoticeResponse {
                     .noticeId(notice.getId())
                     .isRead(notice.getIsRead())
                     .alarmId(alarm.getId())
-                    .alarmType(alarm.getAlarmType().name())
-                    .sourceType(alarm.getSourceType().name())
+                    .alarmType(alarm.getAlarmType())
+                    .sourceType(alarm.getSourceType())
                     .sourceId(alarm.getSourceId())
                     .fromUserId(alarm.getMember().getId())
                     .toUserId(notice.getMember().getId())
