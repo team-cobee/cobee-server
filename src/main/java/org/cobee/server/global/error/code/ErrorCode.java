@@ -65,6 +65,7 @@ public enum ErrorCode {
     PUBLIC_PROFILE_NOT_FOUND(HttpStatus.NOT_FOUND, "PUBLIC-PROFILE-002", "Public profile not found"),
 
     FAILED_OCR_API(HttpStatus.INTERNAL_SERVER_ERROR, "OCR-API-001", "No response received from OCR API"),
+    OCR_NAME_MISMATCH(HttpStatus.BAD_REQUEST, "OCR-002", "OCR name does not match member name"),
     // UserPreferences 관련 에러
     USER_PREFERENCES_NOT_FOUND(HttpStatus.NOT_FOUND, "PREFERENCE-001", "Cannot find UserPreferences"),
     ALREADY_EXISTS_ERROR(HttpStatus.BAD_REQUEST, "PREFERENCE-002", "UserPreferences already exists"),
