@@ -38,6 +38,21 @@ public class RecruitController {
         }
     }
 
+    @PostMapping(value = "/with-images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ApiResponse<RecruitResponse> createRecruitPostWithImages(
+            @RequestPart("request") RecruitRequest request,
+            @RequestPart(value = "images", required = false) MultipartFile[] images,
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        try {
+            Long memberId = principalDetails.getMember().getId();
+            RecruitResponse result = recruitService.createRecruitPostWithImages(request, images, memberId);
+            return ApiResponse.success("구인글 및 이미지 생성 완료", "RECRUIT_WITH_IMAGES_CREATED", result);
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            return null;
+        }
+    }
+
     @PatchMapping("/{postId}")
     public ApiResponse<RecruitResponse> updateRecruitPost(@RequestBody RecruitRequest request,
                                                           @AuthenticationPrincipal PrincipalDetails principalDetails,
@@ -97,7 +112,7 @@ public class RecruitController {
     @PatchMapping("/{postId}/status/{status}")
     public ApiResponse<RecruitResponse> changeRecruitStatus(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                                             @PathVariable(name = "status") RecruitStatus status,
-                                                            @PathVariable(name="postId") Long postId) {
+                                                            @PathVariable(name = "postId") Long postId) {
         Long memberId = principalDetails.getMember().getId();
         RecruitResponse post = recruitService.updateRecruitStatus(memberId, postId, status);
         return ApiResponse.success("", "", post);
