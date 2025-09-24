@@ -91,4 +91,25 @@ public class PublicProfileService {
         member.setPublicProfile(null);
         publicProfileRepository.delete(publicProfile);
     }
+
+    @Transactional(readOnly = true)
+    public PublicProfileResponseDto getPublicProfileById(Long publicProfileId) {
+        PublicProfile publicProfile = publicProfileRepository.findById(publicProfileId)
+                .orElseThrow(() -> new CustomException(ErrorCode.PUBLIC_PROFILE_NOT_FOUND));
+        Member member = memberRepository.findByPublicProfile(publicProfile)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        
+        return new PublicProfileResponseDto(
+                member.getId(),
+                member.getName(),
+                member.getGender(),
+                member.getProfileUrl(),
+                publicProfile.getInfo(),
+                publicProfile.getLifestyle(),
+                publicProfile.getPersonality(),
+                publicProfile.getIsSmoking(),
+                publicProfile.getIsSnoring(),
+                publicProfile.getHasPet()
+        );
+    }
 }

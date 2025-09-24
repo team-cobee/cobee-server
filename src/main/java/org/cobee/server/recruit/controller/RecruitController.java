@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.cobee.server.auth.service.PrincipalDetails;
 import org.cobee.server.global.error.code.ErrorCode;
 import org.cobee.server.global.response.ApiResponse;
-import org.cobee.server.recruit.domain.RecruitPost;
 import org.cobee.server.recruit.domain.enums.RecruitStatus;
 import org.cobee.server.recruit.dto.RecruitRequest;
 import org.cobee.server.recruit.dto.RecruitResponse;
