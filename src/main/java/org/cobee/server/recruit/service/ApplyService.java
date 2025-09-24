@@ -79,10 +79,12 @@ public class ApplyService {
                 applyRecord.acceptMatching(accept);
                 applyRepository.save(applyRecord);
 
+                Long chatRoomId = null;
                 if (Boolean.TRUE.equals(accept)) {
                     Optional<ChatRoom> chatRoomOptional = chatRoomRepository.findByPostId(applyRecord.getPost().getId());
                     if (chatRoomOptional.isPresent()) {
                         ChatRoom chatRoom = chatRoomOptional.get();
+                        chatRoomId = chatRoom.getId();
                         publisher.publishEvent(new ChatRoomInvitedDto(
                                 chatRoom.getId(),
                                 chatRoom.getPost().getId(),
@@ -101,7 +103,8 @@ public class ApplyService {
                         memberId,
                         applyRecord.getMember().getId(),
                         accept,
-                        applyRecord.getAlarm().getMember().getChatRoom().getId()
+                        chatRoomId
+
                 ));
 
                 return ApplyResponse.from(applyRecord);
