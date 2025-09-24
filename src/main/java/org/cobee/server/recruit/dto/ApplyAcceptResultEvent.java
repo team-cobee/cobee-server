@@ -11,4 +11,5 @@ public class ApplyAcceptResultEvent {
     private Long fromUserId;
     private Long toUserId;
     private boolean accepted;
+    private Long chatRoomId;
 }

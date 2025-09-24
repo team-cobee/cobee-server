@@ -100,7 +100,8 @@ public class ApplyService {
                         applyRecord.getPost().getId(),
                         memberId,
                         applyRecord.getMember().getId(),
-                        accept
+                        accept,
+                        applyRecord.getAlarm().getMember().getChatRoom().getId()
                 ));
 
                 return ApplyResponse.from(applyRecord);
