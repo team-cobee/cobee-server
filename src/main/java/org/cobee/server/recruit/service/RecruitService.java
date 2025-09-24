@@ -40,7 +40,10 @@ public class RecruitService {
 
     @Transactional
     public RecruitResponse createRecruitPost(RecruitRequest request, Long memberId) {
-        Map<String, Object> geocodeData = googleMapService.getGeocode(request.getAddress());
+        if (request.getAddress() == null || request.getAddress().trim().isEmpty()) {
+            throw new CustomException(ErrorCode.GOOGLE_INVALID_REQUEST);
+        }
+        Map<String, Object> geocodeData = googleMapService.getGeocode(request.getAddress().trim());
         double latitude = (double) geocodeData.get("latitude");
         double longitude = (double) geocodeData.get("longitude");
         String formattedAddress = (String) geocodeData.get("formattedAddress");

@@ -1,5 +1,6 @@
 package org.cobee.server.publicProfile.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.cobee.server.auth.service.PrincipalDetails;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.cobee.server.publicProfile.dto.PublicProfileResponseDto;
 import org.cobee.server.publicProfile.dto.PublicProfileUpdateRequestDto;
+import org.cobee.server.global.error.exception.CustomException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -58,5 +60,21 @@ public class PublicProfileController {
         Long memberId = principalDetails.getMember().getId();
         publicProfileService.deletePublicProfile(memberId);
         return ApiResponse.success("Public profile deleted successfully", "200");
+    }
+
+    @GetMapping("/{publicProfileId}")
+    public ApiResponse<PublicProfileResponseDto> getPublicProfileById(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable Long publicProfileId
+    ) {
+        try {
+            PublicProfileResponseDto profile = publicProfileService.getPublicProfileById(publicProfileId);
+            return ApiResponse.success("Public profile retrieved successfully", "200", profile);
+        } catch (CustomException e) {
+            return ApiResponse.failure("공개프로필을 찾을 수 없음", "404", e.getMessage());
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            return ApiResponse.failure("서버 내부 에러", "500", e.getMessage());
+        }
     }
 }
