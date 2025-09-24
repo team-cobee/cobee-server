@@ -6,6 +6,7 @@ import org.cobee.server.auth.dto.RefreshTokenRequest;
 import org.cobee.server.auth.jwt.TokenInfo;
 import org.cobee.server.auth.service.AuthService;
 import org.cobee.server.auth.service.PrincipalDetails;
+import org.cobee.server.chat.service.ChatRoomService;
 import org.cobee.server.chat.service.ChatService;
 import org.cobee.server.global.response.ApiResponse;
 import org.cobee.server.member.domain.Member;
@@ -22,6 +23,7 @@ public class AuthController {
 
     private final AuthService authService;
     private final ChatService chatService;
+    private final ChatRoomService chatRoomService;
 
     @GetMapping()
     public ApiResponse<MemberInfoDto> getUserInfo(@AuthenticationPrincipal PrincipalDetails principalDetails) {
@@ -48,6 +50,7 @@ public class AuthController {
         Member member = principalDetails.getMember();
         // 탈퇴시, 회원이 작성한 채팅 메시지 삭제
         long deletedCount = chatService.deleteMessagesByMember(member.getId());
+        chatRoomService.removeUserFromRoom(member.getChatRoom().getId(), member.getId());
         authService.withdrawMember(member.getId(), request, response);
         MemberInfoDto memberInfo = MemberInfoDto.from(member);
         return ApiResponse.success("회원 탈퇴 성공 (삭제된 메시지: " + deletedCount + "건)", "200", memberInfo);

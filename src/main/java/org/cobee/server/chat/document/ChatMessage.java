@@ -1,6 +1,5 @@
 package org.cobee.server.chat.document;
 
-
 import com.mongodb.lang.Nullable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
