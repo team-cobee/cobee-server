@@ -70,4 +70,10 @@ public class ChatService {
         return chatMessageRepository.deleteBySenderId(memberId);
     }
 
+    @Transactional
+    public void deleteMessagesByRoom(Long roomId) {
+        List<ChatMessage> messages = chatMessageRepository.findByChatRoomIdOrderByTimestampAsc(roomId);
+        chatMessageRepository.deleteAll(messages);
+    }
+
 }
