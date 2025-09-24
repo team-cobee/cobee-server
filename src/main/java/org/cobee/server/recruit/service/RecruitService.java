@@ -201,4 +201,19 @@ public class RecruitService {
         recruitRepository.save(post);
         return RecruitResponse.from(post, member);
     }
+
+    @Transactional
+    public RecruitResponse
+    createRecruitPostWithImages(RecruitRequest request, MultipartFile[] images, Long memberId) {
+        // 1. 구인글 생성
+        RecruitResponse recruitResponse = createRecruitPost(request, memberId);
+
+        // 2. 이미지가 있으면 업로드
+        if (images != null && images.length > 0) {
+            addImages(images, recruitResponse.getPostId(), memberId);
+        }
+
+        return recruitResponse;
+    }
+
 }

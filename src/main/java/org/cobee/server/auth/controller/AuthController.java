@@ -6,6 +6,7 @@ import org.cobee.server.auth.dto.RefreshTokenRequest;
 import org.cobee.server.auth.jwt.TokenInfo;
 import org.cobee.server.auth.service.AuthService;
 import org.cobee.server.auth.service.PrincipalDetails;
+import org.cobee.server.chat.service.ChatService;
 import org.cobee.server.global.response.ApiResponse;
 import org.cobee.server.member.domain.Member;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,6 +21,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class AuthController {
 
     private final AuthService authService;
+    private final ChatService chatService;
 
     @GetMapping()
     public ApiResponse<MemberInfoDto> getUserInfo(@AuthenticationPrincipal PrincipalDetails principalDetails) {
@@ -42,10 +44,12 @@ public class AuthController {
 
     @DeleteMapping("/withdraw")
     public ApiResponse<MemberInfoDto> withdraw(@AuthenticationPrincipal PrincipalDetails principalDetails,
-                                     HttpServletRequest request, HttpServletResponse response) {
+                                               HttpServletRequest request, HttpServletResponse response) {
         Member member = principalDetails.getMember();
+        // 탈퇴시, 회원이 작성한 채팅 메시지 삭제
+        long deletedCount = chatService.deleteMessagesByMember(member.getId());
         authService.withdrawMember(member.getId(), request, response);
         MemberInfoDto memberInfo = MemberInfoDto.from(member);
-        return ApiResponse.success("회원 탈퇴 성공", "200", memberInfo);
+        return ApiResponse.success("회원 탈퇴 성공 (삭제된 메시지: " + deletedCount + "건)", "200", memberInfo);
     }
 }
