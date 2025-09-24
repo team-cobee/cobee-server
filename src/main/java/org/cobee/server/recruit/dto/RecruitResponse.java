@@ -120,7 +120,9 @@ public class RecruitResponse{
                 .additionalDescript(post.getAdditionalDescription())
 
                 .comments(responses)
-                .applicantCount(post.getApplyRecords().size()-1)
+                .applicantCount(Optional.ofNullable(post.getApplyRecords())
+                        .map(records -> records.size() - 1)
+                        .orElse(0))
                 .imgUrl(Optional.ofNullable(post.getImages())
                         .map(images -> images.stream()
 
