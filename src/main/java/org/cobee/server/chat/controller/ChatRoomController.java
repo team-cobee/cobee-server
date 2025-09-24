@@ -158,6 +158,7 @@ public class ChatRoomController {
     public ApiResponse<Void> deleteRoom(@PathVariable Long roomId) {
         try {
             chatRoomService.deleteChatRoom(roomId);
+            chatService.deleteMessagesByRoom(roomId);
             return ApiResponse.success("채팅방 삭제 성공", "CHAT_ROOM_DELETED");
         } catch (IllegalArgumentException e) {
             return ApiResponse.failure("채팅방을 찾을 수 없습니다", "CHAT_ROOM_NOT_FOUND", e.getMessage());
