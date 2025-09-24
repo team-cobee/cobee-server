@@ -64,6 +64,7 @@ public class RecruitResponse{
     /* 추가 정보 */
     private String detailDescript;
     private String additionalDescript;
+    private int applicantCount;
 
     /* 나중에 추가해야하는 것
     * private String firstImage;
@@ -119,6 +120,7 @@ public class RecruitResponse{
                 .additionalDescript(post.getAdditionalDescription())
 
                 .comments(responses)
+                .applicantCount(post.getApplyRecords().size()-1)
                 .imgUrl(Optional.ofNullable(post.getImages())
                         .map(images -> images.stream()
 

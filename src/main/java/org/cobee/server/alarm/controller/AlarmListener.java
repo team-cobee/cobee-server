@@ -66,12 +66,12 @@ public class AlarmListener {
                 e.getToUserId(),
                 AlarmType.START_MATCHING,
                 AlarmSourceType.RECRUIT_POST,
-                e.getApplyId(),
+                e.getChatRoomId(),
                 title,
                 body
         ));
     }
-
+// 지원 승인이 곧 채팅방 초대인데 이걸 헷갈려서 api호출과 내용이 잘못된듯....
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void onChatRoomInvited(ChatRoomInvitedDto e) {
