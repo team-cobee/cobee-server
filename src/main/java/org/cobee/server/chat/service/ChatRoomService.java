@@ -1,5 +1,6 @@
 package org.cobee.server.chat.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -95,8 +96,13 @@ public class ChatRoomService {
         if (user.getChatRoom() == null || !user.getChatRoom().equals(room)) {
             throw new CustomException(ErrorCode.CHAT_ROOM_USER_NOT_IN_ROOM);
         }
-
-        room.removeUser(user);
+        if(user.getIsHost()){
+            for (Member member : room.getUsers()){
+                room.removeUser(member);
+            }
+        }else{
+            room.removeUser(user);
+        }
         chatRoomRepository.save(room);
     }
 
