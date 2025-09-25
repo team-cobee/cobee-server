@@ -1,21 +1,16 @@
 package org.cobee.server.ocr.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
+import java.io.IOException;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.cobee.server.auth.service.PrincipalDetails;
 import org.cobee.server.global.response.ApiResponse;
 import org.cobee.server.member.domain.Member;
-import org.cobee.server.member.repository.MemberRepository;
-import org.cobee.server.ocr.dto.OcrResponse;
 import org.cobee.server.ocr.dto.OcrTask;
-import org.cobee.server.ocr.dto.OcrVerificationResponseDto;
 import org.cobee.server.ocr.service.OcrService;
-import org.cobee.server.ocr.service.OcrMemberService;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -23,35 +18,42 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/ocr")
+@Slf4j
 @RequiredArgsConstructor
 public class OcrController {
 
   private final OcrService ocrService;
-  private final OcrMemberService ocrMemberService;
-  private final MemberRepository memberRepository;
 
   @Operation(summary = "주민등록증 OCR 인증 요청", description = "비동기 OCR 인증 작업을 시작하고 작업 ID(taskId)를 반환합니다.")
   @PostMapping(value = "/verify", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ApiResponse<Map<String, String>> startOcrVerification(
-      @RequestPart("image") MultipartFile imageFile,
-      @AuthenticationPrincipal PrincipalDetails principalDetails) {
+          @RequestPart("image") MultipartFile imageFile,
+          @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-    if (imageFile.isEmpty() || imageFile.getContentType() == null || !imageFile.getContentType()
-        .startsWith("image/")) {
-      return ApiResponse.failure("유효하지 않은 이미지 파일입니다.", "400", "INVALID_FILE");
+      if (imageFile.isEmpty() || imageFile.getContentType() == null || !imageFile.getContentType()
+              .startsWith("image/")) {
+          return ApiResponse.failure("유효하지 않은 이미지 파일입니다.", "400", "INVALID_FILE");
+      }
+
+      Member member = principalDetails.getMember();
+
+      try {
+          // 1. 새로운 작업을 등록하고 taskId를 받음
+          String taskId = ocrService.registerNewTask();
+
+          // 2. 비동기 작업 시작 (파일 내용을 byte[]로 변환하여 전달)
+          byte[] fileBytes = imageFile.getBytes();
+          String originalFilename = imageFile.getOriginalFilename();
+          ocrService.processOcrVerificationAsync(taskId, member.getId(), fileBytes, originalFilename);
+
+            // 3. taskId를 즉시 클라이언트에 반환
+          return ApiResponse.success("인증 처리가 시작되었습니다.", "202", Map.of("taskId", taskId));
+
+      } catch (IOException e) {
+          log.error("파일을 읽는 중 오류가 발생했습니다.", e);
+          return ApiResponse.failure("파일 처리 중 오류가 발생했습니다.", "500", "FILE_PROCESSING_ERROR");
+      }
     }
-
-    Member member = principalDetails.getMember();
-
-    // 1. 새로운 작업을 등록하고 taskId를 받음
-    String taskId = ocrService.registerNewTask();
-
-    // 2. 비동기 작업 시작
-    ocrService.processOcrVerificationAsync(taskId, member.getId(), imageFile);
-
-    // 3. taskId를 즉시 클라이언트에 반환
-    return ApiResponse.success("인증 처리가 시작되었습니다.", "202", Map.of("taskId", taskId));
-  }
 
   @Operation(summary = "OCR 인증 상태 조회", description = "taskId를 이용해 비동기 작업의 현재 상태와 결과를 조회합니다.")
   @GetMapping("/verify/status/{taskId}")

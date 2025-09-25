@@ -51,36 +51,34 @@ public class OcrService {
   }
 
   @Async // 비동기 처리
-  public void processOcrVerificationAsync(String taskId, Long memberId, MultipartFile file) {
-    log.info("비동기 OCR 인증 프로세스 시작 - Task ID : {}", taskId);
-    OcrTask task = taskStore.get(taskId);
+  public void processOcrVerificationAsync(String taskId, Long memberId, byte[] fileBytes, String originalFilename) { // MultipartFile 대신 byte[]와 originalFilename을 받도록 수정
+      log.info("비동기 OCR 인증 프로세스 시작 - Task ID : {}", taskId);
+      OcrTask task = taskStore.get(taskId);
 
-    try {
-      // 비동기 처리 전에 파일 데이터를 미리 읽어서 저장
-      byte[] fileBytes = file.getBytes();
-      String originalFilename = file.getOriginalFilename();
-      
-      OcrResponse ocrResult = this.processIdCard(fileBytes, originalFilename);
-      if (ocrResult != null && ocrResult.isSuccess()) {
-        ocrMemberService.updateMemberWithOcrData(memberId, ocrResult);
+      try {
+          // 비동기 처리 전에 파일 데이터를 미리 읽어서 저장할 필요가 없어짐
 
-        Member updateMember = memberRepository.findById(memberId)
-            .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+          OcrResponse ocrResult = this.processIdCard(fileBytes, originalFilename);
+          if (ocrResult != null && ocrResult.isSuccess()) {
+              ocrMemberService.updateMemberWithOcrData(memberId, ocrResult);
 
-        task.setStatus(OcrTaskStatus.SUCCESS);
-        task.setResult(OcrVerificationResponseDto.success(updateMember));
-        log.info("비동기 OCR 인증 프로세스 성공 - Task ID : {}", taskId);
-      } else {
-        // ocr API 자체가 실패한 경우
-        throw new CustomException(ErrorCode.FAILED_OCR_API);
+              Member updateMember = memberRepository.findById(memberId)
+                      .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
+              task.setStatus(OcrTaskStatus.SUCCESS);
+              task.setResult(OcrVerificationResponseDto.success(updateMember));
+              log.info("비동기 OCR 인증 프로세스 성공 - Task ID : {}", taskId);
+          } else {
+              // ocr API 자체가 실패한 경우
+              throw new CustomException(ErrorCode.FAILED_OCR_API);
+          }
+        }
+      catch (Exception e) {
+            log.error("비동기 OCR 처리 실패 - Task ID: {}", taskId, e);
+            task.setStatus(OcrTaskStatus.FAILED);
+            task.setErrorMessage(e.getMessage());
       }
-    } catch (Exception e) {
-      log.error("비동기 OCR 처리 실패 - Task ID: {}", taskId, e);
-      task.setStatus(OcrTaskStatus.FAILED);
-      task.setErrorMessage(e.getMessage());
-    }
   }
-
 
   /**
    * FastAPI OCR 서버로 주민등록증 이미지 전송하여 정보 추출 (바이트 배열 버전)
