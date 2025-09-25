@@ -15,6 +15,7 @@ public enum ErrorCode {
     CHAT_ROOM_USER_NOT_IN_ROOM(HttpStatus.BAD_REQUEST, "CHATROOM-008", "User is not in the ChatRoom"),
     CHAT_ROOM_EXISTS_USER(HttpStatus.BAD_REQUEST, "CHATROOM-009", "User exists in the ChatRoom"),
     CHAT_ROOM_NAME_CANNOT_EMPTY(HttpStatus.BAD_REQUEST, "CHATROOM-010", "ChatRoom name cannot be empty"),
+    CHAT_ROOM_HOST_CANNOT_EXIT(HttpStatus.BAD_REQUEST, "CHATROOM-011", "ChatRoom host cannot exit the room"),
 
 
     LOCATION_NOT_FOUND(HttpStatus.NOT_FOUND, "LOCATION-001", "Cannot find Location"),

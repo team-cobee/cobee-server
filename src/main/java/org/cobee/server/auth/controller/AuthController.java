@@ -50,7 +50,9 @@ public class AuthController {
         Member member = principalDetails.getMember();
         // 탈퇴시, 회원이 작성한 채팅 메시지 삭제
         long deletedCount = chatService.deleteMessagesByMember(member.getId());
-        chatRoomService.removeUserFromRoom(member.getChatRoom().getId(), member.getId());
+        if(member.getChatRoom() != null){
+            chatRoomService.removeUserFromRoom(member.getChatRoom().getId(), member.getId());
+        }
         authService.withdrawMember(member.getId(), request, response);
         MemberInfoDto memberInfo = MemberInfoDto.from(member);
         return ApiResponse.success("회원 탈퇴 성공 (삭제된 메시지: " + deletedCount + "건)", "200", memberInfo);
