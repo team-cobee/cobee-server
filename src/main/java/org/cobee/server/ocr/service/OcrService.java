@@ -56,7 +56,11 @@ public class OcrService {
     OcrTask task = taskStore.get(taskId);
 
     try {
-      OcrResponse ocrResult = this.processIdCard(file);
+      // 비동기 처리 전에 파일 데이터를 미리 읽어서 저장
+      byte[] fileBytes = file.getBytes();
+      String originalFilename = file.getOriginalFilename();
+      
+      OcrResponse ocrResult = this.processIdCard(fileBytes, originalFilename);
       if (ocrResult != null && ocrResult.isSuccess()) {
         ocrMemberService.updateMemberWithOcrData(memberId, ocrResult);
 
@@ -79,15 +83,15 @@ public class OcrService {
 
 
   /**
-   * FastAPI OCR 서버로 주민등록증 이미지 전송하여 정보 추출
+   * FastAPI OCR 서버로 주민등록증 이미지 전송하여 정보 추출 (바이트 배열 버전)
    */
-  public OcrResponse processIdCard(MultipartFile imageFile) {
+  public OcrResponse processIdCard(byte[] fileBytes, String originalFilename) {
     try {
-      // MultipartFile을 ByteArrayResource로 변환
-      ByteArrayResource resource = new ByteArrayResource(imageFile.getBytes()) {
+      // 바이트 배열을 ByteArrayResource로 변환
+      ByteArrayResource resource = new ByteArrayResource(fileBytes) {
         @Override
         public String getFilename() {
-          return imageFile.getOriginalFilename();
+          return originalFilename;
         }
       };
 
@@ -129,6 +133,24 @@ public class OcrService {
       errorResponse.setSuccess(false);
       errorResponse.setError("OCR 처리 중 오류가 발생했습니다: " + e.getMessage());
 
+      return errorResponse;
+    }
+  }
+
+  /**
+   * FastAPI OCR 서버로 주민등록증 이미지 전송하여 정보 추출 (MultipartFile 버전)
+   */
+  public OcrResponse processIdCard(MultipartFile imageFile) {
+    try {
+      return processIdCard(imageFile.getBytes(), imageFile.getOriginalFilename());
+    } catch (Exception e) {
+      log.error("파일 읽기 실패: ", e);
+      
+      // 실패 응답 객체 생성
+      OcrResponse errorResponse = new OcrResponse();
+      errorResponse.setSuccess(false);
+      errorResponse.setError("파일 읽기 중 오류가 발생했습니다: " + e.getMessage());
+      
       return errorResponse;
     }
   }
